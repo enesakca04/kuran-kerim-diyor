@@ -14,7 +14,9 @@ export default function SearchScreen() {
 
     const handleSearch = (text: string) => {
         setQuery(text);
-        if (text.length > 2) {
+        // Sondaki kısım rakamla bitiyorsa referans olabilir (sebe 50, 34:50 vb.)
+        const endsWithDigit = /\d$/.test(text.trim());
+        if (text.length > 2 || (endsWithDigit && text.trim().length >= 3)) {
             const res = searchAyahs(text, language);
             setResults(res);
         } else {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent, Text, PanResponder, GestureResponderEvent } from 'react-native';
+import { View, StyleSheet, FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent, Text, PanResponder, GestureResponderEvent, I18nManager } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ChevronsUp } from 'lucide-react-native';
+import { ChevronLeft } from 'lucide-react-native';
 import { Colors } from '../../constants/colors';
 import { getSurah } from '../../services/quranData';
 import { AyahCard } from '../../components/AyahCard';
@@ -24,6 +24,7 @@ export default function MainFeedScreen() {
     const [isScrubbing, setIsScrubbing] = useState(false);
     const flatListRef = useRef<FlatList>(null);
     const scrubTimer = useRef<NodeJS.Timeout | null>(null);
+    const currentIndexRef = useRef(Math.max(0, (currentAyah || 1) - 1));
     const storeRef = useRef({ barHeight: 0, surah, uiAyah, isScrubbing });
 
     useEffect(() => {
@@ -43,6 +44,7 @@ export default function MainFeedScreen() {
 
         const targetAyahNumber = currentStore.surah.ayahs[safeIndex].number;
         if (targetAyahNumber !== currentStore.uiAyah) {
+            currentIndexRef.current = safeIndex;
             setUiAyah(targetAyahNumber);
             flatListRef.current?.scrollToIndex({ index: safeIndex, animated: false });
         }
@@ -80,6 +82,8 @@ export default function MainFeedScreen() {
     ).current;
 
     useEffect(() => {
+        const newIndex = Math.max(0, (currentAyah || 1) - 1);
+        currentIndexRef.current = newIndex;
         setUiAyah(currentAyah);
     }, [currentSurah]);
 
@@ -96,24 +100,31 @@ export default function MainFeedScreen() {
             setShowSwipeHint(false);
             AsyncStorage.setItem('hasSeenSwipeHint', 'true');
         }
-
-        const offsetY = event.nativeEvent.contentOffset.y;
-        const MathIndex = Math.round(offsetY / containerHeight);
-        if (MathIndex >= 0 && MathIndex < surah.ayahs.length) {
-            const visibleAyahNumber = surah.ayahs[MathIndex].number;
-            if (visibleAyahNumber !== uiAyah) {
-                setUiAyah(visibleAyahNumber);
-            }
-        }
     };
 
     const handleMomentumEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const offsetY = event.nativeEvent.contentOffset.y;
-        const currentIndex = Math.round(offsetY / containerHeight);
-        if (currentIndex >= 0 && currentIndex < surah.ayahs.length) {
-            const visibleAyahNumber = surah.ayahs[currentIndex].number;
-            setProgress(surah.number, visibleAyahNumber);
+        const offsetX = event.nativeEvent.contentOffset.x;
+        const rawIndex = Math.round(offsetX / width);
+        const prev = currentIndexRef.current;
+
+        // Sadece ±1 adım izin ver (tek ayet geçiş)
+        let newIndex = prev;
+        if (rawIndex > prev) newIndex = prev + 1;
+        else if (rawIndex < prev) newIndex = prev - 1;
+
+        // Sınırları kontrol et
+        newIndex = Math.max(0, Math.min(newIndex, surah.ayahs.length - 1));
+        currentIndexRef.current = newIndex;
+
+        // Eğer FlatList fazla ileri/geri gittiyse düzelt
+        if (rawIndex !== newIndex) {
+            flatListRef.current?.scrollToIndex({ index: newIndex, animated: true });
         }
+
+        // UI ve progress güncelle
+        const visibleAyahNumber = surah.ayahs[newIndex].number;
+        setUiAyah(visibleAyahNumber);
+        setProgress(surah.number, visibleAyahNumber);
     };
 
     return (
@@ -130,9 +141,10 @@ export default function MainFeedScreen() {
                         <AyahCard ayah={item} surahName={surah.name.tr} surahNumber={surah.number} />
                     </View>
                 )}
+                horizontal
                 pagingEnabled
-                showsVerticalScrollIndicator={false}
-                snapToInterval={containerHeight}
+                showsHorizontalScrollIndicator={false}
+                snapToInterval={width}
                 snapToAlignment="start"
                 decelerationRate="fast"
                 onScroll={handleScroll}
@@ -140,7 +152,7 @@ export default function MainFeedScreen() {
                 onMomentumScrollEnd={handleMomentumEnd}
                 initialScrollIndex={Math.max(0, currentAyah - 1)}
                 getItemLayout={(data, index) => (
-                    { length: containerHeight, offset: containerHeight * index, index }
+                    { length: width, offset: width * index, index }
                 )}
             />
             {/* Vertical Progress Bar */}
@@ -160,8 +172,8 @@ export default function MainFeedScreen() {
             </View>
             {showSwipeHint && (
                 <View style={styles.swipeHintOverlay} pointerEvents="none">
-                    <ChevronsUp size={48} color="#fff" style={{ marginBottom: 16 }} />
-                    <Text style={styles.swipeHintText}>Sıradaki ayet için{'\n'}yukarı kaydırın</Text>
+                    <ChevronLeft size={48} color="#fff" style={{ marginBottom: 16 }} />
+                    <Text style={styles.swipeHintText}>Sıradaki ayet için{'\n'}sola kaydırın</Text>
                 </View>
             )}
             <HatimCelebration visible={showHatim} onClose={() => setShowHatim(false)} />
