@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import { Colors } from '../../constants/colors';
 import { auth } from '../../services/firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithCredential, OAuthProvider } from 'firebase/auth';
 import { useUserStore } from '../../store/userStore';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import * as AppleAuthentication from 'expo-apple-authentication';
+
+WebBrowser.maybeCompleteAuthSession();
 
 import { ACHIEVEMENTS } from '../../constants/achievements';
 import { useAchievements } from '../../hooks/useAchievements';
@@ -28,10 +33,38 @@ export default function ProfileScreen() {
         router.replace('/onboarding');
     };
 
+    const translateAuthError = (message: string) => {
+        if (message.includes('operation-not-allowed')) return 'Bu giriş yöntemi henüz aktif edilmemiş. (Firebase Console > Auth kısmından E-posta/Şifre girişini açın)';
+        if (message.includes('invalid-email') || message.includes('invalid-credential')) return 'E-posta veya şifre hatalı.';
+        if (message.includes('user-not-found')) return 'Böyle bir kullanıcı bulunamadı.';
+        if (message.includes('email-already-in-use')) return 'Bu e-posta adresi ile zaten kayıt olunmuş.';
+        if (message.includes('weak-password')) return 'Şifreniz çok zayıf (En az 6 karakter olmalı).';
+        if (message.includes('network-request-failed')) return 'İnternet bağlantınızı kontrol edip tekrar deneyin.';
+        if (message.includes('ERR_REQUEST_CANCELED')) return 'Kullanıcı işlemi iptal etti.';
+        return 'Bir hata oluştu: ' + message;
+    };
+
     const [emailInput, setEmailInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+        clientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+        iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+        androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+    });
+
+    useEffect(() => {
+        if (response?.type === 'success') {
+            const { id_token } = response.params;
+            const credential = GoogleAuthProvider.credential(id_token);
+            setLoading(true);
+            signInWithCredential(auth, credential)
+                .catch(e => setError(translateAuthError(e.message)))
+                .finally(() => setLoading(false));
+        }
+    }, [response]);
 
     // Listen to Auth State
     useEffect(() => {
@@ -53,7 +86,7 @@ export default function ProfileScreen() {
         try {
             await signInWithEmailAndPassword(auth, emailInput, passwordInput);
         } catch (e: any) {
-            setError(e.message);
+            setError(translateAuthError(e.message));
         }
         setLoading(false);
     };
@@ -64,7 +97,7 @@ export default function ProfileScreen() {
         try {
             await createUserWithEmailAndPassword(auth, emailInput, passwordInput);
         } catch (e: any) {
-            setError(e.message);
+            setError(translateAuthError(e.message));
         }
         setLoading(false);
     };
@@ -75,9 +108,35 @@ export default function ProfileScreen() {
         try {
             await signInAnonymously(auth);
         } catch (e: any) {
-            setError(e.message);
+            setError(translateAuthError(e.message));
         }
         setLoading(false);
+    };
+
+    const handleAppleLogin = async () => {
+        try {
+            const credential = await AppleAuthentication.signInAsync({
+                requestedScopes: [
+                    AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                    AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                ],
+            });
+            const { identityToken } = credential;
+            if (identityToken) {
+                setLoading(true);
+                const provider = new OAuthProvider('apple.com');
+                const authCredential = provider.credential({
+                    idToken: identityToken,
+                });
+                await signInWithCredential(auth, authCredential);
+            }
+        } catch (e: any) {
+            if (e.code !== 'ERR_REQUEST_CANCELED') {
+                setError(e.message);
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleLogout = async () => {
@@ -168,6 +227,14 @@ export default function ProfileScreen() {
 
                         <TouchableOpacity style={[styles.button, { backgroundColor: theme.secondary, marginTop: 12 }]} onPress={handleRegister}>
                             <Text style={styles.buttonText}>Kayıt Ol</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                            style={[styles.outlineButton, { borderColor: theme.primary, marginTop: 12, backgroundColor: 'transparent' }]} 
+                            onPress={() => promptAsync()}
+                            disabled={!request}
+                        >
+                            <Text style={[styles.outlineButtonText, { color: theme.primary }]}>Google ile Giriş Yap</Text>
                         </TouchableOpacity>
 
                         <View style={styles.divider}>

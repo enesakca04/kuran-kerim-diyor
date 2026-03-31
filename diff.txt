@@ -1,0 +1,626 @@
+diff --git a/app/(tabs)/index.tsx b/app/(tabs)/index.tsx
+index a41b24a..022d192 100644
+--- a/app/(tabs)/index.tsx
++++ b/app/(tabs)/index.tsx
+@@ -1,17 +1,20 @@
+ import React, { useState, useEffect, useRef } from 'react';
+-import { View, StyleSheet, FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent, Text, PanResponder, GestureResponderEvent } from 'react-native';
++import { View, StyleSheet, FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent, Text, PanResponder, GestureResponderEvent, I18nManager } from 'react-native';
+ import AsyncStorage from '@react-native-async-storage/async-storage';
+-import { ChevronsUp } from 'lucide-react-native';
++import { ChevronLeft, Heart } from 'lucide-react-native';
+ import { Colors } from '../../constants/colors';
+ import { getSurah } from '../../services/quranData';
+ import { AyahCard } from '../../components/AyahCard';
+ import { useProgress } from '../../hooks/useProgress';
+ import { useAchievements } from '../../hooks/useAchievements';
+ import { HatimCelebration } from '../../components/HatimCelebration';
++import { useNavigation } from 'expo-router';
++import { TouchableOpacity } from 'react-native';
+ 
+ const { width } = Dimensions.get('window');
+ 
+ export default function MainFeedScreen() {
++    const navigation = useNavigation();
+     const { currentSurah, currentAyah, setProgress } = useProgress();
+     const surah = getSurah(currentSurah || 1);
+     const theme = Colors.light;
+@@ -22,8 +25,11 @@ export default function MainFeedScreen() {
+     const [uiAyah, setUiAyah] = useState(currentAyah);
+     const [barHeight, setBarHeight] = useState(0);
+     const [isScrubbing, setIsScrubbing] = useState(false);
++    const [favorites, setFavorites] = useState<Set<string>>(new Set());
++
+     const flatListRef = useRef<FlatList>(null);
+     const scrubTimer = useRef<NodeJS.Timeout | null>(null);
++    const currentIndexRef = useRef(Math.max(0, (currentAyah || 1) - 1));
+     const storeRef = useRef({ barHeight: 0, surah, uiAyah, isScrubbing });
+ 
+     useEffect(() => {
+@@ -43,6 +49,7 @@ export default function MainFeedScreen() {
+ 
+         const targetAyahNumber = currentStore.surah.ayahs[safeIndex].number;
+         if (targetAyahNumber !== currentStore.uiAyah) {
++            currentIndexRef.current = safeIndex;
+             setUiAyah(targetAyahNumber);
+             flatListRef.current?.scrollToIndex({ index: safeIndex, animated: false });
+         }
+@@ -80,8 +87,14 @@ export default function MainFeedScreen() {
+     ).current;
+ 
+     useEffect(() => {
++        const newIndex = Math.max(0, (currentAyah || 1) - 1);
++        currentIndexRef.current = newIndex;
+         setUiAyah(currentAyah);
+-    }, [currentSurah]);
++        // Arama sonucundan gelince doğru ayete scroll et
++        setTimeout(() => {
++            flatListRef.current?.scrollToIndex({ index: newIndex, animated: false });
++        }, 50);
++    }, [currentSurah, currentAyah]);
+ 
+     useEffect(() => {
+         AsyncStorage.getItem('hasSeenSwipeHint').then(val => {
+@@ -89,6 +102,36 @@ export default function MainFeedScreen() {
+         });
+     }, []);
+ 
++    const favoriteId = surah ? `${surah.number}:${uiAyah}` : null;
++    const isFavorited = favoriteId ? favorites.has(favoriteId) : false;
++
++    const toggleFavorite = React.useCallback(() => {
++        if (!favoriteId) return;
++        setFavorites(prev => {
++            const newSet = new Set(prev);
++            if (newSet.has(favoriteId)) {
++                newSet.delete(favoriteId);
++            } else {
++                newSet.add(favoriteId);
++            }
++            return newSet;
++        });
++    }, [favoriteId]);
++
++    useEffect(() => {
++        navigation.setOptions({
++            headerRight: () => (
++                <TouchableOpacity onPress={toggleFavorite} style={{ marginRight: 16, padding: 4 }}>
++                    <Heart 
++                        size={24} 
++                        color={theme.primary} 
++                        fill={isFavorited ? theme.primary : 'transparent'} 
++                    />
++                </TouchableOpacity>
++            ),
++        });
++    }, [navigation, isFavorited, toggleFavorite, theme.primary]);
++
+     if (!surah) return null;
+ 
+     const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+@@ -96,24 +139,31 @@ export default function MainFeedScreen() {
+             setShowSwipeHint(false);
+             AsyncStorage.setItem('hasSeenSwipeHint', 'true');
+         }
+-
+-        const offsetY = event.nativeEvent.contentOffset.y;
+-        const MathIndex = Math.round(offsetY / containerHeight);
+-        if (MathIndex >= 0 && MathIndex < surah.ayahs.length) {
+-            const visibleAyahNumber = surah.ayahs[MathIndex].number;
+-            if (visibleAyahNumber !== uiAyah) {
+-                setUiAyah(visibleAyahNumber);
+-            }
+-        }
+     };
+ 
+     const handleMomentumEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+-        const offsetY = event.nativeEvent.contentOffset.y;
+-        const currentIndex = Math.round(offsetY / containerHeight);
+-        if (currentIndex >= 0 && currentIndex < surah.ayahs.length) {
+-            const visibleAyahNumber = surah.ayahs[currentIndex].number;
+-            setProgress(surah.number, visibleAyahNumber);
++        const offsetX = event.nativeEvent.contentOffset.x;
++        const rawIndex = Math.round(offsetX / width);
++        const prev = currentIndexRef.current;
++
++        // Sadece ±1 adım izin ver (tek ayet geçiş)
++        let newIndex = prev;
++        if (rawIndex > prev) newIndex = prev + 1;
++        else if (rawIndex < prev) newIndex = prev - 1;
++
++        // Sınırları kontrol et
++        newIndex = Math.max(0, Math.min(newIndex, surah.ayahs.length - 1));
++        currentIndexRef.current = newIndex;
++
++        // Eğer FlatList fazla ileri/geri gittiyse düzelt
++        if (rawIndex !== newIndex) {
++            flatListRef.current?.scrollToIndex({ index: newIndex, animated: true });
+         }
++
++        // UI ve progress güncelle
++        const visibleAyahNumber = surah.ayahs[newIndex].number;
++        setUiAyah(visibleAyahNumber);
++        setProgress(surah.number, visibleAyahNumber);
+     };
+ 
+     return (
+@@ -130,9 +180,10 @@ export default function MainFeedScreen() {
+                         <AyahCard ayah={item} surahName={surah.name.tr} surahNumber={surah.number} />
+                     </View>
+                 )}
++                horizontal
+                 pagingEnabled
+-                showsVerticalScrollIndicator={false}
+-                snapToInterval={containerHeight}
++                showsHorizontalScrollIndicator={false}
++                snapToInterval={width}
+                 snapToAlignment="start"
+                 decelerationRate="fast"
+                 onScroll={handleScroll}
+@@ -140,7 +191,7 @@ export default function MainFeedScreen() {
+                 onMomentumScrollEnd={handleMomentumEnd}
+                 initialScrollIndex={Math.max(0, currentAyah - 1)}
+                 getItemLayout={(data, index) => (
+-                    { length: containerHeight, offset: containerHeight * index, index }
++                    { length: width, offset: width * index, index }
+                 )}
+             />
+             {/* Vertical Progress Bar */}
+@@ -160,8 +211,8 @@ export default function MainFeedScreen() {
+             </View>
+             {showSwipeHint && (
+                 <View style={styles.swipeHintOverlay} pointerEvents="none">
+-                    <ChevronsUp size={48} color="#fff" style={{ marginBottom: 16 }} />
+-                    <Text style={styles.swipeHintText}>Sıradaki ayet için{'\n'}yukarı kaydırın</Text>
++                    <ChevronLeft size={48} color="#fff" style={{ marginBottom: 16 }} />
++                    <Text style={styles.swipeHintText}>Sıradaki ayet için{'\n'}sola kaydırın</Text>
+                 </View>
+             )}
+             <HatimCelebration visible={showHatim} onClose={() => setShowHatim(false)} />
+diff --git a/app/(tabs)/search.tsx b/app/(tabs)/search.tsx
+index 7341db9..d9b3613 100644
+--- a/app/(tabs)/search.tsx
++++ b/app/(tabs)/search.tsx
+@@ -1,20 +1,26 @@
+ import React, { useState } from 'react';
+ import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, useColorScheme } from 'react-native';
++import { useRouter } from 'expo-router';
+ import { Colors } from '../../constants/colors';
+ import { searchAyahs } from '../../services/quranData';
+ import { useUserStore } from '../../store/userStore';
++import { useProgress } from '../../hooks/useProgress';
+ 
+ export default function SearchScreen() {
+     const colorScheme = useColorScheme();
+     const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
+     const { language } = useUserStore();
++    const router = useRouter();
++    const { setProgress } = useProgress();
+ 
+     const [query, setQuery] = useState('');
+     const [results, setResults] = useState<any[]>([]);
+ 
+     const handleSearch = (text: string) => {
+         setQuery(text);
+-        if (text.length > 2) {
++        // Sondaki kısım rakamla bitiyorsa referans olabilir (sebe 50, 34:50 vb.)
++        const endsWithDigit = /\d$/.test(text.trim());
++        if (text.length > 2 || (endsWithDigit && text.trim().length >= 3)) {
+             const res = searchAyahs(text, language);
+             setResults(res);
+         } else {
+@@ -22,6 +28,11 @@ export default function SearchScreen() {
+         }
+     };
+ 
++    const handleResultPress = (surahNumber: number, ayahNumber: number) => {
++        setProgress(surahNumber, ayahNumber);
++        router.push('/(tabs)');
++    };
++
+     return (
+         <View style={[styles.container, { backgroundColor: theme.background }]}>
+             <View style={styles.searchBox}>
+@@ -38,7 +49,10 @@ export default function SearchScreen() {
+                 data={results}
+                 keyExtractor={(item) => item.ayah.globalNumber.toString()}
+                 renderItem={({ item }) => (
+-                    <TouchableOpacity style={[styles.resultCard, { borderBottomColor: theme.border }]}>
++                    <TouchableOpacity
++                        style={[styles.resultCard, { borderBottomColor: theme.border }]}
++                        onPress={() => handleResultPress(item.surahNumber, item.ayah.number)}
++                    >
+                         <Text style={[styles.meta, { color: theme.primary }]}>
+                             {item.surahName} • Ayet {item.ayah.number}
+                         </Text>
+diff --git a/package-lock.json b/package-lock.json
+index e5fbef5..a43bb97 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -3998,7 +3998,7 @@
+       "version": "19.1.17",
+       "resolved": "https://registry.npmjs.org/@types/react/-/react-19.1.17.tgz",
+       "integrity": "sha512-Qec1E3mhALmaspIrhWt9jkQMNdw6bReVu64mjvhbhq2NFPftLPVr+l1SZgmw/66WwBNpDh7ao5AT6gF5v41PFA==",
+-      "dev": true,
++      "devOptional": true,
+       "license": "MIT",
+       "dependencies": {
+         "csstype": "^3.0.2"
+@@ -5052,7 +5052,7 @@
+       "version": "3.2.3",
+       "resolved": "https://registry.npmjs.org/csstype/-/csstype-3.2.3.tgz",
+       "integrity": "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==",
+-      "dev": true,
++      "devOptional": true,
+       "license": "MIT"
+     },
+     "node_modules/debug": {
+@@ -8226,6 +8226,26 @@
+         }
+       }
+     },
++    "node_modules/react-dom": {
++      "version": "19.2.4",
++      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-19.2.4.tgz",
++      "integrity": "sha512-AXJdLo8kgMbimY95O2aKQqsz2iWi9jMgKJhRBAxECE4IFxfcazB2LmzloIoibJI3C12IlY20+KFaLv+71bUJeQ==",
++      "license": "MIT",
++      "peer": true,
++      "dependencies": {
++        "scheduler": "^0.27.0"
++      },
++      "peerDependencies": {
++        "react": "^19.2.4"
++      }
++    },
++    "node_modules/react-dom/node_modules/scheduler": {
++      "version": "0.27.0",
++      "resolved": "https://registry.npmjs.org/scheduler/-/scheduler-0.27.0.tgz",
++      "integrity": "sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==",
++      "license": "MIT",
++      "peer": true
++    },
+     "node_modules/react-fast-compare": {
+       "version": "3.2.2",
+       "resolved": "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-3.2.2.tgz",
+diff --git a/services/quranData.ts b/services/quranData.ts
+index dbb3941..69a36c8 100644
+--- a/services/quranData.ts
++++ b/services/quranData.ts
+@@ -47,15 +47,334 @@ export const getAyah = (surahNumber: number, ayahNumber: number): Ayah | undefin
+     return surah.ayahs.find(a => a.number === ayahNumber);
+ };
+ 
++/**
++ * Kapsamlı normalize fonksiyonu – fonetik eşleştirme için:
++ *  1. lowercase
++ *  2. Türkçe / diacritic → ASCII  (ş→s, ç→c, ğ→g, ı→i, ö→o, ü→u …)
++ *  3. Arapça yazı karakterlerini sil
++ *  4. Fonetik digraph düzleştirme  (sh→s, kh→h, gh→g, th→t, dh→d)
++ *  5. Doubled vowel kısaltma       (aa→a, ee→e, oo→o, ii→i, uu→u)
++ *  6. Yaygın transliterasyon prefix'lerini sil (al-, ash-, adh-, …)
++ *  7. Tire, apostrof, boşluk sil
++ */
++const CHAR_MAP: Record<string, string> = {
++    'ş': 's', 'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ü': 'u',
++    'â': 'a', 'î': 'i', 'û': 'u', 'é': 'e', 'è': 'e', 'ê': 'e',
++    'à': 'a', 'ñ': 'n', 'ä': 'a',
++};
++
++const normalize = (s: string): string => {
++    let o = s.toLowerCase();
++    // 2 – Türkçe / diacritic
++    o = o.replace(/[^\x00-\x7F]/g, ch => CHAR_MAP[ch] || ch);
++    // 3 – Arapça Unicode bloklarını sil
++    o = o.replace(/[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]/g, '');
++    // 6 – Prefix sil  (adh-, ash-, al-, an-, ar-, ad-, at-, az-, aal-)
++    o = o.replace(/^(adh|ash|al|an|ar|ad|at|az|aal)[-\s]*/i, '');
++    // 7 – Tire, apostrof, boşluk sil
++    o = o.replace(/[-'\s]/g, '');
++    // 4 – Fonetik digraph düzleştirme
++    o = o.replace(/sh/g, 's');
++    o = o.replace(/kh/g, 'h');
++    o = o.replace(/gh/g, 'g');
++    o = o.replace(/th/g, 't');
++    o = o.replace(/dh/g, 'd');
++    // 5 – Doubled vowel kısalt
++    o = o.replace(/(.)\1+/g, '$1');
++    return o;
++};
++
++/* ── Türkçe / alternatif sure isim haritası ────────────────────── */
++const SURAH_ALIASES: Record<string, number> = {};
++
++// Alias ekle (normalize ederek key olarak kullan)
++const addAlias = (names: string[], surahNo: number) => {
++    for (const n of names) {
++        SURAH_ALIASES[normalize(n)] = surahNo;
++    }
++};
++
++// 114 sure – Türkçe yaygın isimler + alternatifler
++addAlias(['fatiha', 'el-fatiha'], 1);
++addAlias(['bakara', 'bekara'], 2);
++addAlias(['ali imran', 'al-i imran', 'imran'], 3);
++addAlias(['nisa', 'nissa'], 4);
++addAlias(['maide', 'ma\'ide'], 5);
++addAlias(['enam', 'en\'am'], 6);
++addAlias(['araf', 'a\'raf'], 7);
++addAlias(['enfal'], 8);
++addAlias(['tevbe', 'tövbe'], 9);
++addAlias(['yunus'], 10);
++addAlias(['hud', 'hûd'], 11);
++addAlias(['yusuf'], 12);
++addAlias(['rad', 'ra\'d'], 13);
++addAlias(['ibrahim'], 14);
++addAlias(['hicr'], 15);
++addAlias(['nahl'], 16);
++addAlias(['isra', 'israa'], 17);
++addAlias(['kehf'], 18);
++addAlias(['meryem'], 19);
++addAlias(['taha', 'tâhâ'], 20);
++addAlias(['enbiya', 'enbiyâ'], 21);
++addAlias(['hac', 'hacc'], 22);
++addAlias(['muminun', 'müminun', 'mu\'minun'], 23);
++addAlias(['nur', 'nûr'], 24);
++addAlias(['furkan', 'furkân'], 25);
++addAlias(['şuara', 'suara', 'şu\'ara'], 26);
++addAlias(['neml'], 27);
++addAlias(['kasas'], 28);
++addAlias(['ankebut', 'ankebût'], 29);
++addAlias(['rum', 'rûm'], 30);
++addAlias(['lokman', 'luqman'], 31);
++addAlias(['secde', 'sajda'], 32);
++addAlias(['ahzab', 'ahzâb', 'azhap', 'azhab'], 33);
++addAlias(['sebe', 'seba', 'sebe\'', 'saba'], 34);
++addAlias(['fatir', 'fâtır', 'fatır'], 35);
++addAlias(['yasin', 'yâsin', 'yâsîn'], 36);
++addAlias(['saffat', 'sâffât'], 37);
++addAlias(['sad', 'sâd'], 38);
++addAlias(['zümer', 'zumer', 'zumar'], 39);
++addAlias(['mümin', 'mumin', 'gafir', 'ghafir'], 40);
++addAlias(['fussilet', 'fussılet', 'ha mim secde'], 41);
++addAlias(['şura', 'sura', 'şûra', 'şûrâ'], 42);
++addAlias(['zuhruf', 'züHruf'], 43);
++addAlias(['duhan', 'duhân'], 44);
++addAlias(['casiye', 'câsiye'], 45);
++addAlias(['ahkaf', 'ahkâf'], 46);
++addAlias(['muhammed'], 47);
++addAlias(['fetih', 'feth'], 48);
++addAlias(['hucurat', 'hucurât'], 49);
++addAlias(['kaf', 'qaf'], 50);
++addAlias(['zariyat', 'zâriyât', 'zâriyat'], 51);
++addAlias(['tur', 'tûr'], 52);
++addAlias(['necm'], 53);
++addAlias(['kamer'], 54);
++addAlias(['rahman', 'rahmân'], 55);
++addAlias(['vakia', 'vâkıa', 'vakıa'], 56);
++addAlias(['hadid', 'hadîd'], 57);
++addAlias(['mücadele', 'mucadele', 'mücâdele'], 58);
++addAlias(['haşr', 'hasr', 'hashr'], 59);
++addAlias(['mümtehine', 'mumtehine', 'mümtahine'], 60);
++addAlias(['saf', 'saff'], 61);
++addAlias(['cuma', 'cum\'a'], 62);
++addAlias(['münafikun', 'munafikun', 'münâfıkûn'], 63);
++addAlias(['tegabun', 'teğâbun', 'tegâbün'], 64);
++addAlias(['talak', 'talâk'], 65);
++addAlias(['tahrim', 'tahrîm'], 66);
++addAlias(['mülk', 'mulk'], 67);
++addAlias(['kalem'], 68);
++addAlias(['hakka', 'hâkka', 'hâkka'], 69);
++addAlias(['mearic', 'meâric', 'me\'aric'], 70);
++addAlias(['nuh', 'nûh'], 71);
++addAlias(['cin', 'cinn'], 72);
++addAlias(['müzzemmil', 'muzzemmil'], 73);
++addAlias(['müddessir', 'muddessir', 'müddesir'], 74);
++addAlias(['kıyamet', 'kiyamet', 'kıyâmet'], 75);
++addAlias(['insan', 'insân'], 76);
++addAlias(['mürselat', 'murselat', 'mürselât'], 77);
++addAlias(['nebe', 'nebe\'', 'amme'], 78);
++addAlias(['naziat', 'nâziât', 'naziât'], 79);
++addAlias(['abese'], 80);
++addAlias(['tekvir', 'tekvîr'], 81);
++addAlias(['infitar', 'infitâr'], 82);
++addAlias(['mutaffifin', 'mutaffifîn', 'tatfif'], 83);
++addAlias(['inşikak', 'insikak', 'inşikâk'], 84);
++addAlias(['büruc', 'buruc', 'bürûc'], 85);
++addAlias(['tarık', 'tarik', 'târık'], 86);
++addAlias(['ala', 'âlâ', 'a\'la'], 87);
++addAlias(['gaşiye', 'gasiye', 'gâşiye'], 88);
++addAlias(['fecr'], 89);
++addAlias(['beled'], 90);
++addAlias(['şems', 'sems'], 91);
++addAlias(['leyl', 'leyil'], 92);
++addAlias(['duha', 'duhâ'], 93);
++addAlias(['inşirah', 'insirah', 'şerh', 'serh'], 94);
++addAlias(['tin', 'tîn'], 95);
++addAlias(['alak', 'alâk'], 96);
++addAlias(['kadir', 'kadr'], 97);
++addAlias(['beyyine', 'beyyina'], 98);
++addAlias(['zilzal', 'zelzele', 'zilzâl'], 99);
++addAlias(['adiyat', 'âdiyât'], 100);
++addAlias(['karia', 'kâria', 'kâri\'a'], 101);
++addAlias(['tekasür', 'tekasur', 'tekâsür'], 102);
++addAlias(['asr'], 103);
++addAlias(['hümeze', 'humeze', 'hümaza'], 104);
++addAlias(['fil'], 105);
++addAlias(['kureyş', 'kureys', 'kureyis'], 106);
++addAlias(['maun', 'mâûn', 'mâ\'ûn'], 107);
++addAlias(['kevser', 'kövsêr'], 108);
++addAlias(['kafirun', 'kâfirûn', 'kâfirun'], 109);
++addAlias(['nasr'], 110);
++addAlias(['tebbet', 'mesed', 'leheb'], 111);
++addAlias(['ihlas', 'ihlâs'], 112);
++addAlias(['felak', 'felâk'], 113);
++addAlias(['nas', 'nâs'], 114);
++
++/**
++ * Alias haritasından sure numarası bul.
++ * Girdiyi normalize edip SURAH_ALIASES'ta arar.
++ */
++const findSurahByAlias = (name: string): number | null => {
++    const key = normalize(name);
++    if (SURAH_ALIASES[key] !== undefined) return SURAH_ALIASES[key];
++
++    // Partial match: alias key starts with input or input starts with alias key
++    if (key.length >= 3) {
++        for (const [aliasKey, num] of Object.entries(SURAH_ALIASES)) {
++            if (aliasKey.startsWith(key) || key.startsWith(aliasKey)) {
++                return num;
++            }
++        }
++    }
++    return null;
++};
++
++/* ── Sure adı ile ayet bulmak için parseReference ──────────────── */
++
++const parseReference = (
++    query: string,
++): { surahNumber: number; ayahNumber: number } | null => {
++    const trimmed = query.trim();
++
++    if (trimmed.length < 3) return null;
++
++    // Sondaki sayıyı bul  (ör: "sebe 50" → "50",  "34:50" → "50")
++    const tailDigits = trimmed.match(/(\d{1,3})$/);
++
++    if (!tailDigits) return null;
++
++    const ayahNumber = parseInt(tailDigits[1], 10);
++
++
++    // Sayıdan önceki kısmı al ve separator'ları temizle
++    let before = trimmed.substring(0, tailDigits.index!).trim();
++    // Sondaki : . - gibi ayırıcıları sil
++    before = before.replace(/[:\.\-]+$/, '').trim();
++
++
++    if (!before) return null;
++
++    // Eğer öndeki kısım da saf sayı ise → sure numarası + ayet numarası
++    if (/^\d{1,3}$/.test(before)) {
++
++        return {
++            surahNumber: parseInt(before, 10),
++            ayahNumber,
++        };
++    }
++
++    // ── İlk önce alias haritasından ara (Türkçe isimler) ──
++    const aliasMatch = findSurahByAlias(before);
++    if (aliasMatch) {
++
++        return { surahNumber: aliasMatch, ayahNumber };
++    }
++
++    // ── Sonra normalize tabanlı eşleştirme (data.json isimleri) ──
++    const ni = normalize(before);
++
++    if (!ni) return null;
++
++    for (const surah of quranData) {
++        const candidates = [
++            surah.name.tr,
++            surah.name.en,
++            surah.name.ar,
++            surah.englishNameTranslation,
++        ];
++
++        // a) Tam eşleşme
++        for (const c of candidates) {
++            if (normalize(c) === ni) {
++
++                return { surahNumber: surah.number, ayahNumber };
++            }
++        }
++
++        // b) startsWith / includes  (min 3 karakter)
++        if (ni.length >= 3) {
++            for (const c of candidates) {
++                const nc = normalize(c);
++                if (nc.length === 0) continue; // Arapça isimler boş string olur, atla
++                if (
++                    nc.startsWith(ni) ||
++                    ni.startsWith(nc) ||
++                    nc.includes(ni)
++                ) {
++
++                    return { surahNumber: surah.number, ayahNumber };
++                }
++            }
++        }
++
++        // c) Ünsüz iskelet eşleştirmesi  (min 3 karakter)
++        //    "sebe"→sb  ===  "Saba"→sb   ✓
++        //    "nisa"→ns  ===  "Nisaa"→ns   ✓
++        if (ni.length >= 3) {
++            const ic = ni.replace(/[aeiou]/g, '');
++            if (ic.length >= 2) {
++                for (const c of candidates) {
++                    const cc = normalize(c).replace(/[aeiou]/g, '');
++                    if (cc.length >= 2 && (
++                        cc === ic ||
++                        cc.startsWith(ic) ||
++                        ic.startsWith(cc)
++                    )) {
++
++                        return { surahNumber: surah.number, ayahNumber };
++                    }
++                }
++            }
++        }
++    }
++
++    return null;
++};
++
++/* ── Ana arama fonksiyonu ──────────────────────────────────────── */
++
+ export const searchAyahs = (query: string, language: AppLanguage) => {
+     const results: { surahName: string; surahNumber: number; ayah: Ayah }[] = [];
++
++    // 1) Referans tabanlı arama  (34:50, sebe 50 …)
++    const ref = parseReference(query);
++
++    if (ref) {
++        const surah = getSurah(ref.surahNumber);
++        if (surah) {
++            const ayah = surah.ayahs.find(a => a.number === ref.ayahNumber);
++            if (ayah) {
++                const sName =
++                    language === 'ar'
++                        ? surah.name.ar
++                        : language === 'en'
++                            ? surah.name.en
++                            : surah.name.tr;
++                results.push({
++                    surahName: sName || surah.name.ar,
++                    surahNumber: surah.number,
++                    ayah,
++                });
++                return results;
++            }
++        }
++    }
++
++    // 2) Mevcut metin araması (en az 3 karakter, meal + Arapça)
+     const lowerQuery = query.toLowerCase();
+ 
+     quranData.forEach(surah => {
+         surah.ayahs.forEach(ayah => {
+-            if (ayah.translations[language]?.toLowerCase().includes(lowerQuery) || ayah.arabic.includes(query)) {
+-                // Simple fallback for surah name display
+-                const sName = language === 'ar' ? surah.name.ar : (language === 'en' ? surah.name.en : surah.name.tr);
++            if (
++                ayah.translations[language]?.toLowerCase().includes(lowerQuery) ||
++                ayah.arabic.includes(query)
++            ) {
++                const sName =
++                    language === 'ar'
++                        ? surah.name.ar
++                        : language === 'en'
++                            ? surah.name.en
++                            : surah.name.tr;
+                 results.push({
+                     surahName: sName || surah.name.ar,
+                     surahNumber: surah.number,
