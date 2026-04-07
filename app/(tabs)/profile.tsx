@@ -12,7 +12,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 import { ACHIEVEMENTS } from '../../constants/achievements';
 import { useAchievements } from '../../hooks/useAchievements';
-import { BookOpen, BookMarked, MessageSquare, Heart, TrendingUp, GitCommitHorizontal, Star } from 'lucide-react-native';
+import { BookOpen, BookMarked, MessageSquare, Heart, TrendingUp, GitCommitHorizontal, Star, Settings, LogOut, UserX, ChevronRight } from 'lucide-react-native';
 import { useColorScheme, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
@@ -46,6 +46,7 @@ export default function ProfileScreen() {
 
     const [emailInput, setEmailInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
+    const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -71,8 +72,9 @@ export default function ProfileScreen() {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 setAuth(user.uid, user.isAnonymous, user.displayName, user.email);
-                const { syncProgressToCloud } = await import('../../services/syncService');
+                const { syncProgressToCloud, mergeGuestFavoritesToCloud } = await import('../../services/syncService');
                 await syncProgressToCloud();
+                await mergeGuestFavoritesToCloud();
             } else {
                 setAuth(null, false, null, null);
             }
@@ -92,6 +94,10 @@ export default function ProfileScreen() {
     };
 
     const handleRegister = async () => {
+        if (passwordInput.length < 6) {
+            setError('Şifre en az 6 karakter olmalıdır.');
+            return;
+        }
         setLoading(true);
         setError('');
         try {
@@ -145,56 +151,70 @@ export default function ProfileScreen() {
 
     if (userId) {
         return (
-            <View style={[styles.container, { backgroundColor: theme.background }]}>
-                <View style={[styles.card, { backgroundColor: theme.card }]}>
-                    <Text style={[styles.title, { color: theme.text }]}>Profiliniz</Text>
-                    <Text style={{ color: theme.secondary, marginBottom: 8, textAlign: 'center' }}>
-                        Durum: {isAnonymous ? 'Misafir Kullanıcı' : 'Kayıtlı Kullanıcı'}
+            <ScrollView style={[styles.container, { backgroundColor: theme.background }]}>
+                <View style={[styles.headerCard, { backgroundColor: theme.card }]}>
+                    <View style={styles.avatarCircle}>
+                        <Text style={styles.avatarText}>{isAnonymous ? 'M' : email?.[0]?.toUpperCase() || 'U'}</Text>
+                    </View>
+                    <Text style={[styles.title, { color: theme.text, marginBottom: 4 }]}>
+                        {isAnonymous ? 'Misafir Kullanıcı' : email}
                     </Text>
-                    {!isAnonymous && <Text style={{ color: theme.text, marginBottom: 24, textAlign: 'center' }}>Email: {email}</Text>}
+                    <Text style={{ color: theme.secondary, marginBottom: 16 }}>
+                        Hesap Türü: {isAnonymous ? 'Misafir' : 'Kayıtlı'}
+                    </Text>
+                </View>
 
-                    <Text style={[styles.title, { color: theme.text, marginTop: 16, fontSize: 18 }]}>Kazanılan Rozetler</Text>
-                    <View style={styles.badgesContainer}>
-                        {ACHIEVEMENTS.map(badge => {
-                            const IconComponent = ICON_MAP[badge.icon] || Star;
-                            const hasEarned = earnedBadges.includes(badge.id);
-
-                            return (
-                                <View key={badge.id} style={[styles.badge, hasEarned ? styles.badgeEarned : styles.badgeLocked]}>
-                                    <IconComponent size={32} color={hasEarned ? theme.primary : '#ccc'} />
-                                    <Text style={{ fontSize: 12, marginTop: 4, color: hasEarned ? theme.text : '#ccc', textAlign: 'center' }}>
-                                        {badge.title}
-                                    </Text>
-                                </View>
-                            );
-                        })}
-                    </View>
-
-                    <Text style={[styles.title, { color: theme.text, marginTop: 16, fontSize: 18 }]}>Ayarlar (Dil)</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 8 }}>
-                        <TouchableOpacity onPress={() => setLanguage('tr')} style={[styles.button, { flex: 1, margin: 4, backgroundColor: language === 'tr' ? theme.primary : theme.muted }]}><Text style={{ color: '#fff', textAlign: 'center' }}>Türkçe</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => setLanguage('en')} style={[styles.button, { flex: 1, margin: 4, backgroundColor: language === 'en' ? theme.primary : theme.muted }]}><Text style={{ color: '#fff', textAlign: 'center' }}>English</Text></TouchableOpacity>
-                        <TouchableOpacity onPress={() => setLanguage('ar')} style={[styles.button, { flex: 1, margin: 4, backgroundColor: language === 'ar' ? theme.primary : theme.muted }]}><Text style={{ color: '#fff', textAlign: 'center' }}>العربية</Text></TouchableOpacity>
-                    </View>
-
-                    <TouchableOpacity style={[styles.button, { backgroundColor: '#e74c3c', marginTop: 16 }]} onPress={handleLogout}>
-                        <Text style={styles.buttonText}>Çıkış Yap</Text>
+                <View style={[styles.menuCard, { backgroundColor: theme.card }]}>
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.border }]} onPress={() => router.push('/(tabs)/favorites')}>
+                        <View style={styles.menuItemLeft}>
+                            <Heart size={20} color={theme.primary} />
+                            <Text style={[styles.menuItemText, { color: theme.text }]}>Favorilerim</Text>
+                        </View>
+                        <ChevronRight size={20} color={theme.muted} />
                     </TouchableOpacity>
 
-                    {__DEV__ && (
-                        <TouchableOpacity style={[styles.button, { backgroundColor: '#000', marginTop: 16, borderWidth: 1, borderColor: '#333' }]} onPress={clearDevStorage}>
-                            <Text style={[styles.buttonText, { color: '#fff' }]}>[DEV] Onboarding'i Sıfırla</Text>
-                        </TouchableOpacity>
-                    )}
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.border }]}>
+                        <View style={styles.menuItemLeft}>
+                            <MessageSquare size={20} color={theme.primary} />
+                            <Text style={[styles.menuItemText, { color: theme.text }]}>Yorumlarım</Text>
+                        </View>
+                        <ChevronRight size={20} color={theme.muted} />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.border }]}>
+                        <View style={styles.menuItemLeft}>
+                            <Settings size={20} color={theme.primary} />
+                            <Text style={[styles.menuItemText, { color: theme.text }]}>Hesap Ayarları</Text>
+                        </View>
+                        <ChevronRight size={20} color={theme.muted} />
+                    </TouchableOpacity>
                 </View>
-            </View>
+
+                <View style={[styles.menuCard, { backgroundColor: theme.card }]}>
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.border }]} onPress={handleLogout}>
+                        <View style={styles.menuItemLeft}>
+                            <LogOut size={20} color="#e74c3c" />
+                            <Text style={[styles.menuItemText, { color: "#e74c3c" }]}>Çıkış Yap</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomWidth: 0 }]}>
+                        <View style={styles.menuItemLeft}>
+                            <UserX size={20} color="#e74c3c" />
+                            <Text style={[styles.menuItemText, { color: "#e74c3c" }]}>Hesabı Sil</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         );
     }
 
     return (
         <View style={[styles.container, { backgroundColor: theme.background }]}>
             <View style={styles.card}>
-                <Text style={[styles.title, { color: theme.text }]}>Giriş Yap</Text>
+                <Text style={[styles.title, { color: theme.text }]}>
+                    {authMode === 'login' ? 'Giriş Yap' : 'Kayıt Ol'}
+                </Text>
 
                 {error ? <Text style={styles.error}>{error}</Text> : null}
 
@@ -221,27 +241,41 @@ export default function ProfileScreen() {
                     <ActivityIndicator size="large" color={theme.primary} style={{ marginVertical: 16 }} />
                 ) : (
                     <>
-                        <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={handleLogin}>
-                            <Text style={styles.buttonText}>Giriş Yap</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={[styles.button, { backgroundColor: theme.secondary, marginTop: 12 }]} onPress={handleRegister}>
-                            <Text style={styles.buttonText}>Kayıt Ol</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity 
-                            style={[styles.outlineButton, { borderColor: theme.primary, marginTop: 12, backgroundColor: 'transparent' }]} 
-                            onPress={() => promptAsync()}
-                            disabled={!request}
-                        >
-                            <Text style={[styles.outlineButtonText, { color: theme.primary }]}>Google ile Giriş Yap</Text>
-                        </TouchableOpacity>
+                        {authMode === 'login' ? (
+                            <>
+                                <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={handleLogin}>
+                                    <Text style={styles.buttonText}>Giriş Yap</Text>
+                                </TouchableOpacity>
+                                
+                                <TouchableOpacity style={{marginTop: 16, alignItems: 'center'}} onPress={() => { setAuthMode('register'); setError(''); }}>
+                                    <Text style={{color: theme.primary, fontWeight: 'bold'}}>Hesabın yok mu? Kayıt Ol</Text>
+                                </TouchableOpacity>
+                            </>
+                        ) : (
+                            <>
+                                <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={handleRegister}>
+                                    <Text style={styles.buttonText}>Kayıt Ol</Text>
+                                </TouchableOpacity>
+                                
+                                <TouchableOpacity style={{marginTop: 16, alignItems: 'center'}} onPress={() => { setAuthMode('login'); setError(''); }}>
+                                    <Text style={{color: theme.primary, fontWeight: 'bold'}}>Zaten hesabın var mı? Giriş Yap</Text>
+                                </TouchableOpacity>
+                            </>
+                        )}
 
                         <View style={styles.divider}>
                             <View style={[styles.line, { backgroundColor: theme.border }]} />
                             <Text style={{ marginHorizontal: 8, color: theme.muted }}>VEYA</Text>
                             <View style={[styles.line, { backgroundColor: theme.border }]} />
                         </View>
+
+                        <TouchableOpacity 
+                            style={[styles.outlineButton, { borderColor: theme.primary, backgroundColor: 'transparent', marginBottom: 12 }]} 
+                            onPress={() => promptAsync()}
+                            disabled={!request}
+                        >
+                            <Text style={[styles.outlineButtonText, { color: theme.primary }]}>Google ile {authMode === 'login' ? 'Giriş Yap' : 'Kayıt Ol'}</Text>
+                        </TouchableOpacity>
 
                         <TouchableOpacity style={[styles.outlineButton, { borderColor: theme.primary }]} onPress={handleGuestLogin}>
                             <Text style={[styles.outlineButtonText, { color: theme.primary }]}>Misafir Olarak Devam Et</Text>
@@ -256,8 +290,50 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        padding: 16,
+    },
+    headerCard: {
         padding: 24,
+        borderRadius: 12,
+        alignItems: 'center',
+        marginBottom: 16,
+        elevation: 2,
+    },
+    avatarCircle: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        backgroundColor: '#B69A73',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 16,
+    },
+    avatarText: {
+        fontSize: 32,
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    menuCard: {
+        borderRadius: 12,
+        marginBottom: 16,
+        elevation: 2,
+        overflow: 'hidden',
+    },
+    menuItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 16,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+    menuItemLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    menuItemText: {
+        fontSize: 16,
+        marginLeft: 12,
+        fontWeight: '500',
     },
     card: {
         backgroundColor: '#fff',

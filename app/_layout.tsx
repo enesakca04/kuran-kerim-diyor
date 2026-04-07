@@ -24,6 +24,11 @@ export default function RootLayout() {
             if (hasOnboarded !== 'true') {
                 router.replace('/onboarding');
             }
+            
+            // Yükle
+            const { useUserStore } = await import('../store/userStore');
+            await useUserStore.getState().loadFavorites();
+            
             SplashScreen.hideAsync();
         };
 

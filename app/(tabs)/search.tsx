@@ -5,6 +5,45 @@ import { Colors } from '../../constants/colors';
 import { searchAyahs } from '../../services/quranData';
 import { useUserStore } from '../../store/userStore';
 import { useProgress } from '../../hooks/useProgress';
+import { useAyahStats } from '../../hooks/useAyahStats';
+import { formatFavCount } from '../../services/statsService';
+import { Heart } from 'lucide-react-native';
+
+const SearchResultItem = ({ item, theme, language, onPress }: any) => {
+    const ayahId = `${item.surahNumber}:${item.ayah.number}`;
+    const { count } = useAyahStats(ayahId);
+    const { favorites } = useUserStore();
+    
+    // Eğer daha önceden(bu özellik yokken) lokal olarak favladıysa ama global 0 ise en az 1 göster
+    const displayCount = Math.max(count, favorites[ayahId] ? 1 : 0);
+    
+    return (
+        <TouchableOpacity
+            style={[styles.resultCard, { borderBottomColor: theme.border }]}
+            onPress={onPress}
+        >
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <Text style={[styles.meta, { color: theme.primary, marginBottom: 0 }]}>
+                    {item.surahName} • Ayet {item.ayah.number}
+                </Text>
+                {displayCount > 0 && (
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ color: theme.primary, marginRight: 4, fontSize: 12, fontWeight: 'bold' }}>
+                            {formatFavCount(displayCount)} kişi
+                        </Text>
+                        <Heart size={14} color={theme.primary} fill={theme.primary} />
+                    </View>
+                )}
+            </View>
+            <Text style={[styles.arabic, { color: theme.text }]} numberOfLines={2}>
+                {item.ayah.arabic}
+            </Text>
+            <Text style={[styles.translation, { color: theme.secondary }]} numberOfLines={3}>
+                {item.ayah.translations[language]}
+            </Text>
+        </TouchableOpacity>
+    );
+};
 
 export default function SearchScreen() {
     const colorScheme = useColorScheme();
@@ -49,20 +88,12 @@ export default function SearchScreen() {
                 data={results}
                 keyExtractor={(item) => item.ayah.globalNumber.toString()}
                 renderItem={({ item }) => (
-                    <TouchableOpacity
-                        style={[styles.resultCard, { borderBottomColor: theme.border }]}
-                        onPress={() => handleResultPress(item.surahNumber, item.ayah.number)}
-                    >
-                        <Text style={[styles.meta, { color: theme.primary }]}>
-                            {item.surahName} • Ayet {item.ayah.number}
-                        </Text>
-                        <Text style={[styles.arabic, { color: theme.text }]} numberOfLines={2}>
-                            {item.ayah.arabic}
-                        </Text>
-                        <Text style={[styles.translation, { color: theme.secondary }]} numberOfLines={3}>
-                            {item.ayah.translations[language]}
-                        </Text>
-                    </TouchableOpacity>
+                    <SearchResultItem 
+                        item={item} 
+                        theme={theme} 
+                        language={language} 
+                        onPress={() => handleResultPress(item.surahNumber, item.ayah.number)} 
+                    />
                 )}
                 ListEmptyComponent={
                     query.length > 2 ? (

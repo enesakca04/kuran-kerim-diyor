@@ -1,12 +1,15 @@
 import { Tabs } from 'expo-router';
-import { Home, BookOpen, Search, User } from 'lucide-react-native';
+import { Home, BookOpen, Search, User, Heart } from 'lucide-react-native';
 import { Colors } from '../../constants/colors';
+import { View, StyleSheet, Platform, useColorScheme } from 'react-native';
 
 export default function TabLayout() {
-    const theme = Colors.light; // We can add useColorScheme later
+    const colorScheme = useColorScheme();
+    const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
 
     return (
         <Tabs
+            backBehavior="history"
             screenOptions={{
                 tabBarActiveTintColor: theme.primary,
                 tabBarInactiveTintColor: theme.muted,
@@ -36,6 +39,21 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
+                name="favorites"
+                options={{
+                    title: "", // No title to keep it clean, just the center button
+                    tabBarIcon: ({ focused }) => (
+                        <View style={[
+                            styles.centerButton,
+                            { backgroundColor: focused ? theme.primary : theme.background }
+                        ]}>
+                            {/* @ts-ignore */}
+                            <Heart size={26} color={focused ? '#fff' : theme.muted} fill={focused ? '#fff' : 'transparent'} />
+                        </View>
+                    ),
+                }}
+            />
+            <Tabs.Screen
                 name="search"
                 options={{
                     title: "Arama",
@@ -54,3 +72,22 @@ export default function TabLayout() {
         </Tabs>
     );
 }
+
+const styles = StyleSheet.create({
+    centerButton: {
+        top: -10,
+        width: 54,
+        height: 54,
+        borderRadius: 27,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 3.84,
+        elevation: 5,
+    }
+});

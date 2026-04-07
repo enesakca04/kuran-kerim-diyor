@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent, Text, PanResponder, GestureResponderEvent, I18nManager } from 'react-native';
+import { View, StyleSheet, FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent, Text, PanResponder, GestureResponderEvent, I18nManager, Animated } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ChevronLeft, Heart } from 'lucide-react-native';
 import { Colors } from '../../constants/colors';
@@ -10,6 +10,10 @@ import { useAchievements } from '../../hooks/useAchievements';
 import { HatimCelebration } from '../../components/HatimCelebration';
 import { useNavigation } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
+import { useUserStore } from '../../store/userStore';
+import { DeleteWarningModal } from '../../components/DeleteWarningModal';
+import { useAyahStats } from '../../hooks/useAyahStats';
+import { formatFavCount } from '../../services/statsService';
 
 const { width } = Dimensions.get('window');
 
@@ -25,7 +29,8 @@ export default function MainFeedScreen() {
     const [uiAyah, setUiAyah] = useState(currentAyah);
     const [barHeight, setBarHeight] = useState(0);
     const [isScrubbing, setIsScrubbing] = useState(false);
-    const [favorites, setFavorites] = useState<Set<string>>(new Set());
+    const { favorites, toggleFavorite, hideFavoriteDeleteWarning, setHideFavoriteDeleteWarning } = useUserStore();
+    const [showDeleteWarning, setShowDeleteWarning] = useState(false);
 
     const flatListRef = useRef<FlatList>(null);
     const scrubTimer = useRef<NodeJS.Timeout | null>(null);
@@ -103,34 +108,72 @@ export default function MainFeedScreen() {
     }, []);
 
     const favoriteId = surah ? `${surah.number}:${uiAyah}` : null;
-    const isFavorited = favoriteId ? favorites.has(favoriteId) : false;
+    // Map içinde key var mı kontrolü
+    const isFavorited = favoriteId ? !!favorites[favoriteId] : false;
+    
+    const { count: globalFavCount, incrementOptimistic } = useAyahStats(favoriteId);
+    
+    const scaleAnim = useRef(new Animated.Value(1)).current;
 
-    const toggleFavorite = React.useCallback(() => {
+    const executeToggle = React.useCallback(() => {
         if (!favoriteId) return;
-        setFavorites(prev => {
-            const newSet = new Set(prev);
-            if (newSet.has(favoriteId)) {
-                newSet.delete(favoriteId);
-            } else {
-                newSet.add(favoriteId);
-            }
-            return newSet;
-        });
-    }, [favoriteId]);
+        toggleFavorite(favoriteId);
+        incrementOptimistic(isFavorited ? -1 : 1);
+        
+        Animated.sequence([
+            Animated.spring(scaleAnim, {
+                toValue: 1.3,
+                useNativeDriver: true,
+                speed: 20
+            }),
+            Animated.spring(scaleAnim, {
+                toValue: 1,
+                useNativeDriver: true,
+                speed: 20
+            })
+        ]).start();
+    }, [favoriteId, toggleFavorite, scaleAnim]);
+
+    const handleToggleFavorite = React.useCallback(() => {
+        if (!favoriteId) return;
+        // Eğer favoriden çikariyorsak ve uyarilmasini gizlemediyse uyar
+        if (isFavorited && !hideFavoriteDeleteWarning) {
+            setShowDeleteWarning(true);
+        } else {
+            executeToggle();
+        }
+    }, [favoriteId, isFavorited, hideFavoriteDeleteWarning, executeToggle]);
+
+    const handleConfirmDelete = (dontAskAgain: boolean) => {
+        if (dontAskAgain) {
+            setHideFavoriteDeleteWarning(true);
+        }
+        setShowDeleteWarning(false);
+        executeToggle();
+    };
 
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <TouchableOpacity onPress={toggleFavorite} style={{ marginRight: 16, padding: 4 }}>
-                    <Heart 
-                        size={24} 
-                        color={theme.primary} 
-                        fill={isFavorited ? theme.primary : 'transparent'} 
-                    />
-                </TouchableOpacity>
+                <View style={{ alignItems: 'center' }}>
+                    <TouchableOpacity onPress={handleToggleFavorite} style={{ marginRight: 16, padding: 4 }}>
+                        <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+                            <Heart 
+                                size={24} 
+                                color={theme.primary} 
+                                fill={isFavorited ? theme.primary : 'transparent'} 
+                            />
+                        </Animated.View>
+                    </TouchableOpacity>
+                    {globalFavCount > 0 && (
+                        <Text style={{ fontSize: 10, color: theme.primary, marginRight: 16, marginTop: -4, fontWeight: 'bold' }}>
+                            {formatFavCount(globalFavCount)}
+                        </Text>
+                    )}
+                </View>
             ),
         });
-    }, [navigation, isFavorited, toggleFavorite, theme.primary]);
+    }, [navigation, isFavorited, handleToggleFavorite, theme.primary, scaleAnim, globalFavCount]);
 
     if (!surah) return null;
 
@@ -216,6 +259,11 @@ export default function MainFeedScreen() {
                 </View>
             )}
             <HatimCelebration visible={showHatim} onClose={() => setShowHatim(false)} />
+            <DeleteWarningModal 
+                visible={showDeleteWarning}
+                onCancel={() => setShowDeleteWarning(false)}
+                onConfirm={handleConfirmDelete}
+            />
         </View>
     );
 }
