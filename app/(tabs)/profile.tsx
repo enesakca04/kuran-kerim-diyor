@@ -67,20 +67,7 @@ export default function ProfileScreen() {
         }
     }, [response]);
 
-    // Listen to Auth State
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                setAuth(user.uid, user.isAnonymous, user.displayName, user.email);
-                const { syncProgressToCloud, mergeGuestFavoritesToCloud } = await import('../../services/syncService');
-                await syncProgressToCloud();
-                await mergeGuestFavoritesToCloud();
-            } else {
-                setAuth(null, false, null, null);
-            }
-        });
-        return unsubscribe;
-    }, []);
+    // Auth State is now managed globally in _layout.tsx
 
     const handleLogin = async () => {
         setLoading(true);
@@ -173,7 +160,7 @@ export default function ProfileScreen() {
                         <ChevronRight size={20} color={theme.muted} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.border }]}>
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.border }]} onPress={() => router.push('/my-comments')}>
                         <View style={styles.menuItemLeft}>
                             <MessageSquare size={20} color={theme.primary} />
                             <Text style={[styles.menuItemText, { color: theme.text }]}>Yorumlarım</Text>
@@ -276,6 +263,15 @@ export default function ProfileScreen() {
                         >
                             <Text style={[styles.outlineButtonText, { color: theme.primary }]}>Google ile {authMode === 'login' ? 'Giriş Yap' : 'Kayıt Ol'}</Text>
                         </TouchableOpacity>
+
+                        {Platform.OS === 'ios' && (
+                            <TouchableOpacity 
+                                style={[styles.outlineButton, { borderColor: theme.text, backgroundColor: theme.card, marginBottom: 12 }]} 
+                                onPress={handleAppleLogin}
+                            >
+                                <Text style={[styles.outlineButtonText, { color: theme.text }]}>Apple ile {authMode === 'login' ? 'Giriş Yap' : 'Kayıt Ol'}</Text>
+                            </TouchableOpacity>
+                        )}
 
                         <TouchableOpacity style={[styles.outlineButton, { borderColor: theme.primary }]} onPress={handleGuestLogin}>
                             <Text style={[styles.outlineButtonText, { color: theme.primary }]}>Misafir Olarak Devam Et</Text>

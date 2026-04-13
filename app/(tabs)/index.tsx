@@ -91,14 +91,34 @@ export default function MainFeedScreen() {
         })
     ).current;
 
+    // Bu effect hem sure değişimini (arama/profil) hem de aynı sure içinde dışaridan gelen
+    // navigasyonları yakalar. onViewableItemsChanged swipe'ta currentIndexRef'i
+    // SENKRON olarak günceller, bu yüzden swipe trigger’ında currentIndexRef zaten
+    // doğru değerddedir ve aşağıdaki kontrol false döner → duplicate scroll olmaz.
     useEffect(() => {
-        const newIndex = Math.max(0, (currentAyah || 1) - 1);
-        currentIndexRef.current = newIndex;
+        const surahObj = surah;
+        if (!surahObj || !surahObj.ayahs.length) return;
+
+        // Hedef indexi ayet numarasından doğru bul
+        let targetIndex = surahObj.ayahs.findIndex(a => a.number === currentAyah);
+        if (targetIndex < 0) {
+            targetIndex = Math.min(Math.max(0, (currentAyah || 1) - 1), surahObj.ayahs.length - 1);
+        }
+
+        // onViewableItemsChanged swipe sırasında ref'i önceden güncellediyse
+        // bu iki değer eşittir ve scroll tetiklenmez. Dışarıdan navigasyonda
+        // ref eski yerdedir → scroll gerçekleşir.
+        if (currentIndexRef.current === targetIndex) return;
+
+        currentIndexRef.current = targetIndex;
         setUiAyah(currentAyah);
-        // Arama sonucundan gelince doğru ayete scroll et
         setTimeout(() => {
-            flatListRef.current?.scrollToIndex({ index: newIndex, animated: false });
-        }, 50);
+            try {
+                flatListRef.current?.scrollToIndex({ index: targetIndex, animated: false });
+            } catch (e) {
+                console.log('Scroll sınır hatası engellendi:', e);
+            }
+        }, 100);
     }, [currentSurah, currentAyah]);
 
     useEffect(() => {
@@ -132,7 +152,7 @@ export default function MainFeedScreen() {
                 speed: 20
             })
         ]).start();
-    }, [favoriteId, toggleFavorite, scaleAnim]);
+    }, [favoriteId, toggleFavorite, incrementOptimistic, isFavorited, scaleAnim]);
 
     const handleToggleFavorite = React.useCallback(() => {
         if (!favoriteId) return;
@@ -184,30 +204,28 @@ export default function MainFeedScreen() {
         }
     };
 
-    const handleMomentumEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const offsetX = event.nativeEvent.contentOffset.x;
-        const rawIndex = Math.round(offsetX / width);
-        const prev = currentIndexRef.current;
-
-        // Sadece ±1 adım izin ver (tek ayet geçiş)
-        let newIndex = prev;
-        if (rawIndex > prev) newIndex = prev + 1;
-        else if (rawIndex < prev) newIndex = prev - 1;
-
-        // Sınırları kontrol et
-        newIndex = Math.max(0, Math.min(newIndex, surah.ayahs.length - 1));
-        currentIndexRef.current = newIndex;
-
-        // Eğer FlatList fazla ileri/geri gittiyse düzelt
-        if (rawIndex !== newIndex) {
-            flatListRef.current?.scrollToIndex({ index: newIndex, animated: true });
+    const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
+        if (viewableItems && viewableItems.length > 0) {
+            const centerItem = viewableItems[0];
+            if (centerItem && typeof centerItem.index === 'number') {
+                const newIndex = centerItem.index;
+                const currentSurahObj = storeRef.current.surah;
+                
+                if (currentSurahObj && currentSurahObj.ayahs[newIndex]) {
+                    if (currentIndexRef.current !== newIndex) {
+                        currentIndexRef.current = newIndex;
+                        const visibleAyahNumber = currentSurahObj.ayahs[newIndex].number;
+                        setUiAyah(visibleAyahNumber);
+                        // isProgrammaticJump'u false bırak: bu kullanıcı swipe'i,
+                        // useEffect bu değişikliğe tepki VERMEYECEK.
+                        setProgress(currentSurahObj.number, visibleAyahNumber);
+                    }
+                }
+            }
         }
+    }).current;
 
-        // UI ve progress güncelle
-        const visibleAyahNumber = surah.ayahs[newIndex].number;
-        setUiAyah(visibleAyahNumber);
-        setProgress(surah.number, visibleAyahNumber);
-    };
+    const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
     return (
         <View
@@ -231,8 +249,14 @@ export default function MainFeedScreen() {
                 decelerationRate="fast"
                 onScroll={handleScroll}
                 scrollEventThrottle={16}
-                onMomentumScrollEnd={handleMomentumEnd}
+                onViewableItemsChanged={onViewableItemsChanged}
+                viewabilityConfig={viewabilityConfig}
                 initialScrollIndex={Math.max(0, currentAyah - 1)}
+                onScrollToIndexFailed={(info) => {
+                    setTimeout(() => {
+                        flatListRef.current?.scrollToIndex({ index: info.index, animated: false });
+                    }, 300);
+                }}
                 getItemLayout={(data, index) => (
                     { length: width, offset: width * index, index }
                 )}

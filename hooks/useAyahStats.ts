@@ -36,9 +36,11 @@ export const useAyahStats = (ayahId: string | null) => {
     // Expose a helper to optimistically update the counter when user themselves favorites it
     const incrementOptimistic = (diff: number) => {
         if (!ayahId) return;
-        const newVal = Math.max(0, count + diff); // Don't let it go below 0
-        setCount(newVal);
-        countCache[ayahId] = newVal;
+        setCount(prev => {
+            const newVal = Math.max(0, prev + diff); // Closure bağımlılığından kurtardık (Fonksiyonel Setter)
+            countCache[ayahId] = newVal;
+            return newVal;
+        });
     };
 
     return { count, incrementOptimistic };
