@@ -17,7 +17,14 @@ export function useProgress() {
                 const storedProg = await AsyncStorage.getItem(PROGRESS_KEY);
                 if (storedProg) {
                     const { surah, ayah } = JSON.parse(storedProg);
-                    setStoreProgress(surah, ayah);
+                    // Sadece store sıfırda (ilk açılış) ise yükle.
+                    // Dışarıdan setProgress çağrıldıysa (ör. yorumdan navigasyon),
+                    // store zaten güncel; AsyncStorage eski pozisyonu ezmesin.
+                    const currentState = useUserStore.getState();
+                    const storeIsDefault = currentState.currentSurah === 1 && currentState.currentAyah === 1;
+                    if (storeIsDefault || !currentState.currentSurah) {
+                        setStoreProgress(surah, ayah);
+                    }
                 }
                 const storedComp = await AsyncStorage.getItem(COMPLETED_KEY);
                 if (storedComp) {

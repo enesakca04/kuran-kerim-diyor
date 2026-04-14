@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent, Text, PanResponder, GestureResponderEvent, I18nManager } from 'react-native';
+import { View, StyleSheet, FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent, Text, PanResponder, GestureResponderEvent, I18nManager, Animated } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ChevronLeft, Heart } from 'lucide-react-native';
 import { Colors } from '../../constants/colors';
@@ -10,6 +10,10 @@ import { useAchievements } from '../../hooks/useAchievements';
 import { HatimCelebration } from '../../components/HatimCelebration';
 import { useNavigation } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
+import { useUserStore } from '../../store/userStore';
+import { DeleteWarningModal } from '../../components/DeleteWarningModal';
+import { useAyahStats } from '../../hooks/useAyahStats';
+import { formatFavCount } from '../../services/statsService';
 
 const { width } = Dimensions.get('window');
 
@@ -25,7 +29,8 @@ export default function MainFeedScreen() {
     const [uiAyah, setUiAyah] = useState(currentAyah);
     const [barHeight, setBarHeight] = useState(0);
     const [isScrubbing, setIsScrubbing] = useState(false);
-    const [favorites, setFavorites] = useState<Set<string>>(new Set());
+    const { favorites, toggleFavorite, hideFavoriteDeleteWarning, setHideFavoriteDeleteWarning } = useUserStore();
+    const [showDeleteWarning, setShowDeleteWarning] = useState(false);
 
     const flatListRef = useRef<FlatList>(null);
     const scrubTimer = useRef<NodeJS.Timeout | null>(null);
@@ -86,14 +91,34 @@ export default function MainFeedScreen() {
         })
     ).current;
 
+    // Bu effect hem sure değişimini (arama/profil) hem de aynı sure içinde dışaridan gelen
+    // navigasyonları yakalar. onViewableItemsChanged swipe'ta currentIndexRef'i
+    // SENKRON olarak günceller, bu yüzden swipe trigger’ında currentIndexRef zaten
+    // doğru değerddedir ve aşağıdaki kontrol false döner → duplicate scroll olmaz.
     useEffect(() => {
-        const newIndex = Math.max(0, (currentAyah || 1) - 1);
-        currentIndexRef.current = newIndex;
+        const surahObj = surah;
+        if (!surahObj || !surahObj.ayahs.length) return;
+
+        // Hedef indexi ayet numarasından doğru bul
+        let targetIndex = surahObj.ayahs.findIndex(a => a.number === currentAyah);
+        if (targetIndex < 0) {
+            targetIndex = Math.min(Math.max(0, (currentAyah || 1) - 1), surahObj.ayahs.length - 1);
+        }
+
+        // onViewableItemsChanged swipe sırasında ref'i önceden güncellediyse
+        // bu iki değer eşittir ve scroll tetiklenmez. Dışarıdan navigasyonda
+        // ref eski yerdedir → scroll gerçekleşir.
+        if (currentIndexRef.current === targetIndex) return;
+
+        currentIndexRef.current = targetIndex;
         setUiAyah(currentAyah);
-        // Arama sonucundan gelince doğru ayete scroll et
         setTimeout(() => {
-            flatListRef.current?.scrollToIndex({ index: newIndex, animated: false });
-        }, 50);
+            try {
+                flatListRef.current?.scrollToIndex({ index: targetIndex, animated: false });
+            } catch (e) {
+                console.log('Scroll sınır hatası engellendi:', e);
+            }
+        }, 100);
     }, [currentSurah, currentAyah]);
 
     useEffect(() => {
@@ -103,34 +128,72 @@ export default function MainFeedScreen() {
     }, []);
 
     const favoriteId = surah ? `${surah.number}:${uiAyah}` : null;
-    const isFavorited = favoriteId ? favorites.has(favoriteId) : false;
+    // Map içinde key var mı kontrolü
+    const isFavorited = favoriteId ? !!favorites[favoriteId] : false;
+    
+    const { count: globalFavCount, incrementOptimistic } = useAyahStats(favoriteId);
+    
+    const scaleAnim = useRef(new Animated.Value(1)).current;
 
-    const toggleFavorite = React.useCallback(() => {
+    const executeToggle = React.useCallback(() => {
         if (!favoriteId) return;
-        setFavorites(prev => {
-            const newSet = new Set(prev);
-            if (newSet.has(favoriteId)) {
-                newSet.delete(favoriteId);
-            } else {
-                newSet.add(favoriteId);
-            }
-            return newSet;
-        });
-    }, [favoriteId]);
+        toggleFavorite(favoriteId);
+        incrementOptimistic(isFavorited ? -1 : 1);
+        
+        Animated.sequence([
+            Animated.spring(scaleAnim, {
+                toValue: 1.3,
+                useNativeDriver: true,
+                speed: 20
+            }),
+            Animated.spring(scaleAnim, {
+                toValue: 1,
+                useNativeDriver: true,
+                speed: 20
+            })
+        ]).start();
+    }, [favoriteId, toggleFavorite, incrementOptimistic, isFavorited, scaleAnim]);
+
+    const handleToggleFavorite = React.useCallback(() => {
+        if (!favoriteId) return;
+        // Eğer favoriden çikariyorsak ve uyarilmasini gizlemediyse uyar
+        if (isFavorited && !hideFavoriteDeleteWarning) {
+            setShowDeleteWarning(true);
+        } else {
+            executeToggle();
+        }
+    }, [favoriteId, isFavorited, hideFavoriteDeleteWarning, executeToggle]);
+
+    const handleConfirmDelete = (dontAskAgain: boolean) => {
+        if (dontAskAgain) {
+            setHideFavoriteDeleteWarning(true);
+        }
+        setShowDeleteWarning(false);
+        executeToggle();
+    };
 
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <TouchableOpacity onPress={toggleFavorite} style={{ marginRight: 16, padding: 4 }}>
-                    <Heart 
-                        size={24} 
-                        color={theme.primary} 
-                        fill={isFavorited ? theme.primary : 'transparent'} 
-                    />
-                </TouchableOpacity>
+                <View style={{ alignItems: 'center' }}>
+                    <TouchableOpacity onPress={handleToggleFavorite} style={{ marginRight: 16, padding: 4 }}>
+                        <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+                            <Heart 
+                                size={24} 
+                                color={theme.primary} 
+                                fill={isFavorited ? theme.primary : 'transparent'} 
+                            />
+                        </Animated.View>
+                    </TouchableOpacity>
+                    {globalFavCount > 0 && (
+                        <Text style={{ fontSize: 10, color: theme.primary, marginRight: 16, marginTop: -4, fontWeight: 'bold' }}>
+                            {formatFavCount(globalFavCount)}
+                        </Text>
+                    )}
+                </View>
             ),
         });
-    }, [navigation, isFavorited, toggleFavorite, theme.primary]);
+    }, [navigation, isFavorited, handleToggleFavorite, theme.primary, scaleAnim, globalFavCount]);
 
     if (!surah) return null;
 
@@ -141,30 +204,28 @@ export default function MainFeedScreen() {
         }
     };
 
-    const handleMomentumEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const offsetX = event.nativeEvent.contentOffset.x;
-        const rawIndex = Math.round(offsetX / width);
-        const prev = currentIndexRef.current;
-
-        // Sadece ±1 adım izin ver (tek ayet geçiş)
-        let newIndex = prev;
-        if (rawIndex > prev) newIndex = prev + 1;
-        else if (rawIndex < prev) newIndex = prev - 1;
-
-        // Sınırları kontrol et
-        newIndex = Math.max(0, Math.min(newIndex, surah.ayahs.length - 1));
-        currentIndexRef.current = newIndex;
-
-        // Eğer FlatList fazla ileri/geri gittiyse düzelt
-        if (rawIndex !== newIndex) {
-            flatListRef.current?.scrollToIndex({ index: newIndex, animated: true });
+    const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
+        if (viewableItems && viewableItems.length > 0) {
+            const centerItem = viewableItems[0];
+            if (centerItem && typeof centerItem.index === 'number') {
+                const newIndex = centerItem.index;
+                const currentSurahObj = storeRef.current.surah;
+                
+                if (currentSurahObj && currentSurahObj.ayahs[newIndex]) {
+                    if (currentIndexRef.current !== newIndex) {
+                        currentIndexRef.current = newIndex;
+                        const visibleAyahNumber = currentSurahObj.ayahs[newIndex].number;
+                        setUiAyah(visibleAyahNumber);
+                        // isProgrammaticJump'u false bırak: bu kullanıcı swipe'i,
+                        // useEffect bu değişikliğe tepki VERMEYECEK.
+                        setProgress(currentSurahObj.number, visibleAyahNumber);
+                    }
+                }
+            }
         }
+    }).current;
 
-        // UI ve progress güncelle
-        const visibleAyahNumber = surah.ayahs[newIndex].number;
-        setUiAyah(visibleAyahNumber);
-        setProgress(surah.number, visibleAyahNumber);
-    };
+    const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
     return (
         <View
@@ -188,8 +249,14 @@ export default function MainFeedScreen() {
                 decelerationRate="fast"
                 onScroll={handleScroll}
                 scrollEventThrottle={16}
-                onMomentumScrollEnd={handleMomentumEnd}
+                onViewableItemsChanged={onViewableItemsChanged}
+                viewabilityConfig={viewabilityConfig}
                 initialScrollIndex={Math.max(0, currentAyah - 1)}
+                onScrollToIndexFailed={(info) => {
+                    setTimeout(() => {
+                        flatListRef.current?.scrollToIndex({ index: info.index, animated: false });
+                    }, 300);
+                }}
                 getItemLayout={(data, index) => (
                     { length: width, offset: width * index, index }
                 )}
@@ -216,6 +283,11 @@ export default function MainFeedScreen() {
                 </View>
             )}
             <HatimCelebration visible={showHatim} onClose={() => setShowHatim(false)} />
+            <DeleteWarningModal 
+                visible={showDeleteWarning}
+                onCancel={() => setShowDeleteWarning(false)}
+                onConfirm={handleConfirmDelete}
+            />
         </View>
     );
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot, addDoc, updateDoc, doc, getDoc, setDoc, increment, serverTimestamp } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { useUserStore } from '../store/userStore';
+import { maskName } from '../utils/privacy';
 
 export interface Comment {
     id: string;
@@ -13,6 +14,11 @@ export interface Comment {
     likes: number;
     likedBy: string[];
     createdAt: any;
+    surahNo: number;
+    ayahNo: number;
+    replyToId?: string | null;
+    isDeletedUser?: boolean;
+    isDeletedMod?: boolean;
 }
 
 export function useComments(surahNo: number, ayahNo: number) {
@@ -41,27 +47,62 @@ export function useComments(surahNo: number, ayahNo: number) {
         return unsubscribe;
     }, [surahNo, ayahNo]);
 
-    const addComment = async (text: string, asAnonymous: boolean) => {
+    const addComment = async (text: string, asAnonymous: boolean, replyToId: string | null = null, effectiveName?: string) => {
         if (!userId) throw new Error("Giriş yapmalısınız!");
+
+        // Mahremiyet filtresi
+        const safeName = asAnonymous ? 'Anonim' : maskName(effectiveName || displayName || 'Kullanıcı');
 
         const newComment = {
             userId,
             text,
-            language, // User's active language
+            language,
             isAnonymous: asAnonymous,
-            displayName: asAnonymous ? 'Anonim' : (displayName || 'Kullanıcı'),
+            displayName: safeName,
             likes: 0,
             likedBy: [],
             createdAt: serverTimestamp(),
+            surahNo,
+            ayahNo,
+            replyToId,
+            isDeletedUser: false,
+            isDeletedMod: false,
         };
 
-        await addDoc(commentsRef, newComment);
+        const docRef = await addDoc(commentsRef, newComment);
 
-        // Update AyahStats
-        const statsRef = doc(db, 'ayahStats', ayahId);
+        // Profil koleksiyonuna bir kopya/isaret kaydedelim
+        // Bu kullanicinin yorumlarini bedavaya okumasi icin guvenilir yontem
+        const profileCommentRef = doc(db, `user_comments/${userId}/comments`, docRef.id);
+        await setDoc(profileCommentRef, {
+            ayahId,
+            surahNo,
+            ayahNo,
+            text, // kisa bir onizleme
+            createdAt: serverTimestamp(),
+        });
+
+        // Toplu sayac
+        const statsRef = doc(db, 'ayah_stats', ayahId);
         await setDoc(statsRef, {
             totalComments: increment(1)
         }, { merge: true });
+    };
+
+    const deleteComment = async (commentId: string) => {
+        if (!userId) return;
+        const commentRef = doc(db, `comments/${ayahId}/comments`, commentId);
+        
+        await updateDoc(commentRef, {
+            text: '',
+            isDeletedUser: true
+        });
+
+        const profileCommentRef = doc(db, `user_comments/${userId}/comments`, commentId);
+        await updateDoc(profileCommentRef, {
+            text: '',
+            isDeletedUser: true
+        }).catch(() => {});
     };
 
     const toggleLike = async (commentId: string) => {
@@ -91,5 +132,5 @@ export function useComments(surahNo: number, ayahNo: number) {
         }
     };
 
-    return { comments, loading, addComment, toggleLike };
+    return { comments, loading, addComment, toggleLike, deleteComment };
 }

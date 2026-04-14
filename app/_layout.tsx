@@ -2,6 +2,8 @@ import { Stack } from 'expo-router';
 import { useFonts, Amiri_400Regular, Amiri_700Bold } from '@expo-google-fonts/amiri';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { auth } from '../services/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 import { useRouter, useSegments } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,10 +26,30 @@ export default function RootLayout() {
             if (hasOnboarded !== 'true') {
                 router.replace('/onboarding');
             }
+            
+            // Yükle
+            const { useUserStore } = await import('../store/userStore');
+            await useUserStore.getState().loadFavorites();
+            
             SplashScreen.hideAsync();
         };
 
         checkFirstLaunch();
+
+        // Listen to Auth State Globally
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            const { useUserStore } = await import('../store/userStore');
+            if (user) {
+                useUserStore.getState().setAuth(user.uid, user.isAnonymous, user.displayName, user.email);
+                const { syncProgressToCloud, mergeGuestFavoritesToCloud } = await import('../services/syncService');
+                syncProgressToCloud();
+                mergeGuestFavoritesToCloud();
+            } else {
+                useUserStore.getState().setAuth(null, false, null, null);
+            }
+        });
+
+        return () => unsubscribe();
     }, [loaded, error]);
 
     if (!loaded && !error) {

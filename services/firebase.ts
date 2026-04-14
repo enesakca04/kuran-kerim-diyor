@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, initializeFirestore } from 'firebase/firestore';
 import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -21,5 +21,7 @@ export const auth = initializeAuth(app, {
     persistence: getReactNativePersistence(AsyncStorage)
 });
 
-// Initialize Firestore
-export const db = getFirestore(app);
+// Initialize Firestore (Websocket blocklanmalarına karşı Long Polling zorlaması devrede)
+export const db = initializeFirestore(app, {
+    experimentalForceLongPolling: true,
+});
