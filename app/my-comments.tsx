@@ -7,6 +7,7 @@ import { db } from '../services/firebase';
 import { useUserStore } from '../store/userStore';
 import { useRouter, Stack } from 'expo-router';
 import { MessageSquare } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 
 interface MyComment {
     id: string;
@@ -23,6 +24,7 @@ export default function MyCommentsScreen() {
     const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
     const { userId } = useUserStore();
     const router = useRouter();
+    const { t } = useTranslation();
 
     const [comments, setComments] = useState<MyComment[]>([]);
     const [loading, setLoading] = useState(true);
@@ -77,11 +79,10 @@ export default function MyCommentsScreen() {
         <View style={[styles.container, { backgroundColor: theme.background }]}>
             <Stack.Screen 
                 options={{ 
-                    title: 'Yorumlarım',
+                    title: t('my_comments.title'),
                     headerShadowVisible: false,
                     headerTintColor: theme.text,
                     headerStyle: { backgroundColor: theme.background },
-                    headerBackTitle: 'Geri'
                 }} 
             />
 
@@ -101,7 +102,7 @@ export default function MyCommentsScreen() {
                         >
                             <View style={styles.cardHeader}>
                                 <Text style={[styles.surahTitle, { color: theme.primary }]}>
-                                    Sure No: {item.surahNo} • Ayet {item.ayahNo}
+                                    {t('my_comments.surah_label')} {item.surahNo} • {t('common.ayah')} {item.ayahNo}
                                 </Text>
                             </View>
                             <Text style={[styles.commentText, { color: theme.text }]} numberOfLines={3}>
@@ -109,13 +110,13 @@ export default function MyCommentsScreen() {
                             </Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 12 }}>
                                 <MessageSquare size={14} color={theme.secondary} />
-                                <Text style={{ color: theme.secondary, fontSize: 12, marginLeft: 6 }}>Ayete Git</Text>
+                                <Text style={{ color: theme.secondary, fontSize: 12, marginLeft: 6 }}>{t('common.go_to_verse')}</Text>
                             </View>
                         </TouchableOpacity>
                     )}
                     ListEmptyComponent={
                         <View style={styles.center}>
-                            <Text style={[styles.emptyText, { color: theme.muted }]}>Henüz bir ayet için paylaşım yapmadınız.</Text>
+                            <Text style={[styles.emptyText, { color: theme.muted }]}>{t('my_comments.empty')}</Text>
                         </View>
                     }
                 />

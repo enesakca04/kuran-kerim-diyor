@@ -15,6 +15,9 @@ interface UserState {
     favorites: Record<string, number>;
     collections: Record<string, Collection>;
     hideFavoriteDeleteWarning: boolean;
+    // Arapca kullanicilar icin ceviri ayarlari
+    showArabicTranslation: boolean;
+    arabicTranslationLang: AppLanguage;
 
     // Auth state
     userId: string | null;
@@ -34,6 +37,8 @@ interface UserState {
 
     // Collection specific actions
     setHideFavoriteDeleteWarning: (hide: boolean) => void;
+    setShowArabicTranslation: (show: boolean) => void;
+    setArabicTranslationLang: (lang: AppLanguage) => void;
     addCollection: (name: string) => void;
     deleteCollection: (colId: string) => void;
     addAyahToCollection: (ayahId: string, colId: string) => void;
@@ -71,13 +76,25 @@ export const useUserStore = create<UserState>((set) => ({
     favorites: {},
     collections: {},
     hideFavoriteDeleteWarning: false,
+    showArabicTranslation: false,
+    arabicTranslationLang: 'en',
 
     userId: null,
     isAnonymous: false,
     displayName: null,
     email: null,
 
-    setLanguage: (lang) => set({ language: lang }),
+    setLanguage: (lang) => {
+        set({ language: lang });
+        // i18n ve AsyncStorage'i de senkronize et
+        import('../services/i18n').then(({ default: i18n, applyRTL }) => {
+            i18n.changeLanguage(lang);
+            applyRTL(lang);
+        });
+        import('@react-native-async-storage/async-storage').then(({ default: AsyncStorage }) => {
+            AsyncStorage.setItem('@app_language', lang);
+        });
+    },
     setProgress: (surah, ayah) => set({ currentSurah: surah, currentAyah: ayah }),
     addCompletedSurah: (surah) => set((state) => {
         const list = state.completedSurahs || [];
@@ -146,6 +163,12 @@ export const useUserStore = create<UserState>((set) => ({
             const storedWarn = await AsyncStorage.getItem('hideFavWarning');
             if (storedWarn) set({ hideFavoriteDeleteWarning: storedWarn === 'true' });
 
+            const storedArabicTranslation = await AsyncStorage.getItem('@arabic_show_translation');
+            if (storedArabicTranslation !== null) set({ showArabicTranslation: storedArabicTranslation === 'true' });
+
+            const storedArabicLang = await AsyncStorage.getItem('@arabic_translation_lang');
+            if (storedArabicLang) set({ arabicTranslationLang: storedArabicLang as AppLanguage });
+
         } catch (e) {
             console.error('Failed to load favorites/collections', e);
         }
@@ -154,6 +177,20 @@ export const useUserStore = create<UserState>((set) => ({
     setHideFavoriteDeleteWarning: (hide: boolean) => {
         set({ hideFavoriteDeleteWarning: hide });
         saveLocal('hideFavWarning', hide);
+    },
+
+    setShowArabicTranslation: (show: boolean) => {
+        set({ showArabicTranslation: show });
+        import('@react-native-async-storage/async-storage').then(({ default: AsyncStorage }) => {
+            AsyncStorage.setItem('@arabic_show_translation', show ? 'true' : 'false');
+        });
+    },
+
+    setArabicTranslationLang: (lang: AppLanguage) => {
+        set({ arabicTranslationLang: lang });
+        import('@react-native-async-storage/async-storage').then(({ default: AsyncStorage }) => {
+            AsyncStorage.setItem('@arabic_translation_lang', lang);
+        });
     },
 
     addCollection: (name: string) => {

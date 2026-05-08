@@ -236,11 +236,15 @@ export default function MainFeedScreen() {
                 ref={flatListRef}
                 data={surah.ayahs}
                 keyExtractor={(item) => item.globalNumber.toString()}
-                renderItem={({ item }) => (
-                    <View style={{ height: containerHeight, width }}>
-                        <AyahCard ayah={item} surahName={surah.name.tr} surahNumber={surah.number} />
-                    </View>
-                )}
+                renderItem={({ item }) => {
+                    const { language } = useUserStore.getState();
+                    const surahName = language === 'ar' ? surah.name.ar : language === 'tr' ? surah.name.tr : surah.name.en;
+                    return (
+                        <View style={{ height: containerHeight, width }}>
+                            <AyahCard ayah={item} surahName={surahName} surahNumber={surah.number} />
+                        </View>
+                    );
+                }}
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}

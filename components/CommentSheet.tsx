@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, KeyboardAvoidingView, Platform, useColorScheme } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '../constants/colors';
 import { useComments } from '../hooks/useComments';
 import { useUserStore } from '../store/userStore';
@@ -16,8 +17,10 @@ interface CommentSheetProps {
 export function CommentSheet({ surahNo, ayahNo, onClose }: CommentSheetProps) {
     const { comments, loading, addComment, toggleLike, deleteComment } = useComments(surahNo, ayahNo);
     const { userId, isAnonymous, language, displayName } = useUserStore();
-    const theme = Colors.light;
+    const colorScheme = useColorScheme();
+    const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
     const router = useRouter();
+    const { t } = useTranslation();
 
     const [text, setText] = useState('');
     const [sendAsAnonymous, setSendAsAnonymous] = useState(false);
@@ -122,17 +125,17 @@ export function CommentSheet({ surahNo, ayahNo, onClose }: CommentSheetProps) {
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
             <View style={[styles.header, { borderBottomColor: theme.border }]}>
-                <Text style={[styles.title, { color: theme.text }]}>Yorumlar</Text>
+                <Text style={[styles.title, { color: theme.text }]}>{t('comments.title')}</Text>
                 <TouchableOpacity onPress={() => setShowAllLanguages(!showAllLanguages)}>
                     <Text style={{ color: theme.primary }}>
-                        {showAllLanguages ? 'Sadece ' + language.toUpperCase() : 'Tüm Diller'}
+                        {showAllLanguages ? t('comments.only_language', { lang: language.toUpperCase() }) : t('comments.all_languages')}
                     </Text>
                 </TouchableOpacity>
             </View>
 
             {loading && comments.length === 0 && (
                 <View style={{ paddingVertical: 12, alignItems: 'center' }}>
-                    <Text style={{ color: theme.muted, fontSize: 12 }}>Yükleniyor...</Text>
+                    <Text style={{ color: theme.muted, fontSize: 12 }}>{t('comments.loading')}</Text>
                 </View>
             )}
             <FlatList
@@ -182,7 +185,7 @@ export function CommentSheet({ surahNo, ayahNo, onClose }: CommentSheetProps) {
                                         inputRef.current?.focus();
                                     }}>
                                         <Reply size={16} color={theme.muted} />
-                                        <Text style={[styles.actionText, { color: theme.muted }]}>Yanıtla</Text>
+                                        <Text style={[styles.actionText, { color: theme.muted }]}>{t('comments.reply')}</Text>
                                     </TouchableOpacity>
                                 )}
 
@@ -200,14 +203,15 @@ export function CommentSheet({ surahNo, ayahNo, onClose }: CommentSheetProps) {
                                 )}
                             </View>
                             
-                            {/* Yanıtları Göster / Gizle Butonu */}
                             {!isReply && item.replyCount > 0 && (
                                 <TouchableOpacity 
                                     style={{ marginTop: 12, paddingVertical: 4 }} 
                                     onPress={() => toggleThread(item.id)}
                                 >
                                     <Text style={{ color: theme.muted, fontWeight: 'bold', fontSize: 13 }}>
-                                        {expandedThreads[item.id] ? '— Yanıtları Gizle' : `— ${item.replyCount} Yanıtı Göster`}
+                                        {expandedThreads[item.id]
+                                            ? t('comments.hide_replies')
+                                            : t('comments.show_replies', { count: item.replyCount })}
                                     </Text>
                                 </TouchableOpacity>
                             )}
@@ -215,7 +219,7 @@ export function CommentSheet({ surahNo, ayahNo, onClose }: CommentSheetProps) {
                     );
                 }}
                 ListEmptyComponent={
-                    <Text style={[styles.emptyText, { color: theme.muted, fontSize: 16 }]}>Ayetin size ne hissettirdiğini ve merak ettiklerinizi diğer müslümanlar ile paylaşın.</Text>
+                    <Text style={[styles.emptyText, { color: theme.muted, fontSize: 16 }]}>{t('comments.empty')}</Text>
                 }
             />
 
@@ -227,12 +231,12 @@ export function CommentSheet({ surahNo, ayahNo, onClose }: CommentSheetProps) {
                             onPress={() => setSendAsAnonymous(!sendAsAnonymous)}
                         >
                             <Text style={{ color: sendAsAnonymous ? theme.primary : theme.muted, fontSize: 12 }}>
-                                {sendAsAnonymous ? '👁️ Kimliğimi Gizle' : 'Kendi İsmimle (Mahremiyet Korumalı)'}
+                                {sendAsAnonymous ? `👁️ ${t('comments.hide_identity')}` : t('comments.show_identity')}
                             </Text>
                         </TouchableOpacity>
                         {replyToId && (
                             <TouchableOpacity onPress={() => setReplyToId(null)}>
-                                <Text style={{ color: '#e74c3c', fontSize: 12 }}>İptal</Text>
+                                <Text style={{ color: '#e74c3c', fontSize: 12 }}>{t('comments.cancel')}</Text>
                             </TouchableOpacity>
                         )}
                     </View>
@@ -241,7 +245,7 @@ export function CommentSheet({ surahNo, ayahNo, onClose }: CommentSheetProps) {
                         <TextInput
                             ref={inputRef}
                             style={[styles.input, { borderColor: theme.border, color: theme.text }]}
-                            placeholder={replyToId ? "Yanıtınız..." : "Siz de hislerinizi paylaşın..."}
+                            placeholder={replyToId ? t('comments.placeholder_reply') : t('comments.placeholder')}
                             placeholderTextColor={theme.muted}
                             value={text}
                             onChangeText={setText}
@@ -256,24 +260,23 @@ export function CommentSheet({ surahNo, ayahNo, onClose }: CommentSheetProps) {
                     </View>
                     {!sendAsAnonymous && (
                         <Text style={{ color: theme.muted, fontSize: 10, marginTop: 8, fontStyle: 'italic' }}>
-                            🛡️ İçiniz rahat olsun, güvenliğiniz için isminiz ({maskName(effectiveName)}) şeklinde gizlenir.
+                            🛡️ {t('comments.privacy_note', { name: maskName(effectiveName) })}
                         </Text>
                     )}
                 </View>
             ) : (
                 <View style={[styles.loginPrompt, { backgroundColor: theme.card }]}>
                     <Text style={{ color: theme.text, fontSize: 16, fontWeight: 'bold', marginBottom: 8, textAlign: 'center' }}>
-                        Düşüncelerinizi Paylaşmak İster Misiniz?
+                        {t('comments.login_prompt_title')}
                     </Text>
                     <Text style={{ color: theme.muted, textAlign: 'center', fontSize: 13, marginBottom: 16 }}>
-                        Devam etmek için ücretsiz giriş yapmanız veya saniyeler içinde hesap oluşturmanız gerekiyor.
+                        {t('comments.login_prompt_desc')}
                     </Text>
-                    {/* Yönlendirme butonu daha sonra Profile vs navigate ile bağlanabilir */}
                     <TouchableOpacity 
                         style={[styles.authBtn, { backgroundColor: theme.primary }]}
                         onPress={() => { onClose(); router.push('/(tabs)/profile'); }}
                     >
-                        <Text style={{ color: '#fff', fontWeight: 'bold' }}>Hesap Oluştur / Giriş Yap</Text>
+                        <Text style={{ color: '#fff', fontWeight: 'bold' }}>{t('comments.login_button')}</Text>
                     </TouchableOpacity>
                 </View>
             )}

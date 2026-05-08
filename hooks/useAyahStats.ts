@@ -11,17 +11,20 @@ export const useAyahStats = (ayahId: string | null) => {
     useEffect(() => {
         if (!ayahId) return;
 
+        // favoriteId "1:1" formatinda gelir, Firestore icin "1_1" formatina cevir
+        const statId = ayahId.replace(':', '_');
+
         // Reset state or use existing cache while pulling
-        setCount(countCache[ayahId] || 0);
+        setCount(countCache[statId] || 0);
 
         let isMounted = true;
-        const ref = doc(db, 'ayah_stats', ayahId);
+        const ref = doc(db, 'ayah_stats', statId);
 
         getDoc(ref).then(snap => {
             if (snap.exists() && isMounted) {
                 const data = snap.data();
                 if (typeof data.count === 'number') {
-                    countCache[ayahId] = data.count;
+                    countCache[statId] = data.count;
                     setCount(data.count);
                 }
             }
@@ -36,9 +39,10 @@ export const useAyahStats = (ayahId: string | null) => {
     // Expose a helper to optimistically update the counter when user themselves favorites it
     const incrementOptimistic = (diff: number) => {
         if (!ayahId) return;
+        const statId = ayahId.replace(':', '_');
         setCount(prev => {
-            const newVal = Math.max(0, prev + diff); // Closure bağımlılığından kurtardık (Fonksiyonel Setter)
-            countCache[ayahId] = newVal;
+            const newVal = Math.max(0, prev + diff);
+            countCache[statId] = newVal;
             return newVal;
         });
     };

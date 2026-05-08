@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, initializeFirestore } from 'firebase/firestore';
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAuth } from 'firebase/auth';
 
 // Firebase configuration from environment variables
 const firebaseConfig = {
@@ -16,10 +15,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Auth with AsyncStorage persistence for React Native
-export const auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage)
-});
+// Initialize Firebase Auth (Firebase 10+ auto-detects React Native persistence)
+export const auth = getAuth(app);
 
 // Initialize Firestore (Websocket blocklanmalarına karşı Long Polling zorlaması devrede)
 export const db = initializeFirestore(app, {

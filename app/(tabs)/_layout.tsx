@@ -2,10 +2,12 @@ import { Tabs } from 'expo-router';
 import { Home, BookOpen, Search, User, Heart } from 'lucide-react-native';
 import { Colors } from '../../constants/colors';
 import { View, StyleSheet, Platform, useColorScheme } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 export default function TabLayout() {
     const colorScheme = useColorScheme();
     const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
+    const { t } = useTranslation();
 
     return (
         <Tabs
@@ -25,7 +27,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: "Kur'an",
+                    title: t('tabs.quran'),
                     // @ts-ignore
                     tabBarIcon: ({ color }) => <Home size={24} color={color} />,
                 }}
@@ -33,7 +35,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="surahs"
                 options={{
-                    title: "Sureler",
+                    title: t('tabs.surahs'),
                     // @ts-ignore
                     tabBarIcon: ({ color }) => <BookOpen size={24} color={color} />,
                 }}
@@ -56,7 +58,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="search"
                 options={{
-                    title: "Arama",
+                    title: t('tabs.search'),
                     // @ts-ignore
                     tabBarIcon: ({ color }) => <Search size={24} color={color} />,
                 }}
@@ -64,7 +66,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="profile"
                 options={{
-                    title: "Profil",
+                    title: t('tabs.profile'),
                     // @ts-ignore
                     tabBarIcon: ({ color }) => <User size={24} color={color} />,
                 }}

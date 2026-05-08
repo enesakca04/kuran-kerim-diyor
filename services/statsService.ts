@@ -3,8 +3,9 @@ import { db } from './firebase';
 
 export const updateGlobalFavCount = async (ayahId: string, diff: number) => {
     try {
-        const statRef = doc(db, 'ayah_stats', ayahId);
-        // We use setDoc with merge: true so if the doc doesn't exist, it gets created with default fields
+        // favoriteId formati "1:1" (JS key), Firestore icin "1_1" formatina cevir
+        const statId = ayahId.replace(':', '_');
+        const statRef = doc(db, 'ayah_stats', statId);
         await setDoc(statRef, { count: increment(diff) }, { merge: true });
     } catch (e) {
         console.warn('Could not update global fav count', e);

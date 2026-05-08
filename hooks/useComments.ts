@@ -115,7 +115,7 @@ export function useComments(surahNo: number, ayahNo: number) {
         const data = commentSnap.data() as Comment;
         const hasLiked = data.likedBy.includes(userId);
 
-        const statsRef = doc(db, 'ayahStats', ayahId);
+        const statsRef = doc(db, 'ayah_stats', ayahId);
 
         if (hasLiked) {
             await updateDoc(commentRef, {
