@@ -36,7 +36,14 @@ export function CommentSheet({ surahNo, ayahNo, onClose }: CommentSheetProps) {
     // Grouping by reply structure could be done here if needed. For flat UI, replies just show up indented.
     const rawFiltered = showAllLanguages
         ? comments
-        : comments.filter(c => c.language === language);
+        : comments.filter(c => {
+            if (!c.replyToId) {
+                // Ana yorum ise: Dile göre filtrele
+                return !c.language || c.language === language;
+            }
+            // Yanıt ise: Daima dahil et (Ana yorum görünüyorsa bu da görünür)
+            return true;
+        });
 
     const buildThreads = (commentsList: any[]) => {
         const rootItems = commentsList.filter(c => !c.replyToId);
@@ -87,9 +94,9 @@ export function CommentSheet({ surahNo, ayahNo, onClose }: CommentSheetProps) {
 
     const filteredComments = buildThreads(rawFiltered);
 
-    const formatDate = (timestamp: any) => {
-        if (!timestamp) return 'Az önce';
-        const d = timestamp.toDate ? timestamp.toDate() : new Date();
+    const formatDate = (timestamp: string) => {
+        if (!timestamp) return t('comments.just_now');
+        const d = new Date(timestamp);
         const dd = String(d.getDate()).padStart(2, '0');
         const mm = String(d.getMonth() + 1).padStart(2, '0');
         const yyyy = d.getFullYear();
@@ -99,14 +106,13 @@ export function CommentSheet({ surahNo, ayahNo, onClose }: CommentSheetProps) {
     const handleSend = async () => {
         if (!text.trim() || !isRealUser) return;
         const currentText = text.trim();
-        const currentReplyId = replyToId;
         
         // Optimistic UI: Kullanıcıyı bekletmemek için anında temizliyoruz.
         setText('');
         setReplyToId(null);
         
         try {
-            await addComment(currentText, sendAsAnonymous, currentReplyId, effectiveName);
+            await addComment(currentText, sendAsAnonymous);
         } catch (e) {
             console.error(e);
             // Hata olursa metni geri getirebiliriz
@@ -150,7 +156,7 @@ export function CommentSheet({ surahNo, ayahNo, onClose }: CommentSheetProps) {
                                     {item.displayName} 
                                     {isReply && <Text style={{fontSize: 12, fontWeight: 'normal', color: theme.muted}}> (Yanıt)</Text>}
                                 </Text>
-                                <Text style={{ fontSize: 12, color: theme.muted }}>{item.language.toUpperCase()}</Text>
+                                <Text style={{ fontSize: 12, color: theme.muted }}>{item.language?.toUpperCase() || 'TR'}</Text>
                             </View>
                             
                             {item.isDeletedUser ? (

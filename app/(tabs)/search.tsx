@@ -6,17 +6,21 @@ import { searchAyahs } from '../../services/quranData';
 import { useUserStore } from '../../store/userStore';
 import { useProgress } from '../../hooks/useProgress';
 import { useAyahStats } from '../../hooks/useAyahStats';
-import { formatFavCount } from '../../services/statsService';
 import { Heart } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 
+const formatFavCount = (n: number) => {
+    if (n < 1000) return n.toString();
+    return (n / 1000).toFixed(1) + 'k';
+};
+
 const SearchResultItem = ({ item, theme, language, onPress }: any) => {
     const ayahId = `${item.surahNumber}:${item.ayah.number}`;
-    const { count } = useAyahStats(ayahId);
+    const { favoriteCount } = useAyahStats(item.surahNumber, item.ayah.number);
     const { favorites } = useUserStore();
     
     // Eğer daha önceden(bu özellik yokken) lokal olarak favladıysa ama global 0 ise en az 1 göster
-    const displayCount = Math.max(count, favorites[ayahId] ? 1 : 0);
+    const displayCount = Math.max(favoriteCount, favorites[ayahId] ? 1 : 0);
     
     return (
         <TouchableOpacity

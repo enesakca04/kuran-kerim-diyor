@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Colors } from '../constants/colors';
 import { useColorScheme } from 'react-native';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { db } from '../services/firebase';
+import apiClient from '../services/apiClient';
 import { useUserStore } from '../store/userStore';
 import { useRouter, Stack } from 'expo-router';
 import { MessageSquare } from 'lucide-react-native';
@@ -15,7 +14,7 @@ interface MyComment {
     surahNo: number;
     ayahNo: number;
     text: string;
-    createdAt: any;
+    createdAt: string;
     isDeletedUser?: boolean;
 }
 
@@ -35,27 +34,28 @@ export default function MyCommentsScreen() {
             return;
         }
 
-        const q = query(
-            collection(db, `user_comments/${userId}/comments`),
-            orderBy('createdAt', 'desc')
-        );
+        const fetchMyComments = async () => {
+            try {
+                const response = await apiClient.get('/comments/my');
+                // Backend returns list where ayahId is "surahNo_ayahNo"
+                // Let's parse it if needed or just use as is.
+                const enriched = response.data.map((c: any) => {
+                    const [s, a] = c.ayahId.split('_');
+                    return {
+                        ...c,
+                        surahNo: parseInt(s),
+                        ayahNo: parseInt(a)
+                    };
+                });
+                setComments(enriched);
+            } catch (error) {
+                console.error("Yorumlarım çekilemedi:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const fetched: MyComment[] = [];
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                if (!data.isDeletedUser) {
-                    fetched.push({ id: doc.id, ...data } as MyComment);
-                }
-            });
-            setComments(fetched);
-            setLoading(false);
-        }, (error) => {
-            console.error("Yorumlarım çekilemedi:", error);
-            setLoading(false);
-        });
-
-        return unsubscribe;
+        fetchMyComments();
     }, [userId]);
 
 

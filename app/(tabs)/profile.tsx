@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Platform, Modal, FlatList } from 'react-native';
 import { Colors } from '../../constants/colors';
-import { auth } from '../../services/firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithCredential, OAuthProvider } from 'firebase/auth';
+import apiClient from '../../services/apiClient';
+import * as SecureStore from 'expo-secure-store';
 import { useUserStore } from '../../store/userStore';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
@@ -12,8 +12,6 @@ import { LANGUAGES, AppLanguage } from '../../constants/languages';
 
 WebBrowser.maybeCompleteAuthSession();
 
-import { ACHIEVEMENTS } from '../../constants/achievements';
-import { useAchievements } from '../../hooks/useAchievements';
 import { BookOpen, BookMarked, MessageSquare, Heart, TrendingUp, GitCommitHorizontal, Star, Settings, LogOut, UserX, ChevronRight, Globe, Check } from 'lucide-react-native';
 import { useColorScheme, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,7 +25,6 @@ export default function ProfileScreen() {
     const colorScheme = useColorScheme();
     const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
     const { userId, isAnonymous, email, setAuth, language, setLanguage } = useUserStore();
-    const { earnedBadges } = useAchievements();
     const router = useRouter();
     const { t } = useTranslation();
     const [showLangModal, setShowLangModal] = useState(false);
@@ -38,13 +35,10 @@ export default function ProfileScreen() {
     };
 
     const translateAuthError = (message: string) => {
-        if (message.includes('operation-not-allowed')) return t('auth_errors.operation_not_allowed');
-        if (message.includes('invalid-email') || message.includes('invalid-credential')) return t('auth_errors.invalid_credential');
-        if (message.includes('user-not-found')) return t('auth_errors.user_not_found');
-        if (message.includes('email-already-in-use')) return t('auth_errors.email_in_use');
-        if (message.includes('weak-password')) return t('auth_errors.weak_password');
-        if (message.includes('network-request-failed')) return t('auth_errors.network_failed');
-        if (message.includes('ERR_REQUEST_CANCELED')) return t('auth_errors.cancelled');
+        if (message.includes('invalid_credential') || message.includes('401')) return t('auth_errors.invalid_credential');
+        if (message.includes('user_not_found') || message.includes('404')) return t('auth_errors.user_not_found');
+        if (message.includes('email_in_use') || message.includes('409')) return t('auth_errors.email_in_use');
+        if (message.includes('network_failed')) return t('auth_errors.network_failed');
         return t('auth_errors.generic', { message });
     };
 
@@ -62,24 +56,24 @@ export default function ProfileScreen() {
 
     useEffect(() => {
         if (response?.type === 'success') {
-            const { id_token } = response.params;
-            const credential = GoogleAuthProvider.credential(id_token);
-            setLoading(true);
-            signInWithCredential(auth, credential)
-                .catch(e => setError(translateAuthError(e.message)))
-                .finally(() => setLoading(false));
+            // Google Login will be implemented in backend later
+            setError("Google Login is currently unavailable with the new backend.");
         }
     }, [response]);
-
-    // Auth State is now managed globally in _layout.tsx
 
     const handleLogin = async () => {
         setLoading(true);
         setError('');
         try {
-            await signInWithEmailAndPassword(auth, emailInput, passwordInput);
+            const res = await apiClient.post('/auth/login', {
+                email: emailInput,
+                password: passwordInput
+            });
+            const { accessToken, user } = res.data;
+            await SecureStore.setItemAsync('userToken', accessToken);
+            setAuth(user.id, user.isGuest, user.email, user.email);
         } catch (e: any) {
-            setError(translateAuthError(e.message));
+            setError(translateAuthError(e.response?.data?.message || e.message));
         }
         setLoading(false);
     };
@@ -92,9 +86,15 @@ export default function ProfileScreen() {
         setLoading(true);
         setError('');
         try {
-            await createUserWithEmailAndPassword(auth, emailInput, passwordInput);
+            const res = await apiClient.post('/auth/register', {
+                email: emailInput,
+                password: passwordInput
+            });
+            const { accessToken, user } = res.data;
+            await SecureStore.setItemAsync('userToken', accessToken);
+            setAuth(user.id, user.isGuest, user.email, user.email);
         } catch (e: any) {
-            setError(translateAuthError(e.message));
+            setError(translateAuthError(e.response?.data?.message || e.message));
         }
         setLoading(false);
     };
@@ -103,41 +103,23 @@ export default function ProfileScreen() {
         setLoading(true);
         setError('');
         try {
-            await signInAnonymously(auth);
+            const res = await apiClient.post('/auth/guest');
+            const { accessToken, user } = res.data;
+            await SecureStore.setItemAsync('userToken', accessToken);
+            setAuth(user.id, true, null, null);
         } catch (e: any) {
-            setError(translateAuthError(e.message));
+            setError(translateAuthError(e.response?.data?.message || e.message));
         }
         setLoading(false);
     };
 
     const handleAppleLogin = async () => {
-        try {
-            const credential = await AppleAuthentication.signInAsync({
-                requestedScopes: [
-                    AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-                    AppleAuthentication.AppleAuthenticationScope.EMAIL,
-                ],
-            });
-            const { identityToken } = credential;
-            if (identityToken) {
-                setLoading(true);
-                const provider = new OAuthProvider('apple.com');
-                const authCredential = provider.credential({
-                    idToken: identityToken,
-                });
-                await signInWithCredential(auth, authCredential);
-            }
-        } catch (e: any) {
-            if (e.code !== 'ERR_REQUEST_CANCELED') {
-                setError(e.message);
-            }
-        } finally {
-            setLoading(false);
-        }
+        setError("Apple Login is currently unavailable with the new backend.");
     };
 
     const handleLogout = async () => {
-        await signOut(auth);
+        await SecureStore.deleteItemAsync('userToken');
+        setAuth(null, false, null, null);
     };
 
     if (userId) {
@@ -420,24 +402,6 @@ const styles = StyleSheet.create({
         color: '#e74c3c',
         marginBottom: 16,
         textAlign: 'center',
-    },
-    badgesContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        marginVertical: 16,
-    },
-    badge: {
-        width: '30%',
-        alignItems: 'center',
-        margin: '1.5%',
-        padding: 8,
-        borderRadius: 8,
-        borderWidth: 1,
-    },
-    badgeEarned: {
-        borderColor: '#B69A73',
-        backgroundColor: 'rgba(182, 154, 115, 0.1)',
     },
     badgeLocked: {
         borderColor: '#eee',

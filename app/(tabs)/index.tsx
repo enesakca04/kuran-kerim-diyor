@@ -6,14 +6,16 @@ import { Colors } from '../../constants/colors';
 import { getSurah } from '../../services/quranData';
 import { AyahCard } from '../../components/AyahCard';
 import { useProgress } from '../../hooks/useProgress';
-import { useAchievements } from '../../hooks/useAchievements';
-import { HatimCelebration } from '../../components/HatimCelebration';
 import { useNavigation } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
 import { useUserStore } from '../../store/userStore';
 import { DeleteWarningModal } from '../../components/DeleteWarningModal';
 import { useAyahStats } from '../../hooks/useAyahStats';
-import { formatFavCount } from '../../services/statsService';
+
+const formatFavCount = (n: number) => {
+    if (n < 1000) return n.toString();
+    return (n / 1000).toFixed(1) + 'k';
+};
 
 const { width } = Dimensions.get('window');
 
@@ -23,7 +25,6 @@ export default function MainFeedScreen() {
     const surah = getSurah(currentSurah || 1);
     const theme = Colors.light;
 
-    const { showHatim, setShowHatim } = useAchievements();
     const [containerHeight, setContainerHeight] = useState(Dimensions.get('window').height);
     const [showSwipeHint, setShowSwipeHint] = useState(false);
     const [uiAyah, setUiAyah] = useState(currentAyah);
@@ -131,7 +132,7 @@ export default function MainFeedScreen() {
     // Map içinde key var mı kontrolü
     const isFavorited = favoriteId ? !!favorites[favoriteId] : false;
     
-    const { count: globalFavCount, incrementOptimistic } = useAyahStats(favoriteId);
+    const { favoriteCount: globalFavCount, incrementOptimistic } = useAyahStats(surah?.number || 0, uiAyah);
     
     const scaleAnim = useRef(new Animated.Value(1)).current;
 
@@ -286,7 +287,6 @@ export default function MainFeedScreen() {
                     <Text style={styles.swipeHintText}>Sıradaki ayet için{'\n'}sola kaydırın</Text>
                 </View>
             )}
-            <HatimCelebration visible={showHatim} onClose={() => setShowHatim(false)} />
             <DeleteWarningModal 
                 visible={showDeleteWarning}
                 onCancel={() => setShowDeleteWarning(false)}

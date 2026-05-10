@@ -1,51 +1,44 @@
 import { useState, useEffect } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../services/firebase';
+import apiClient from '../services/apiClient';
 
-const countCache: Record<string, number> = {};
+interface AyahStats {
+    ayahId: string;
+    favoriteCount: number;
+    commentCount: number;
+    likeCount: number;
+}
 
-export const useAyahStats = (ayahId: string | null) => {
-    // If it's already in cache, load it immediately. Otherwise default to 0 during fetch.
-    const [count, setCount] = useState<number>(ayahId ? (countCache[ayahId] || 0) : 0);
+export function useAyahStats(surahNo: number, ayahNo: number) {
+    const [stats, setStats] = useState<AyahStats | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        if (!ayahId) return;
+    const ayahId = `${surahNo}_${ayahNo}`;
 
-        // favoriteId "1:1" formatinda gelir, Firestore icin "1_1" formatina cevir
-        const statId = ayahId.replace(':', '_');
-
-        // Reset state or use existing cache while pulling
-        setCount(countCache[statId] || 0);
-
-        let isMounted = true;
-        const ref = doc(db, 'ayah_stats', statId);
-
-        getDoc(ref).then(snap => {
-            if (snap.exists() && isMounted) {
-                const data = snap.data();
-                if (typeof data.count === 'number') {
-                    countCache[statId] = data.count;
-                    setCount(data.count);
-                }
-            }
-        }).catch(err => {
-            // Silently fail if no internet
-            console.log('Failed fetching ayah count:', err.message);
-        });
-
-        return () => { isMounted = false; };
-    }, [ayahId]);
-
-    // Expose a helper to optimistically update the counter when user themselves favorites it
-    const incrementOptimistic = (diff: number) => {
-        if (!ayahId) return;
-        const statId = ayahId.replace(':', '_');
-        setCount(prev => {
-            const newVal = Math.max(0, prev + diff);
-            countCache[statId] = newVal;
-            return newVal;
-        });
+    const fetchStats = async () => {
+        try {
+            const response = await apiClient.get(`/stats/${ayahId}`);
+            setStats(response.data);
+        } catch (error) {
+            console.error("Error fetching ayah stats:", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    return { count, incrementOptimistic };
-};
+    useEffect(() => {
+        fetchStats();
+    }, [ayahId]);
+
+    // UI için her iki sayıyı da ayrı ayrı döndürüyoruz
+    const commentCount = stats?.commentCount || 0;
+    const favoriteCount = stats?.favoriteCount || 0;
+
+    return { 
+        stats, 
+        loading, 
+        refresh: fetchStats,
+        commentCount,
+        favoriteCount,
+        incrementOptimistic: (delta: number = 1) => setStats(prev => prev ? { ...prev, favoriteCount: Math.max(0, prev.favoriteCount + delta) } : null)
+    };
+}

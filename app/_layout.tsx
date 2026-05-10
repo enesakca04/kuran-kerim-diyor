@@ -2,8 +2,6 @@ import { Stack } from 'expo-router';
 import { useFonts, Amiri_400Regular, Amiri_700Bold } from '@expo-google-fonts/amiri';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { auth } from '../services/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
 import '../services/i18n'; // i18n'i uygulama baslarken baslat
 import i18n, { applyRTL, detectDeviceLanguage } from '../services/i18n';
 
@@ -46,20 +44,32 @@ export default function RootLayout() {
 
         checkFirstLaunch();
 
-        // Listen to Auth State Globally
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        checkFirstLaunch();
+
+        // Listen to Auth State Globally using our API
+        const checkAuth = async () => {
             const { useUserStore } = await import('../store/userStore');
-            if (user) {
-                useUserStore.getState().setAuth(user.uid, user.isAnonymous, user.displayName, user.email);
-                const { syncProgressToCloud, mergeGuestFavoritesToCloud } = await import('../services/syncService');
-                syncProgressToCloud();
-                mergeGuestFavoritesToCloud();
-            } else {
+            const { default: apiClient } = await import('../services/apiClient');
+            const SecureStore = await import('expo-secure-store');
+            
+            try {
+                const token = await SecureStore.getItemAsync('userToken');
+                if (token) {
+                    // Fetch real user info from backend
+                    const res = await apiClient.get('/auth/me');
+                    const { user } = res.data;
+                    useUserStore.getState().setAuth(user.id, user.isGuest, user.email, user.email);
+                } else {
+                    useUserStore.getState().setAuth(null, false, null, null);
+                }
+            } catch (e) {
+                // If token is invalid or expired, clear it
+                await SecureStore.deleteItemAsync('userToken');
                 useUserStore.getState().setAuth(null, false, null, null);
             }
-        });
+        };
 
-        return () => unsubscribe();
+        checkAuth();
     }, [loaded, error]);
 
     if (!loaded && !error) {
