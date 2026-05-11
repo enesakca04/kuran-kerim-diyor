@@ -20,8 +20,9 @@ export function CollectionManagerModal({ visible, ayahId, onClose }: CollectionM
 
     const handleCreateCol = () => {
         if (newColName.trim().length > 0) {
-            addCollection(newColName.trim());
+            addCollection(newColName.trim(), ayahId);
             setNewColName('');
+            onClose(); // Automatically close after creation
         }
     };
 
@@ -30,6 +31,7 @@ export function CollectionManagerModal({ visible, ayahId, onClose }: CollectionM
             removeAyahFromCollection(ayahId, colId);
         } else {
             addAyahToCollection(ayahId, colId);
+            onClose(); // Close modal after adding
         }
     };
 

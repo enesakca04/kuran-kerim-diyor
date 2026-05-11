@@ -15,12 +15,12 @@ const formatFavCount = (n: number) => {
 };
 
 const SearchResultItem = ({ item, theme, language, onPress }: any) => {
-    const ayahId = `${item.surahNumber}:${item.ayah.number}`;
+    const ayahId = `${item.surahNumber}_${item.ayah.number}`;
     const { favoriteCount } = useAyahStats(item.surahNumber, item.ayah.number);
-    const { favorites } = useUserStore();
+    const { favorites, userId } = useUserStore();
     
-    // Eğer daha önceden(bu özellik yokken) lokal olarak favladıysa ama global 0 ise en az 1 göster
-    const displayCount = Math.max(favoriteCount, favorites[ayahId] ? 1 : 0);
+    // Yalnızca giriş yapmış kullanıcılar için (lokalde varsa ve henüz global'e yansımadıysa) 1 göster. Misafirler için sadece gerçek db verisini göster.
+    const displayCount = userId ? Math.max(favoriteCount, favorites[ayahId] ? 1 : 0) : favoriteCount;
     
     return (
         <TouchableOpacity

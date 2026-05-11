@@ -42,7 +42,9 @@
     "google_login": "المتابعة مع Google",
     "apple_login": "المتابعة مع Apple",
     "guest_continue": "المتابعة كضيف",
-    "or": "أو"
+    "or": "أو",
+    "delete_confirm_title": "حذف الحساب",
+    "delete_confirm_message": "هل أنت متأكد أنك تريد حذف حسابك؟ لا يمكن التراجع عن هذا الإجراء وسيتم حذف جميع بياناتك (المفضلة، المجموعات، التعليقات) نهائياً."
   },
   "auth_errors": {
     "operation_not_allowed": "هذه الطريقة غير مفعّلة.",
@@ -58,14 +60,27 @@
   "favorites": {
     "title": "المفضلة",
     "empty": "لا توجد آيات محفوظة في هذه القائمة بعد.",
-    "ayah": "{{surah}} - الآية {{number}}"
+    "ayah": "{{surah}} - الآية {{number}}",
+    "delete_collection_title": "حذف المجموعة",
+    "delete_collection_message": "هل أنت متأكد أنك تريد حذف هذه المجموعة وجميع الآيات الموجودة فيها؟"
   },
   "surahs": {
     "title": "السور",
     "ayah_count": "{{count}} آية"
   },
-  "comments": {
+    "comments": {
     "title": "التعليقات",
+    "status_preparing": "جاري التحضير للنشر...",
+    "status_removed": "تمت إزالته من قبل المشرف",
+    "status_rejected": "مرفوض",
+    "moderation_reasons": {
+      "PROFANITY": "يحتوي على ألفاظ نابية أو لغة بذيئة.",
+      "INSULT": "يحتوي على إهانات أو عدم احترام.",
+      "SPAM": "محتوى غير مرغوب فيه أو متكرر.",
+      "OFF_TOPIC": "محتوى خارج الموضوع أو غير ذي صلة.",
+      "HATE_SPEECH": "يحتوي على خطاب كراهية.",
+      "OTHER": "المحتوى ينتهك إرشادات المنتدى."
+    },
     "all_languages": "جميع اللغات",
     "only_language": "{{lang}} فقط",
     "loading": "جارٍ التحميل...",
@@ -73,6 +88,7 @@
     "placeholder": "شارك أفكارك...",
     "placeholder_reply": "ردّك...",
     "reply": "رد",
+    "replying_to": "رد على {{name}}",
     "cancel": "إلغاء",
     "delete": "حذف",
     "show_replies": "عرض {{count}} ردود",
@@ -86,7 +102,9 @@
     "privacy_note": "اطمئن، سيظهر اسمك كـ ({{name}}) للحفاظ على خصوصيتك.",
     "login_prompt_title": "هل تريد مشاركة أفكارك؟",
     "login_prompt_desc": "سجّل دخولك مجانًا أو أنشئ حسابًا في ثوانٍ للمتابعة.",
-    "login_button": "إنشاء حساب / تسجيل الدخول"
+    "login_button": "إنشاء حساب / تسجيل الدخول",
+    "delete_confirm_title": "حذف التعليق",
+    "delete_confirm_message": "هل أنت متأكد من حذف هذا التعليق؟"
   },
   "my_comments": {
     "title": "تعليقاتي",
@@ -106,7 +124,9 @@
     "person": "أشخاص",
     "ayah": "آية",
     "close": "إغلاق",
-    "go_to_verse": "انتقل إلى الآية"
+    "go_to_verse": "انتقل إلى الآية",
+    "cancel": "إلغاء",
+    "delete": "حذف"
   },
   "settings": {
     "title": "إعدادات الحساب",

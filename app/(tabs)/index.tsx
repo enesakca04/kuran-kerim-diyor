@@ -128,7 +128,7 @@ export default function MainFeedScreen() {
         });
     }, []);
 
-    const favoriteId = surah ? `${surah.number}:${uiAyah}` : null;
+    const favoriteId = surah ? `${surah.number}_${uiAyah}` : null;
     // Map içinde key var mı kontrolü
     const isFavorited = favoriteId ? !!favorites[favoriteId] : false;
     

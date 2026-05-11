@@ -28,7 +28,7 @@ export const register = async (req: Request, res: Response) => {
       data: {
         email: parsedData.email,
         password: hashedPassword,
-        name: parsedData.name,
+        name: parsedData.name || parsedData.email.split('@')[0],
       },
     });
 

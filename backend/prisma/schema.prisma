@@ -23,6 +23,7 @@ model User {
   comments           Comment[]
   favorites          Favorite[]
   reports            Report[]
+  likes              CommentLike[]
 }
 
 model Report {
@@ -70,16 +71,34 @@ model CollectionItem {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
+  userId           String
+  ayahId           String
+  text             String
+  language         String   @default("tr")
+  status           String   @default("PENDING") // PENDING, APPROVED, REJECTED, REMOVED_BY_MODERATOR
+  moderationReason String?
+  isDeleted        Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent           Comment? @relation("CommentReplies", fields: [replyToId], references: [id])
+  replyToId        Int?
+  replies          Comment[] @relation("CommentReplies")
+  reports          Report[]
+  likes            CommentLike[]
+}
+
+model CommentLike {
   userId    String
-  ayahId    String
-  text      String
-  language  String   @default("tr")
-  isDeleted Boolean  @default(false)
+  commentId Int
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  reports   Report[]
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@id([userId, commentId])
 }
 
 model AyahStat {

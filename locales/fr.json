@@ -42,7 +42,9 @@
     "google_login": "Continuer avec Google",
     "apple_login": "Continuer avec Apple",
     "guest_continue": "Continuer en tant qu'invité",
-    "or": "OU"
+    "or": "OU",
+    "delete_confirm_title": "Supprimer le compte",
+    "delete_confirm_message": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et toutes vos données (favoris, collections, commentaires) seront définitivement supprimées."
   },
   "auth_errors": {
     "operation_not_allowed": "Cette méthode de connexion n'est pas activée.",
@@ -58,7 +60,9 @@
   "favorites": {
     "title": "Mes favoris",
     "empty": "Aucun verset sauvegardé dans cette liste pour l'instant.",
-    "ayah": "{{surah}} - Verset {{number}}"
+    "ayah": "{{surah}} - Verset {{number}}",
+    "delete_collection_title": "Supprimer la collection",
+    "delete_collection_message": "Êtes-vous sûr de vouloir supprimer cette collection et tous les versets qu'elle contient ?"
   },
   "surahs": {
     "title": "Sourates",
@@ -66,6 +70,17 @@
   },
   "comments": {
     "title": "Commentaires",
+    "status_preparing": "Préparation de la publication...",
+    "status_removed": "Supprimé par le modérateur",
+    "status_rejected": "Rejeté",
+    "moderation_reasons": {
+      "PROFANITY": "Contient des grossièretés veya un langage vulgaire.",
+      "INSULT": "Contient des insultes ou de l'irrespect.",
+      "SPAM": "Spam ou contenu répétitif.",
+      "OFF_TOPIC": "Contenu hors sujet veya non pertinent.",
+      "HATE_SPEECH": "Contient des discours de haine.",
+      "OTHER": "Le contenu enfreint les règles de la communauté."
+    },
     "all_languages": "Toutes les langues",
     "only_language": "Seulement {{lang}}",
     "loading": "Chargement...",
@@ -73,6 +88,7 @@
     "placeholder": "Partagez vos pensées...",
     "placeholder_reply": "Votre réponse...",
     "reply": "Répondre",
+    "replying_to": "Réponse à {{name}}",
     "cancel": "Annuler",
     "delete": "Supprimer",
     "show_replies": "Afficher {{count}} réponses",
@@ -86,7 +102,9 @@
     "privacy_note": "Rassurez-vous, votre nom apparaîtra sous la forme ({{name}}) pour la confidentialité.",
     "login_prompt_title": "Voulez-vous partager vos pensées ?",
     "login_prompt_desc": "Connectez-vous gratuitement ou créez un compte en quelques secondes.",
-    "login_button": "Créer un compte / Se connecter"
+    "login_button": "Créer un compte / Se connecter",
+    "delete_confirm_title": "Supprimer le commentaire",
+    "delete_confirm_message": "Êtes-vous sûr de vouloir supprimer ce commentaire ?"
   },
   "my_comments": {
     "title": "Mes commentaires",
@@ -106,7 +124,9 @@
     "person": "personnes",
     "ayah": "Verset",
     "close": "Fermer",
-    "go_to_verse": "Aller au verset"
+    "go_to_verse": "Aller au verset",
+    "cancel": "Annuler",
+    "delete": "Supprimer"
   },
   "settings": {
     "title": "Paramètres du compte",

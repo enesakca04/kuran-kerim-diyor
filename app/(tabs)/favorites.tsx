@@ -8,6 +8,8 @@ import { ChevronDown, Heart, MoreVertical, Check } from 'lucide-react-native';
 import { CollectionManagerModal } from '../../components/CollectionManagerModal';
 import { DeleteWarningModal } from '../../components/DeleteWarningModal';
 import { useTranslation } from 'react-i18next';
+import { Alert } from 'react-native';
+import { Trash2 } from 'lucide-react-native';
 
 export default function FavoritesScreen() {
     const colorScheme = useColorScheme();
@@ -50,7 +52,7 @@ export default function FavoritesScreen() {
         if (!sourceMap) return [];
         return Object.entries(sourceMap)
             .map(([id, timestamp]) => {
-                const [surahNoStr, ayahNoStr] = id.split(':');
+                const [surahNoStr, ayahNoStr] = id.includes('_') ? id.split('_') : id.split(':');
                 return { id, timestamp, surahNo: parseInt(surahNoStr, 10), ayahNo: parseInt(ayahNoStr, 10) };
             })
             .sort((a, b) => b.timestamp - a.timestamp);
@@ -81,6 +83,26 @@ export default function FavoritesScreen() {
             toggleFavorite(warningAyahId);
         }
         setWarningAyahId(null);
+    };
+
+    const handleRemoveCollection = (colId: string, colName: string) => {
+        Alert.alert(
+            t('favorites.delete_collection_title'),
+            t('favorites.delete_collection_message'),
+            [
+                { text: t('common.cancel'), style: 'cancel' },
+                { 
+                    text: t('common.delete'), 
+                    style: 'destructive',
+                    onPress: () => {
+                        useUserStore.getState().deleteCollection(colId);
+                        if (selectedCol === colId) {
+                            setSelectedCol('general');
+                        }
+                    }
+                }
+            ]
+        );
     };
 
     const renderItem = ({ item }: { item: any }) => {
@@ -147,14 +169,25 @@ export default function FavoritesScreen() {
                         {Object.values(collections)
                             .sort((a, b) => a.name.localeCompare(b.name))
                             .map(col => (
-                            <TouchableOpacity 
+                            <View 
                                 key={col.id}
                                 style={[styles.dropdownItem, selectedCol === col.id && { backgroundColor: theme.background }]} 
-                                onPress={() => { setSelectedCol(col.id); setShowColDropdown(false); }}
                             >
-                                <Text style={[{ color: theme.text }, selectedCol === col.id && { fontWeight: 'bold' }]}>{col.name}</Text>
-                                {selectedCol === col.id && <Check size={18} color={theme.primary} />}
-                            </TouchableOpacity>
+                                <TouchableOpacity 
+                                    style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}
+                                    onPress={() => { setSelectedCol(col.id); setShowColDropdown(false); }}
+                                >
+                                    <Text style={[{ color: theme.text, flex: 1 }, selectedCol === col.id && { fontWeight: 'bold' }]}>{col.name}</Text>
+                                    {selectedCol === col.id && <Check size={18} color={theme.primary} style={{ marginRight: 12 }} />}
+                                </TouchableOpacity>
+
+                                <TouchableOpacity 
+                                    onPress={() => handleRemoveCollection(col.id, col.name)}
+                                    style={{ padding: 8 }}
+                                >
+                                    <Trash2 size={18} color="#e74c3c" />
+                                </TouchableOpacity>
+                            </View>
                         ))}
                     </View>
                 </TouchableOpacity>

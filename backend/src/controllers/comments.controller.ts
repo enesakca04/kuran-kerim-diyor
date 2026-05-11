@@ -1,21 +1,39 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { prisma } from '../utils/prisma';
+import { moderateComment } from '../services/moderation.service';
 
 export const getComments = async (req: Request, res: Response) => {
   try {
     const ayahId = req.params.ayahId as string;
     console.log(`[Comments]: Fetching for Ayah ID: ${ayahId}`);
     
-    // We only fetch comments that are NOT deleted
+    const userId = req.user?.userId;
+
+    // We only fetch comments that are NOT deleted and match visibility rules
     const comments = await prisma.comment.findMany({
-      where: { ayahId, isDeleted: false },
+      where: { 
+        ayahId, 
+        isDeleted: false,
+        OR: [
+          { status: 'APPROVED' },
+          { AND: [{ userId: userId || 'GUEST' }, { status: 'PENDING' }] }, // Sadece PENDING olan kendi yorumunu görsün, REJECTED olanı burada görmesin
+          { status: 'REMOVED_BY_MODERATOR' }
+        ]
+      },
       include: {
         user: {
           select: { name: true, isDeleted: true }
-        }
+        },
+        _count: { select: { likes: true } },
+        likes: (userId && !req.user?.isGuest) ? {
+          where: { userId }
+        } : false
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: [
+        { status: 'asc' }, // PENDING ve APPROVED başa, REMOVED sona (Alfabetik olarak P-A-R)
+        { createdAt: 'desc' }
+      ]
     });
 
     console.log(`[Comments]: Found ${comments.length} comments in DB`);
@@ -27,11 +45,34 @@ export const getComments = async (req: Request, res: Response) => {
         displayName = 'Silinmiş Hesap';
       }
 
+      if (comment.status === 'REMOVED_BY_MODERATOR') {
+        return {
+          id: comment.id,
+          ayahId: comment.ayahId,
+          userId: comment.userId,
+          replyToId: comment.replyToId,
+          text: `Bu yorum topluluk kuralları (${comment.moderationReason || 'Uygunsuz İçerik'}) nedeniyle moderatör tarafından kaldırılmıştır.`,
+          createdAt: comment.createdAt,
+          status: comment.status,
+          language: comment.language,
+          likeCount: comment._count.likes,
+          isLikedByMe: comment.likes ? comment.likes.length > 0 : false,
+          user: { name: 'Moderatör Sistemi' }
+        };
+      }
+
       return {
         id: comment.id,
         ayahId: comment.ayahId,
+        userId: comment.userId,
+        replyToId: comment.replyToId,
         text: comment.text,
         createdAt: comment.createdAt,
+        status: comment.status,
+        language: comment.language,
+        moderationReason: comment.moderationReason,
+        likeCount: comment._count.likes,
+        isLikedByMe: comment.likes ? comment.likes.length > 0 : false,
         user: { name: displayName }
       };
     });
@@ -60,7 +101,8 @@ export const getMyComments = async (req: Request, res: Response) => {
 const addCommentSchema = z.object({
   ayahId: z.string(),
   text: z.string().min(1).max(1000),
-  language: z.string().optional().default('tr')
+  language: z.string().optional().default('tr'),
+  replyToId: z.number().optional()
 });
 
 export const addComment = async (req: Request, res: Response) => {
@@ -73,56 +115,21 @@ export const addComment = async (req: Request, res: Response) => {
     }
 
     const data = addCommentSchema.parse(req.body);
-
-    // Akıllı Dil Algılama
-    let finalLanguage = data.language; // Varsayılan olarak frontend'den gelen (uygulama dili)
+    let finalLanguage = data.language; 
     
-    try {
-      const LanguageDetect = require('languagedetect');
-      const lngDetector = new LanguageDetect();
-      const detected = lngDetector.detect(data.text, 1); // En yakın 1 sonucu al
-      
-      if (detected.length > 0 && detected[0][1] > 0.2) { // %20'den fazla eminse
-        const langMap: Record<string, string> = {
-          'turkish': 'tr',
-          'english': 'en',
-          'arabic': 'ar',
-          'german': 'de',
-          'french': 'fr',
-          'spanish': 'es',
-          'russian': 'ru',
-          'bosnian': 'bs',
-          'albanian': 'sq'
-        };
-        const detectedName = detected[0][0].toLowerCase();
-        if (langMap[detectedName]) {
-          finalLanguage = langMap[detectedName];
-        } else {
-          // Desteklemedigimiz ama algiladigimiz bir dil (ornegin: greek, swedish vb.)
-          // Bu yorumlar sadece "Tüm Diller" sekmesinde gorunur, ana dili mesgul etmez.
-          finalLanguage = detectedName;
-        }
-        console.log(`[LanguageDetect]: "${data.text.substring(0, 20)}..." detected as ${finalLanguage}`);
-      }
-    } catch (error) {
-      console.error('[LanguageDetect Error]:', error);
-    }
-
     const comment = await prisma.comment.create({
       data: { 
         ayahId: data.ayahId,
         text: data.text,
         language: finalLanguage,
-        userId: userId
+        userId: userId,
+        status: 'PENDING',
+        ...(data.replyToId ? { replyToId: data.replyToId } : {})
       }
     });
 
-    // Update AyahStat
-    await prisma.ayahStat.upsert({
-      where: { ayahId: data.ayahId },
-      update: { commentCount: { increment: 1 } },
-      create: { ayahId: data.ayahId, commentCount: 1 }
-    });
+    // Artık AI Moderasyonu ve Sayaç Güncellemesini Arka Plan İşçisi (Worker) yapacak.
+    // Kullanıcıya yorumun kaydedildiğini dönüyoruz, "İncelemede" olarak görünecek.
 
     res.status(201).json(comment);
   } catch (error) {
@@ -155,6 +162,56 @@ export const deleteComment = async (req: Request, res: Response) => {
     });
 
     res.json({ message: 'Comment deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const toggleLike = async (req: Request, res: Response) => {
+  try {
+    const userId = req.user!.userId;
+    const isGuest = req.user!.isGuest;
+    const commentId = parseInt(req.params.commentId as string);
+
+    if (isGuest) {
+      return res.status(403).json({ message: 'Guests cannot like comments' });
+    }
+
+    const comment = await prisma.comment.findUnique({
+      where: { id: commentId }
+    });
+
+    if (!comment) {
+      return res.status(404).json({ message: 'Comment not found' });
+    }
+
+    const existingLike = await prisma.commentLike.findUnique({
+      where: {
+        userId_commentId: { userId, commentId }
+      }
+    });
+
+    if (existingLike) {
+      await prisma.commentLike.delete({
+        where: { userId_commentId: { userId, commentId } }
+      });
+      // Update ayah stat
+      await prisma.ayahStat.update({
+        where: { ayahId: comment.ayahId },
+        data: { likeCount: { decrement: 1 } }
+      });
+      res.json({ message: 'Like removed', isLikedByMe: false });
+    } else {
+      await prisma.commentLike.create({
+        data: { userId, commentId }
+      });
+      // Update ayah stat
+      await prisma.ayahStat.update({
+        where: { ayahId: comment.ayahId },
+        data: { likeCount: { increment: 1 } }
+      });
+      res.json({ message: 'Like added', isLikedByMe: true });
+    }
   } catch (error) {
     res.status(500).json({ message: 'Internal server error' });
   }

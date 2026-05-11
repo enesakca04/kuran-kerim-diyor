@@ -42,7 +42,9 @@
     "google_login": "Mit Google fortfahren",
     "apple_login": "Mit Apple fortfahren",
     "guest_continue": "Als Gast fortfahren",
-    "or": "ODER"
+    "or": "ODER",
+    "delete_confirm_title": "Konto löschen",
+    "delete_confirm_message": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden und alle Ihre Daten (Favoriten, Sammlungen, Kommentare) werden dauerhaft gelöscht."
   },
   "auth_errors": {
     "operation_not_allowed": "Diese Anmeldemethode ist nicht aktiviert.",
@@ -58,7 +60,9 @@
   "favorites": {
     "title": "Meine Favoriten",
     "empty": "Noch keine Verse in dieser Liste gespeichert.",
-    "ayah": "{{surah}} - Vers {{number}}"
+    "ayah": "{{surah}} - Vers {{number}}",
+    "delete_collection_title": "Sammlung löschen",
+    "delete_collection_message": "Sind Sie sicher, dass Sie diese Sammlung und alle darin enthaltenen Verse löschen möchten?"
   },
   "surahs": {
     "title": "Suren",
@@ -66,6 +70,17 @@
   },
   "comments": {
     "title": "Kommentare",
+    "status_preparing": "Vorbereitung der Veröffentlichung...",
+    "status_removed": "Vom Moderator entfernt",
+    "status_rejected": "Abgelehnt",
+    "moderation_reasons": {
+      "PROFANITY": "Enthält vulgäre Sprache oder Obszönitäten.",
+      "INSULT": "Enthält Beleidigungen oder Respektlosigkeiten.",
+      "SPAM": "Spam oder wiederholte Inhalte.",
+      "OFF_TOPIC": "Themenfremder oder irrelevanter Inhalt.",
+      "HATE_SPEECH": "Enthält Hassrede.",
+      "OTHER": "Inhalt verstößt gegen die Community-Richtlinien."
+    },
     "all_languages": "Alle Sprachen",
     "only_language": "Nur {{lang}}",
     "loading": "Wird geladen...",
@@ -73,6 +88,7 @@
     "placeholder": "Teilen Sie Ihre Gedanken...",
     "placeholder_reply": "Ihre Antwort...",
     "reply": "Antworten",
+    "replying_to": "Antwort an {{name}}",
     "cancel": "Abbrechen",
     "delete": "Löschen",
     "show_replies": "{{count}} Antworten anzeigen",
@@ -86,7 +102,9 @@
     "privacy_note": "Keine Sorge, Ihr Name erscheint als ({{name}}) für den Datenschutz.",
     "login_prompt_title": "Möchten Sie Ihre Gedanken teilen?",
     "login_prompt_desc": "Melden Sie sich kostenlos an oder erstellen Sie in Sekunden ein Konto.",
-    "login_button": "Konto erstellen / Anmelden"
+    "login_button": "Konto erstellen / Anmelden",
+    "delete_confirm_title": "Kommentar löschen",
+    "delete_confirm_message": "Sind Sie sicher, dass Sie diesen Kommentar löschen möchten?"
   },
   "my_comments": {
     "title": "Meine Kommentare",
@@ -106,7 +124,9 @@
     "person": "Personen",
     "ayah": "Vers",
     "close": "Schließen",
-    "go_to_verse": "Zum Vers gehen"
+    "go_to_verse": "Zum Vers gehen",
+    "cancel": "Abbrechen",
+    "delete": "Löschen"
   },
   "settings": {
     "title": "Kontoeinstellungen",

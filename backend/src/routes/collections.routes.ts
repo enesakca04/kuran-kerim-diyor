@@ -5,7 +5,8 @@ import {
   createCollection, 
   deleteCollection, 
   addItemToCollection, 
-  removeItemFromCollection 
+  removeItemFromCollection,
+  syncCollections
 } from '../controllers/collections.controller';
 
 const router = Router();
@@ -13,6 +14,7 @@ const router = Router();
 router.use(authenticate); // Protect all collection routes
 
 router.get('/', getCollections);
+router.post('/sync', syncCollections);
 router.post('/', createCollection);
 router.delete('/:id', deleteCollection);
 router.post('/:id/items', addItemToCollection);

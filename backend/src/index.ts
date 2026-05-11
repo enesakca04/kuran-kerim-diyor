@@ -13,8 +13,12 @@ import commentRoutes from './routes/comments.routes';
 import reportRoutes from './routes/reports.routes';
 import statsRoutes from './routes/stats.routes';
 import userRoutes from './routes/user.routes';
+import { startModerationWorker } from './services/worker.service';
 
 const app = express();
+
+// Start the background worker
+startModerationWorker();
 const port = process.env.PORT || 3000;
 
 // Security Middlewares
@@ -25,7 +29,7 @@ app.use(express.json());
 // Rate Limiting: Max 100 requests per 15 minutes per IP
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, 
-  max: 100, 
+  max: 1000, 
   message: 'Too many requests from this IP, please try again later.'
 });
 app.use(limiter);
@@ -43,6 +47,6 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', message: 'Kuran Backend is secure and running' });
 });
 
-app.listen(port, () => {
-    console.log(`[Server]: Server is running at http://localhost:${port}`);
+app.listen(Number(port), '0.0.0.0', () => {
+    console.log(`[Server]: Server is running at http://0.0.0.0:${port}`);
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Platform, Modal, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Platform, Modal, FlatList, Alert } from 'react-native';
 import { Colors } from '../../constants/colors';
 import apiClient from '../../services/apiClient';
 import * as SecureStore from 'expo-secure-store';
@@ -69,9 +69,13 @@ export default function ProfileScreen() {
                 email: emailInput,
                 password: passwordInput
             });
-            const { accessToken, user } = res.data;
+            const { accessToken, refreshToken, user } = res.data;
             await SecureStore.setItemAsync('userToken', accessToken);
+            await SecureStore.setItemAsync('refreshToken', refreshToken);
             setAuth(user.id, user.isGuest, user.email, user.email);
+            if (!user.isGuest) {
+                useUserStore.getState().syncAllLocalData();
+            }
         } catch (e: any) {
             setError(translateAuthError(e.response?.data?.message || e.message));
         }
@@ -90,9 +94,13 @@ export default function ProfileScreen() {
                 email: emailInput,
                 password: passwordInput
             });
-            const { accessToken, user } = res.data;
+            const { accessToken, refreshToken, user } = res.data;
             await SecureStore.setItemAsync('userToken', accessToken);
+            await SecureStore.setItemAsync('refreshToken', refreshToken);
             setAuth(user.id, user.isGuest, user.email, user.email);
+            if (!user.isGuest) {
+                useUserStore.getState().syncAllLocalData();
+            }
         } catch (e: any) {
             setError(translateAuthError(e.response?.data?.message || e.message));
         }
@@ -104,8 +112,9 @@ export default function ProfileScreen() {
         setError('');
         try {
             const res = await apiClient.post('/auth/guest');
-            const { accessToken, user } = res.data;
+            const { accessToken, refreshToken, user } = res.data;
             await SecureStore.setItemAsync('userToken', accessToken);
+            await SecureStore.setItemAsync('refreshToken', refreshToken);
             setAuth(user.id, true, null, null);
         } catch (e: any) {
             setError(translateAuthError(e.response?.data?.message || e.message));
@@ -119,7 +128,37 @@ export default function ProfileScreen() {
 
     const handleLogout = async () => {
         await SecureStore.deleteItemAsync('userToken');
+        await SecureStore.deleteItemAsync('refreshToken');
         setAuth(null, false, null, null);
+    };
+
+    const handleDeleteAccount = async () => {
+        Alert.alert(
+            t('profile.delete_confirm_title'),
+            t('profile.delete_confirm_message'),
+            [
+                { text: t('common.cancel'), style: 'cancel' },
+                { 
+                    text: t('common.delete'), 
+                    style: 'destructive',
+                    onPress: async () => {
+                        setLoading(true);
+                        try {
+                            await apiClient.delete('/user');
+                            await SecureStore.deleteItemAsync('userToken');
+                            await SecureStore.deleteItemAsync('refreshToken');
+                            // Clear all local data as well
+                            await AsyncStorage.clear(); 
+                            setAuth(null, false, null, null);
+                            router.replace('/onboarding');
+                        } catch (e: any) {
+                            Alert.alert("Error", e.response?.data?.message || e.message);
+                        }
+                        setLoading(false);
+                    }
+                }
+            ]
+        );
     };
 
     if (userId) {
@@ -182,7 +221,7 @@ export default function ProfileScreen() {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[styles.menuItem, { borderBottomWidth: 0 }]}>
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomWidth: 0 }]} onPress={handleDeleteAccount}>
                         <View style={styles.menuItemLeft}>
                             <UserX size={20} color="#e74c3c" />
                             <Text style={[styles.menuItemText, { color: "#e74c3c" }]}>{t('profile.delete_account')}</Text>

@@ -59,6 +59,9 @@ export default function RootLayout() {
                     const res = await apiClient.get('/auth/me');
                     const { user } = res.data;
                     useUserStore.getState().setAuth(user.id, user.isGuest, user.email, user.email);
+                    if (!user.isGuest) {
+                        useUserStore.getState().syncAllLocalData();
+                    }
                 } else {
                     useUserStore.getState().setAuth(null, false, null, null);
                 }

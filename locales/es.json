@@ -42,7 +42,9 @@
     "google_login": "Continuar con Google",
     "apple_login": "Continuar con Apple",
     "guest_continue": "Continuar como invitado",
-    "or": "O"
+    "or": "O",
+    "delete_confirm_title": "Eliminar cuenta",
+    "delete_confirm_message": "¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer y todos tus datos (favoritos, colecciones, comentarios) se eliminarán de forma permanente."
   },
   "auth_errors": {
     "operation_not_allowed": "Este método de inicio de sesión no está habilitado.",
@@ -58,7 +60,9 @@
   "favorites": {
     "title": "Mis favoritos",
     "empty": "Aún no hay versículos guardados en esta lista.",
-    "ayah": "{{surah}} - Versículo {{number}}"
+    "ayah": "{{surah}} - Versículo {{number}}",
+    "delete_collection_title": "Eliminar colección",
+    "delete_collection_message": "¿Estás seguro de que deseas eliminar esta colección y todos los versículos que contiene?"
   },
   "surahs": {
     "title": "Suras",
@@ -66,6 +70,17 @@
   },
   "comments": {
     "title": "Comentarios",
+    "status_preparing": "Preparación para la publicación...",
+    "status_removed": "Eliminado por el moderador",
+    "status_rejected": "Rechazado",
+    "moderation_reasons": {
+      "PROFANITY": "Contiene blasfemias o lenguaje vulgar.",
+      "INSULT": "Contiene insultos o falta de respeto.",
+      "SPAM": "Spam o contenido repetitivo.",
+      "OFF_TOPIC": "Contenido fuera de tema o irrelevante.",
+      "HATE_SPEECH": "Contiene discurso de odio.",
+      "OTHER": "El contenido infringe las normas de la comunidad."
+    },
     "all_languages": "Todos los idiomas",
     "only_language": "Solo {{lang}}",
     "loading": "Cargando...",
@@ -73,6 +88,7 @@
     "placeholder": "Comparte tus pensamientos...",
     "placeholder_reply": "Tu respuesta...",
     "reply": "Responder",
+    "replying_to": "Respondiendo a {{name}}",
     "cancel": "Cancelar",
     "delete": "Eliminar",
     "show_replies": "Mostrar {{count}} respuestas",
@@ -86,7 +102,9 @@
     "privacy_note": "Tranquilo, tu nombre aparecerá como ({{name}}) para proteger tu privacidad.",
     "login_prompt_title": "¿Quieres compartir tus pensamientos?",
     "login_prompt_desc": "Inicia sesión gratis o crea una cuenta en segundos para continuar.",
-    "login_button": "Crear cuenta / Iniciar sesión"
+    "login_button": "Crear cuenta / Iniciar sesión",
+    "delete_confirm_title": "Eliminar comentario",
+    "delete_confirm_message": "¿Estás seguro de que quieres eliminar este comentario?"
   },
   "my_comments": {
     "title": "Mis comentarios",
@@ -106,7 +124,9 @@
     "person": "personas",
     "ayah": "Versículo",
     "close": "Cerrar",
-    "go_to_verse": "Ir al versículo"
+    "go_to_verse": "Ir al versículo",
+    "cancel": "Cancelar",
+    "delete": "Eliminar"
   },
   "settings": {
     "title": "Configuración de la cuenta",
