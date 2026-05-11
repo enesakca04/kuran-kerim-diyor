@@ -6,16 +6,21 @@ import { searchAyahs } from '../../services/quranData';
 import { useUserStore } from '../../store/userStore';
 import { useProgress } from '../../hooks/useProgress';
 import { useAyahStats } from '../../hooks/useAyahStats';
-import { formatFavCount } from '../../services/statsService';
 import { Heart } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
+
+const formatFavCount = (n: number) => {
+    if (n < 1000) return n.toString();
+    return (n / 1000).toFixed(1) + 'k';
+};
 
 const SearchResultItem = ({ item, theme, language, onPress }: any) => {
-    const ayahId = `${item.surahNumber}:${item.ayah.number}`;
-    const { count } = useAyahStats(ayahId);
-    const { favorites } = useUserStore();
+    const ayahId = `${item.surahNumber}_${item.ayah.number}`;
+    const { favoriteCount } = useAyahStats(item.surahNumber, item.ayah.number);
+    const { favorites, userId } = useUserStore();
     
-    // Eğer daha önceden(bu özellik yokken) lokal olarak favladıysa ama global 0 ise en az 1 göster
-    const displayCount = Math.max(count, favorites[ayahId] ? 1 : 0);
+    // Yalnızca giriş yapmış kullanıcılar için (lokalde varsa ve henüz global'e yansımadıysa) 1 göster. Misafirler için sadece gerçek db verisini göster.
+    const displayCount = userId ? Math.max(favoriteCount, favorites[ayahId] ? 1 : 0) : favoriteCount;
     
     return (
         <TouchableOpacity
@@ -51,6 +56,7 @@ export default function SearchScreen() {
     const { language } = useUserStore();
     const router = useRouter();
     const { setProgress } = useProgress();
+    const { t } = useTranslation();
 
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<any[]>([]);
@@ -77,7 +83,7 @@ export default function SearchScreen() {
             <View style={styles.searchBox}>
                 <TextInput
                     style={[styles.input, { borderColor: theme.border, color: theme.text, backgroundColor: theme.card }]}
-                    placeholder="Kur'an'da ara..."
+                    placeholder={t('search.placeholder')}
                     placeholderTextColor={theme.muted}
                     value={query}
                     onChangeText={handleSearch}
@@ -97,9 +103,9 @@ export default function SearchScreen() {
                 )}
                 ListEmptyComponent={
                     query.length > 2 ? (
-                        <Text style={[styles.empty, { color: theme.muted }]}>Sonuç bulunamadı.</Text>
+                        <Text style={[styles.empty, { color: theme.muted }]}>{t('search.no_results')}</Text>
                     ) : (
-                        <Text style={[styles.empty, { color: theme.muted }]}>Aramak için en az 3 harf girin.</Text>
+                        <Text style={[styles.empty, { color: theme.muted }]}>{t('search.min_chars')}</Text>
                     )
                 }
             />

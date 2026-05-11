@@ -6,6 +6,8 @@ import { useUserStore } from '../store/userStore';
 import { MessageSquare } from 'lucide-react-native';
 import { CommentSheet } from './CommentSheet';
 import { AudioPlayer } from './AudioPlayer';
+import { useTranslation } from 'react-i18next';
+import { useAyahStats } from '../hooks/useAyahStats';
 
 interface AyahCardProps {
     ayah: Ayah;
@@ -14,9 +16,17 @@ interface AyahCardProps {
 }
 
 export function AyahCard({ ayah, surahName, surahNumber }: AyahCardProps) {
-    const language = useUserStore((state) => state.language);
+    const { language, showArabicTranslation, arabicTranslationLang } = useUserStore();
+    const { stats, refresh } = useAyahStats(surahNumber, ayah.number);
     const theme = Colors.light;
     const [showComments, setShowComments] = useState(false);
+    const { t } = useTranslation();
+
+    // Arapca kullanici: meal tercihine gore goster/gizle
+    const isArabicUser = language === 'ar';
+    const displayLang = isArabicUser ? arabicTranslationLang : language;
+    const translationText = ayah.translations[displayLang];
+    const shouldShowTranslation = !isArabicUser || showArabicTranslation;
 
     return (
         <View style={[styles.container, { backgroundColor: theme.background }]}>
@@ -28,31 +38,49 @@ export function AyahCard({ ayah, surahName, surahNumber }: AyahCardProps) {
                 <Text style={[styles.arabicText, { color: theme.text }]}>
                     {ayah.arabic}
                 </Text>
-                <Text style={[styles.translationText, { color: theme.secondary }]}>
-                    {ayah.translations[language]}
-                </Text>
+                {shouldShowTranslation && translationText ? (
+                    <Text style={[styles.translationText, { color: theme.secondary }]}>
+                        {translationText}
+                    </Text>
+                ) : null}
             </ScrollView>
 
             <View style={styles.footer}>
                 <AudioPlayer globalAyahNumber={ayah.globalNumber} />
 
                 <Text style={[styles.metaText, { color: theme.muted, marginHorizontal: 16 }]}>
-                    {surahName} • Ayet {ayah.number}
+                    {surahName} • {t('common.ayah')} {ayah.number}
                 </Text>
 
                 <TouchableOpacity style={styles.commentBtn} onPress={() => setShowComments(true)}>
-                    <MessageSquare size={24} color={theme.primary} />
+                    <View style={styles.commentBadgeContainer}>
+                        <MessageSquare size={24} color={theme.primary} />
+                        {stats && stats.commentCount > 0 && (
+                            <View style={[styles.badge, { backgroundColor: theme.primary }]}>
+                                <Text style={styles.badgeText}>{stats.commentCount}</Text>
+                            </View>
+                        )}
+                    </View>
                 </TouchableOpacity>
             </View>
 
-            <Modal visible={showComments} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setShowComments(false)}>
+            <Modal visible={showComments} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => {
+                setShowComments(false);
+                refresh();
+            }}>
                 <View style={{ flex: 1, backgroundColor: theme.background }}>
                     <View style={styles.sheetHeader}>
-                        <TouchableOpacity onPress={() => setShowComments(false)}>
-                            <Text style={{ color: theme.primary, fontSize: 16, padding: 16, fontWeight: 'bold' }}>Kapat</Text>
+                        <TouchableOpacity onPress={() => {
+                            setShowComments(false);
+                            refresh();
+                        }}>
+                            <Text style={{ color: theme.primary, fontSize: 16, padding: 16, fontWeight: 'bold' }}>{t('common.close')}</Text>
                         </TouchableOpacity>
                     </View>
-                    <CommentSheet surahNo={surahNumber} ayahNo={ayah.number} onClose={() => setShowComments(false)} />
+                    <CommentSheet surahNo={surahNumber} ayahNo={ayah.number} onClose={() => {
+                        setShowComments(false);
+                        refresh();
+                    }} />
                 </View>
             </Modal>
         </View>
@@ -102,6 +130,25 @@ const styles = StyleSheet.create({
     },
     commentBtn: {
         padding: 8,
+    },
+    commentBadgeContainer: {
+        position: 'relative',
+    },
+    badge: {
+        position: 'absolute',
+        top: -8,
+        right: -8,
+        minWidth: 18,
+        height: 18,
+        borderRadius: 9,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 4,
+    },
+    badgeText: {
+        color: '#fff',
+        fontSize: 10,
+        fontWeight: 'bold',
     },
     sheetHeader: {
         borderBottomWidth: 1,

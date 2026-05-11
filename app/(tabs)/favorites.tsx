@@ -7,6 +7,9 @@ import { useNavigation, useRouter } from 'expo-router';
 import { ChevronDown, Heart, MoreVertical, Check } from 'lucide-react-native';
 import { CollectionManagerModal } from '../../components/CollectionManagerModal';
 import { DeleteWarningModal } from '../../components/DeleteWarningModal';
+import { useTranslation } from 'react-i18next';
+import { Alert } from 'react-native';
+import { Trash2 } from 'lucide-react-native';
 
 export default function FavoritesScreen() {
     const colorScheme = useColorScheme();
@@ -18,6 +21,7 @@ export default function FavoritesScreen() {
     
     const router = useRouter();
     const navigation = useNavigation();
+    const { t } = useTranslation();
 
     // States
     const [selectedCol, setSelectedCol] = useState<string>('general');
@@ -34,13 +38,13 @@ export default function FavoritesScreen() {
                     onPress={() => setShowColDropdown(true)}
                 >
                     <Text style={{ fontSize: 18, fontWeight: 'bold', color: theme.text, marginRight: 6 }}>
-                        {selectedCol === 'general' ? 'Favorilerim' : collections[selectedCol]?.name || 'Favorilerim'}
+                        {selectedCol === 'general' ? t('favorites.title') : collections[selectedCol]?.name || t('favorites.title')}
                     </Text>
                     <ChevronDown size={20} color={theme.text} />
                 </TouchableOpacity>
             )
         });
-    }, [navigation, selectedCol, collections, theme]);
+    }, [navigation, selectedCol, collections, theme, t]);
 
     // Data selector
     const sortedData = useMemo(() => {
@@ -48,7 +52,7 @@ export default function FavoritesScreen() {
         if (!sourceMap) return [];
         return Object.entries(sourceMap)
             .map(([id, timestamp]) => {
-                const [surahNoStr, ayahNoStr] = id.split(':');
+                const [surahNoStr, ayahNoStr] = id.includes('_') ? id.split('_') : id.split(':');
                 return { id, timestamp, surahNo: parseInt(surahNoStr, 10), ayahNo: parseInt(ayahNoStr, 10) };
             })
             .sort((a, b) => b.timestamp - a.timestamp);
@@ -81,10 +85,32 @@ export default function FavoritesScreen() {
         setWarningAyahId(null);
     };
 
+    const handleRemoveCollection = (colId: string, colName: string) => {
+        Alert.alert(
+            t('favorites.delete_collection_title'),
+            t('favorites.delete_collection_message'),
+            [
+                { text: t('common.cancel'), style: 'cancel' },
+                { 
+                    text: t('common.delete'), 
+                    style: 'destructive',
+                    onPress: () => {
+                        useUserStore.getState().deleteCollection(colId);
+                        if (selectedCol === colId) {
+                            setSelectedCol('general');
+                        }
+                    }
+                }
+            ]
+        );
+    };
+
     const renderItem = ({ item }: { item: any }) => {
         const surah = getSurah(item.surahNo);
         const ayah = surah?.ayahs.find((a: any) => a.number === item.ayahNo);
         if (!surah || !ayah) return null;
+
+        const surahDisplayName = language === 'ar' ? surah.name.ar : language === 'tr' ? surah.name.tr : surah.name.en;
 
         return (
             <TouchableOpacity 
@@ -93,7 +119,7 @@ export default function FavoritesScreen() {
             >
                 <View style={styles.cardHeader}>
                     <Text style={[styles.surahName, { color: theme.primary }]}>
-                        {surah.name.tr} - {item.ayahNo}. Ayet
+                        {surahDisplayName} - {item.ayahNo}. {t('common.ayah')}
                     </Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <TouchableOpacity onPress={(e) => { e.stopPropagation(); setManagerAyahId(item.id); }} style={{ padding: 4, marginRight: 8 }}>
@@ -116,7 +142,7 @@ export default function FavoritesScreen() {
             {sortedData.length === 0 ? (
                 <View style={[styles.placeholderCard, { backgroundColor: theme.card, borderColor: theme.border }]}>
                     <Text style={{ color: theme.muted, textAlign: 'center' }}>
-                        Bu listede henüz kayıtlı bir ayet bulunmuyor.
+                        {t('favorites.empty')}
                     </Text>
                 </View>
             ) : (
@@ -137,20 +163,31 @@ export default function FavoritesScreen() {
                             style={[styles.dropdownItem, selectedCol === 'general' && { backgroundColor: theme.background }]} 
                             onPress={() => { setSelectedCol('general'); setShowColDropdown(false); }}
                         >
-                            <Text style={[{ color: theme.text }, selectedCol === 'general' && { fontWeight: 'bold' }]}>Favorilerim</Text>
+                            <Text style={[{ color: theme.text }, selectedCol === 'general' && { fontWeight: 'bold' }]}>{t('favorites.title')}</Text>
                             {selectedCol === 'general' && <Check size={18} color={theme.primary} />}
                         </TouchableOpacity>
                         {Object.values(collections)
                             .sort((a, b) => a.name.localeCompare(b.name))
                             .map(col => (
-                            <TouchableOpacity 
+                            <View 
                                 key={col.id}
                                 style={[styles.dropdownItem, selectedCol === col.id && { backgroundColor: theme.background }]} 
-                                onPress={() => { setSelectedCol(col.id); setShowColDropdown(false); }}
                             >
-                                <Text style={[{ color: theme.text }, selectedCol === col.id && { fontWeight: 'bold' }]}>{col.name}</Text>
-                                {selectedCol === col.id && <Check size={18} color={theme.primary} />}
-                            </TouchableOpacity>
+                                <TouchableOpacity 
+                                    style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}
+                                    onPress={() => { setSelectedCol(col.id); setShowColDropdown(false); }}
+                                >
+                                    <Text style={[{ color: theme.text, flex: 1 }, selectedCol === col.id && { fontWeight: 'bold' }]}>{col.name}</Text>
+                                    {selectedCol === col.id && <Check size={18} color={theme.primary} style={{ marginRight: 12 }} />}
+                                </TouchableOpacity>
+
+                                <TouchableOpacity 
+                                    onPress={() => handleRemoveCollection(col.id, col.name)}
+                                    style={{ padding: 8 }}
+                                >
+                                    <Trash2 size={18} color="#e74c3c" />
+                                </TouchableOpacity>
+                            </View>
                         ))}
                     </View>
                 </TouchableOpacity>

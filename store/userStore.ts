@@ -15,6 +15,9 @@ interface UserState {
     favorites: Record<string, number>;
     collections: Record<string, Collection>;
     hideFavoriteDeleteWarning: boolean;
+    // Arapca kullanicilar icin ceviri ayarlari
+    showArabicTranslation: boolean;
+    arabicTranslationLang: AppLanguage;
 
     // Auth state
     userId: string | null;
@@ -34,22 +37,16 @@ interface UserState {
 
     // Collection specific actions
     setHideFavoriteDeleteWarning: (hide: boolean) => void;
-    addCollection: (name: string) => void;
+    setShowArabicTranslation: (show: boolean) => void;
+    setArabicTranslationLang: (lang: AppLanguage) => void;
+    addCollection: (name: string, initialAyahId?: string) => void;
     deleteCollection: (colId: string) => void;
     addAyahToCollection: (ayahId: string, colId: string) => void;
     removeAyahFromCollection: (ayahId: string, colId: string) => void;
     removeFromAllCollections: (ayahId: string) => void; // Called when removed from general favs
     setCollections: (cols: Record<string, Collection>) => void;
+    syncAllLocalData: () => Promise<void>;
 }
-
-// Helper block to avoid repetition
-const saveFavoritesAndCollectionsToCloud = (userId: string | null, favs: Record<string, number>, cols?: Record<string, Collection>) => {
-    if (userId) {
-        import('../services/syncService').then(sync => {
-            sync.syncFavoritesToCloud(favs, cols);
-        });
-    }
-};
 
 const saveLocal = (key: string, data: any) => {
     import('@react-native-async-storage/async-storage').then(AsyncStorage => {
@@ -57,13 +54,7 @@ const saveLocal = (key: string, data: any) => {
     });
 };
 
-const notifyGlobalStat = (ayahId: string, diff: number) => {
-    import('../services/statsService').then(stats => {
-        stats.updateGlobalFavCount(ayahId, diff);
-    });
-};
-
-export const useUserStore = create<UserState>((set) => ({
+export const useUserStore = create<UserState>((set, get) => ({
     language: 'tr', // Default
     currentSurah: 1,
     currentAyah: 1,
@@ -71,13 +62,25 @@ export const useUserStore = create<UserState>((set) => ({
     favorites: {},
     collections: {},
     hideFavoriteDeleteWarning: false,
+    showArabicTranslation: false,
+    arabicTranslationLang: 'en',
 
     userId: null,
     isAnonymous: false,
     displayName: null,
     email: null,
 
-    setLanguage: (lang) => set({ language: lang }),
+    setLanguage: (lang) => {
+        set({ language: lang });
+        // i18n ve AsyncStorage'i de senkronize et
+        import('../services/i18n').then(({ default: i18n, applyRTL }) => {
+            i18n.changeLanguage(lang);
+            applyRTL(lang);
+        });
+        import('@react-native-async-storage/async-storage').then(({ default: AsyncStorage }) => {
+            AsyncStorage.setItem('@app_language', lang);
+        });
+    },
     setProgress: (surah, ayah) => set({ currentSurah: surah, currentAyah: ayah }),
     addCompletedSurah: (surah) => set((state) => {
         const list = state.completedSurahs || [];
@@ -93,20 +96,30 @@ export const useUserStore = create<UserState>((set) => ({
         set((state) => {
             const newFavs = { ...state.favorites };
             let removing = false;
-            let globalDiff = 0;
+            
             if (newFavs[id]) {
                 delete newFavs[id];
                 removing = true;
-                globalDiff = -1;
             } else {
                 newFavs[id] = Date.now();
-                globalDiff = 1;
             }
             
             saveLocal('userFavorites', newFavs);
-            saveFavoritesAndCollectionsToCloud(state.userId, newFavs);
-            if (state.userId) { // Or universally, let Firebase handle it if not logged in (anonymous writes usually allowed if setup)
-                notifyGlobalStat(id, globalDiff);
+            
+            // API CALL ONLY IF LOGGED IN
+            if (state.userId) {
+                import('../services/apiClient').then(apiClient => {
+                    if (removing) {
+                        apiClient.default.delete(`/favorites/${id}`).catch(() => {});
+                    } else {
+                        const [surah, ayah] = id.includes('_') ? id.split('_') : id.split(':');
+                        apiClient.default.post('/favorites', {
+                            ayahId: id,
+                            surahNumber: parseInt(surah),
+                            ayahNumber: parseInt(ayah)
+                        }).catch(() => {});
+                    }
+                });
             }
 
             // If removing from global, also remove from all collections immediately
@@ -122,7 +135,6 @@ export const useUserStore = create<UserState>((set) => ({
                 
                 if (changedCols) {
                     saveLocal('userCollections', newCols);
-                    saveFavoritesAndCollectionsToCloud(state.userId, newFavs, newCols);
                     return { favorites: newFavs, collections: newCols };
                 }
             }
@@ -146,6 +158,12 @@ export const useUserStore = create<UserState>((set) => ({
             const storedWarn = await AsyncStorage.getItem('hideFavWarning');
             if (storedWarn) set({ hideFavoriteDeleteWarning: storedWarn === 'true' });
 
+            const storedArabicTranslation = await AsyncStorage.getItem('@arabic_show_translation');
+            if (storedArabicTranslation !== null) set({ showArabicTranslation: storedArabicTranslation === 'true' });
+
+            const storedArabicLang = await AsyncStorage.getItem('@arabic_translation_lang');
+            if (storedArabicLang) set({ arabicTranslationLang: storedArabicLang as AppLanguage });
+
         } catch (e) {
             console.error('Failed to load favorites/collections', e);
         }
@@ -156,12 +174,86 @@ export const useUserStore = create<UserState>((set) => ({
         saveLocal('hideFavWarning', hide);
     },
 
-    addCollection: (name: string) => {
+    setShowArabicTranslation: (show: boolean) => {
+        set({ showArabicTranslation: show });
+        import('@react-native-async-storage/async-storage').then(({ default: AsyncStorage }) => {
+            AsyncStorage.setItem('@arabic_show_translation', show ? 'true' : 'false');
+        });
+    },
+
+    setArabicTranslationLang: (lang: AppLanguage) => {
+        set({ arabicTranslationLang: lang });
+        import('@react-native-async-storage/async-storage').then(({ default: AsyncStorage }) => {
+            AsyncStorage.setItem('@arabic_translation_lang', lang);
+        });
+    },
+
+    addCollection: (name: string, initialAyahId?: string) => {
         set((state) => {
-            const id = 'col_' + Date.now().toString();
-            const newCols = { ...state.collections, [id]: { id, name, ayahs: {} } };
+            const id = 'col_' + Date.now().toString(); // Temporary local ID
+            
+            // Initial ayahs if provided
+            const initialAyahs: Record<string, number> = {};
+            if (initialAyahId) {
+                initialAyahs[initialAyahId] = Date.now();
+            }
+
+            const newCols = { ...state.collections, [id]: { id, name, ayahs: initialAyahs } };
+            
+            // If we added an ayah, we might need to update favorites too (mirroring addAyahToCollection logic)
+            let newFavs = { ...state.favorites };
+            let favsChanged = false;
+            
+            if (initialAyahId && !newFavs[initialAyahId]) {
+                newFavs[initialAyahId] = Date.now();
+                favsChanged = true;
+                saveLocal('userFavorites', newFavs);
+            }
+
             saveLocal('userCollections', newCols);
-            saveFavoritesAndCollectionsToCloud(state.userId, state.favorites, newCols);
+            
+            // API CALL ONLY IF LOGGED IN
+            if (state.userId) {
+                import('../services/apiClient').then(apiClient => {
+                    apiClient.default.post('/collections', { name }).then(res => {
+                        const realId = res.data.id.toString();
+                        set(innerState => {
+                            const cols = { ...innerState.collections };
+                            if (cols[id]) {
+                                // Replace temp ID with real ID
+                                cols[realId] = { ...cols[id], id: realId };
+                                delete cols[id];
+                                saveLocal('userCollections', cols);
+                            }
+                            return { collections: cols };
+                        });
+
+                        // If initialAyahId was provided, we also need to add it to the backend collection
+                        if (initialAyahId) {
+                            const [surah, ayah] = initialAyahId.includes('_') ? initialAyahId.split('_') : initialAyahId.split(':');
+                            // We might need a combined endpoint or chain these. 
+                            apiClient.default.post(`/collections/${realId}/items`, {
+                                ayahId: initialAyahId,
+                                surahNumber: parseInt(surah),
+                                ayahNumber: parseInt(ayah)
+                            }).catch(err => console.error("Error adding initial ayah to backend collection:", err));
+                            
+                            // Also ensure it's in global favorites on backend
+                            if (favsChanged) {
+                                apiClient.default.post('/favorites', {
+                                    ayahId: initialAyahId,
+                                    surahNumber: parseInt(surah),
+                                    ayahNumber: parseInt(ayah)
+                                }).catch(() => {});
+                            }
+                        }
+                    }).catch(() => {});
+                });
+            }
+            
+            if (favsChanged) {
+                return { collections: newCols, favorites: newFavs };
+            }
             return { collections: newCols };
         });
     },
@@ -171,7 +263,14 @@ export const useUserStore = create<UserState>((set) => ({
             const newCols = { ...state.collections };
             delete newCols[colId];
             saveLocal('userCollections', newCols);
-            saveFavoritesAndCollectionsToCloud(state.userId, state.favorites, newCols);
+            
+            // API CALL ONLY IF LOGGED IN
+            if (state.userId) {
+                import('../services/apiClient').then(apiClient => {
+                    apiClient.default.delete(`/collections/${colId}`).catch(() => {});
+                });
+            }
+
             return { collections: newCols };
         });
     },
@@ -193,10 +292,26 @@ export const useUserStore = create<UserState>((set) => ({
                 newFavs[ayahId] = Date.now();
                 favsChanged = true;
                 saveLocal('userFavorites', newFavs);
+                
+                // Add to global favorites API ONLY IF LOGGED IN
+                if (state.userId) {
+                    import('../services/apiClient').then(apiClient => {
+                        const [surah, ayah] = ayahId.split('_');
+                        apiClient.default.post('/favorites', {
+                            ayahId, surahNumber: parseInt(surah), ayahNumber: parseInt(ayah)
+                        }).catch(() => {});
+                    });
+                }
             }
 
             saveLocal('userCollections', newCols);
-            saveFavoritesAndCollectionsToCloud(state.userId, newFavs, newCols);
+            
+            // API CALL ONLY IF LOGGED IN
+            if (state.userId) {
+                import('../services/apiClient').then(apiClient => {
+                    // Requires favoriteId. Will be implemented fully when data structures are fully mapped.
+                });
+            }
 
             if (favsChanged) {
                 return { collections: newCols, favorites: newFavs };
@@ -219,7 +334,14 @@ export const useUserStore = create<UserState>((set) => ({
             };
 
             saveLocal('userCollections', newCols);
-            saveFavoritesAndCollectionsToCloud(state.userId, state.favorites, newCols);
+            
+            // API CALL ONLY IF LOGGED IN
+            if (state.userId) {
+                import('../services/apiClient').then(apiClient => {
+                    // Again, requires favoriteId. Will be implemented fully when data structures are fully mapped.
+                });
+            }
+            
             return { collections: newCols };
         });
     },
@@ -242,21 +364,74 @@ export const useUserStore = create<UserState>((set) => ({
                 delete newFavs[ayahId];
                 favsChanged = true;
                 saveLocal('userFavorites', newFavs);
-                if (state.userId) notifyGlobalStat(ayahId, -1);
             }
 
             if (changed) {
                 saveLocal('userCollections', newCols);
-                saveFavoritesAndCollectionsToCloud(state.userId, newFavs, newCols);
                 return { collections: newCols, favorites: newFavs };
             }
             if (favsChanged) {
-                saveFavoritesAndCollectionsToCloud(state.userId, newFavs);
                 return { favorites: newFavs };
             }
             return state;
         });
     },
 
-    setCollections: (cols) => set({ collections: cols })
+    setCollections: (cols) => set({ collections: cols }),
+
+    syncAllLocalData: async () => {
+        const state = get();
+        if (!state.userId || state.isAnonymous) return;
+
+        try {
+            const { default: apiClient } = await import('../services/apiClient');
+            
+            // 1. Sync Favorites
+            const favIds = Object.keys(state.favorites);
+            if (favIds.length > 0) {
+                const favPayload = favIds.map(id => {
+                    const [surah, ayah] = id.includes('_') ? id.split('_') : id.split(':');
+                    return { ayahId: id, surahNumber: parseInt(surah), ayahNumber: parseInt(ayah) };
+                });
+                await apiClient.post('/favorites/sync', favPayload).catch(() => {});
+            }
+
+            // 2. Sync Collections
+            const cols = Object.values(state.collections);
+            const localCols = cols.filter(c => c.id.startsWith('col_'));
+            
+            if (localCols.length > 0) {
+                const colPayload = localCols.map(c => ({
+                    localId: c.id,
+                    name: c.name,
+                    ayahs: Object.keys(c.ayahs)
+                }));
+                
+                const response = await apiClient.post('/collections/sync', colPayload);
+                const mapping = response.data.mapping; // { "col_123": 5 }
+
+                if (mapping) {
+                    set(innerState => {
+                        const newCols = { ...innerState.collections };
+                        let changed = false;
+                        for (const localId of Object.keys(mapping)) {
+                            if (newCols[localId]) {
+                                const realIdStr = mapping[localId].toString();
+                                newCols[realIdStr] = { ...newCols[localId], id: realIdStr };
+                                delete newCols[localId];
+                                changed = true;
+                            }
+                        }
+                        if (changed) {
+                            saveLocal('userCollections', newCols);
+                            return { collections: newCols };
+                        }
+                        return innerState;
+                    });
+                }
+            }
+        } catch (error) {
+            console.error("Error syncing local data:", error);
+        }
+    }
 }));

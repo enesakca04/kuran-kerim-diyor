@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUserStore } from '../store/userStore';
-import { syncProgressToCloud } from '../services/syncService';
 import { getSurah } from '../services/quranData';
 
 const PROGRESS_KEY = '@kuran_progress';
@@ -54,9 +53,6 @@ export function useProgress() {
                 const data = JSON.stringify({ surah: currentSurah, ayah: currentAyah });
                 await AsyncStorage.setItem(PROGRESS_KEY, data);
                 await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(completedSurahs));
-
-                // Background sync to cloud if logged in
-                syncProgressToCloud().catch(console.error);
             } catch (e) {
                 console.error('Failed to save progress', e);
             }

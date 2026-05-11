@@ -1,0 +1,143 @@
+{
+  "tabs": {
+    "quran": "Quran",
+    "surahs": "Surahs",
+    "search": "Search",
+    "profile": "Profile"
+  },
+  "onboarding": {
+    "slide1_title": "Quran Says",
+    "slide1_desc": "A brand new, modern, fluent, and personalized reading experience.",
+    "slide2_title": "Your Progress is Safe",
+    "slide2_desc": "When you create an account, your progress is saved to the cloud. Never lose your place even if you change devices.",
+    "slide3_title": "Share with the Community",
+    "slide3_desc": "Listen to verses and share your feelings anonymously with other readers instantly.",
+    "btn_continue": "Continue",
+    "btn_start": "Bismillah",
+    "skip": "Skip"
+  },
+  "search": {
+    "placeholder": "Search the Quran...",
+    "min_chars": "Enter at least 3 characters to search.",
+    "no_results": "No results found.",
+    "ayah": "Verse"
+  },
+  "profile": {
+    "guest": "Guest User",
+    "account_type": "Account Type",
+    "account_type_guest": "Guest",
+    "account_type_registered": "Registered",
+    "favorites": "My Favorites",
+    "my_comments": "My Comments",
+    "settings": "Account Settings",
+    "language": "App Language",
+    "logout": "Log Out",
+    "delete_account": "Delete Account",
+    "login": "Log In",
+    "register": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "no_account": "Don't have an account? Sign Up",
+    "has_account": "Already have an account? Log In",
+    "google_login": "Continue with Google",
+    "apple_login": "Continue with Apple",
+    "guest_continue": "Continue as Guest",
+    "or": "OR",
+    "delete_confirm_title": "Delete Account",
+    "delete_confirm_message": "Are you sure you want to delete your account? This action cannot be undone and all your data (favorites, collections, comments) will be permanently deleted."
+  },
+  "auth_errors": {
+    "operation_not_allowed": "This sign-in method is not enabled.",
+    "invalid_credential": "Invalid email or password.",
+    "user_not_found": "No user found with this email.",
+    "email_in_use": "This email is already registered.",
+    "weak_password": "Password is too weak (min. 6 characters).",
+    "network_failed": "Please check your internet connection and try again.",
+    "cancelled": "User cancelled the operation.",
+    "generic": "An error occurred: {{message}}",
+    "min_password": "Password must be at least 6 characters."
+  },
+  "favorites": {
+    "title": "My Favorites",
+    "empty": "No verses saved to this list yet.",
+    "ayah": "{{surah}} - Verse {{number}}",
+    "delete_collection_title": "Delete Collection",
+    "delete_collection_message": "Are you sure you want to delete this collection and all the verses in it?"
+  },
+  "surahs": {
+    "title": "Surahs",
+    "ayah_count": "{{count}} Verses"
+  },
+  "comments": {
+    "title": "Comments",
+    "status_preparing": "Preparing for publication...",
+    "status_removed": "Removed by moderator",
+    "status_rejected": "Rejected",
+    "moderation_reasons": {
+      "PROFANITY": "Contains profanity or vulgar language.",
+      "INSULT": "Contains insults or disrespect.",
+      "SPAM": "Spam or repetitive content.",
+      "OFF_TOPIC": "Off-topic or irrelevant content.",
+      "HATE_SPEECH": "Contains hate speech.",
+      "OTHER": "Content violates community guidelines."
+    },
+    "all_languages": "All Languages",
+    "only_language": "Only {{lang}}",
+    "loading": "Loading...",
+    "empty": "Share what this verse means to you with other Muslims.",
+    "placeholder": "Share your thoughts...",
+    "placeholder_reply": "Your reply...",
+    "reply": "Reply",
+    "replying_to": "Replying to {{name}}",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "show_replies": "Show {{count}} Replies",
+    "hide_replies": "Hide Replies",
+    "deleted_user": "This comment has been deleted by the user.",
+    "deleted_mod": "This comment was removed by a moderator for violating guidelines.",
+    "anonymous_label": "Anonymous",
+    "reply_label": "Reply",
+    "hide_identity": "Hide My Identity",
+    "show_identity": "Use My Name (Privacy Protected)",
+    "privacy_note": "Rest assured, your name will appear as ({{name}}) for privacy.",
+    "login_prompt_title": "Want to Share Your Thoughts?",
+    "login_prompt_desc": "Sign in for free or create an account in seconds to continue.",
+    "login_button": "Create Account / Log In",
+    "delete_confirm_title": "Delete Comment",
+    "delete_confirm_message": "Are you sure you want to delete this comment?"
+  },
+  "my_comments": {
+    "title": "My Comments",
+    "empty": "You haven't made any comments yet.",
+    "deleted": "[Deleted]",
+    "surah_label": "Surah"
+  },
+  "delete_warning": {
+    "title": "Remove from Favorites",
+    "message": "Are you sure you want to remove this verse from favorites?",
+    "dont_ask": "Don't ask again",
+    "cancel": "Cancel",
+    "confirm": "Yes, Remove"
+  },
+  "common": {
+    "swipe_hint": "Swipe left for\nthe next verse",
+    "person": "people",
+    "ayah": "Verse",
+    "close": "Close",
+    "go_to_verse": "Go to Verse",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "settings": {
+    "title": "Account Settings",
+    "notifications_section": "Notifications",
+    "notification_permission": "Notification Permission",
+    "notification_permission_sub": "Get notified about new features and reminders.",
+    "reading_section": "Reading Preferences",
+    "show_translation": "Show Translation",
+    "show_translation_sub": "Display Quran translation while reading",
+    "translation_lang": "Translation Language",
+    "reading_no_extra": "Translation is always displayed in your selected language.",
+    "coming_soon": "Coming soon!"
+  }
+}

@@ -2,10 +2,10 @@ import { Stack } from 'expo-router';
 import { useFonts, Amiri_400Regular, Amiri_700Bold } from '@expo-google-fonts/amiri';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { auth } from '../services/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import '../services/i18n'; // i18n'i uygulama baslarken baslat
+import i18n, { applyRTL, detectDeviceLanguage } from '../services/i18n';
 
-import { useRouter, useSegments } from 'expo-router';
+import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -27,29 +27,52 @@ export default function RootLayout() {
                 router.replace('/onboarding');
             }
             
-            // Yükle
+            // Favorileri ve dil tercihini yukle
             const { useUserStore } = await import('../store/userStore');
             await useUserStore.getState().loadFavorites();
+
+            // Kayitli dil tercihi varsa i18n'e uygula, yoksa cihaz dilini kullan
+            const storedLang = await AsyncStorage.getItem('@app_language');
+            const language = storedLang ?? detectDeviceLanguage();
+            i18n.changeLanguage(language);
+            applyRTL(language as any);
+            // Store'u da guncelle
+            useUserStore.getState().setLanguage(language as any);
             
             SplashScreen.hideAsync();
         };
 
         checkFirstLaunch();
 
-        // Listen to Auth State Globally
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        checkFirstLaunch();
+
+        // Listen to Auth State Globally using our API
+        const checkAuth = async () => {
             const { useUserStore } = await import('../store/userStore');
-            if (user) {
-                useUserStore.getState().setAuth(user.uid, user.isAnonymous, user.displayName, user.email);
-                const { syncProgressToCloud, mergeGuestFavoritesToCloud } = await import('../services/syncService');
-                syncProgressToCloud();
-                mergeGuestFavoritesToCloud();
-            } else {
+            const { default: apiClient } = await import('../services/apiClient');
+            const SecureStore = await import('expo-secure-store');
+            
+            try {
+                const token = await SecureStore.getItemAsync('userToken');
+                if (token) {
+                    // Fetch real user info from backend
+                    const res = await apiClient.get('/auth/me');
+                    const { user } = res.data;
+                    useUserStore.getState().setAuth(user.id, user.isGuest, user.email, user.email);
+                    if (!user.isGuest) {
+                        useUserStore.getState().syncAllLocalData();
+                    }
+                } else {
+                    useUserStore.getState().setAuth(null, false, null, null);
+                }
+            } catch (e) {
+                // If token is invalid or expired, clear it
+                await SecureStore.deleteItemAsync('userToken');
                 useUserStore.getState().setAuth(null, false, null, null);
             }
-        });
+        };
 
-        return () => unsubscribe();
+        checkAuth();
     }, [loaded, error]);
 
     if (!loaded && !error) {
@@ -60,6 +83,7 @@ export default function RootLayout() {
         <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+            <Stack.Screen name="settings" options={{ headerShown: false }} />
         </Stack>
     );
 }

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Platform, Modal, FlatList, Alert } from 'react-native';
 import { Colors } from '../../constants/colors';
-import { auth } from '../../services/firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithCredential, OAuthProvider } from 'firebase/auth';
+import apiClient from '../../services/apiClient';
+import * as SecureStore from 'expo-secure-store';
 import { useUserStore } from '../../store/userStore';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import { useTranslation } from 'react-i18next';
+import { LANGUAGES, AppLanguage } from '../../constants/languages';
 
 WebBrowser.maybeCompleteAuthSession();
 
-import { ACHIEVEMENTS } from '../../constants/achievements';
-import { useAchievements } from '../../hooks/useAchievements';
-import { BookOpen, BookMarked, MessageSquare, Heart, TrendingUp, GitCommitHorizontal, Star, Settings, LogOut, UserX, ChevronRight } from 'lucide-react-native';
+import { BookOpen, BookMarked, MessageSquare, Heart, TrendingUp, GitCommitHorizontal, Star, Settings, LogOut, UserX, ChevronRight, Globe, Check } from 'lucide-react-native';
 import { useColorScheme, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
@@ -25,8 +25,9 @@ export default function ProfileScreen() {
     const colorScheme = useColorScheme();
     const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
     const { userId, isAnonymous, email, setAuth, language, setLanguage } = useUserStore();
-    const { earnedBadges } = useAchievements();
     const router = useRouter();
+    const { t } = useTranslation();
+    const [showLangModal, setShowLangModal] = useState(false);
 
     const clearDevStorage = async () => {
         await AsyncStorage.removeItem('hasOnboarded');
@@ -34,14 +35,11 @@ export default function ProfileScreen() {
     };
 
     const translateAuthError = (message: string) => {
-        if (message.includes('operation-not-allowed')) return 'Bu giriş yöntemi henüz aktif edilmemiş. (Firebase Console > Auth kısmından E-posta/Şifre girişini açın)';
-        if (message.includes('invalid-email') || message.includes('invalid-credential')) return 'E-posta veya şifre hatalı.';
-        if (message.includes('user-not-found')) return 'Böyle bir kullanıcı bulunamadı.';
-        if (message.includes('email-already-in-use')) return 'Bu e-posta adresi ile zaten kayıt olunmuş.';
-        if (message.includes('weak-password')) return 'Şifreniz çok zayıf (En az 6 karakter olmalı).';
-        if (message.includes('network-request-failed')) return 'İnternet bağlantınızı kontrol edip tekrar deneyin.';
-        if (message.includes('ERR_REQUEST_CANCELED')) return 'Kullanıcı işlemi iptal etti.';
-        return 'Bir hata oluştu: ' + message;
+        if (message.includes('invalid_credential') || message.includes('401')) return t('auth_errors.invalid_credential');
+        if (message.includes('user_not_found') || message.includes('404')) return t('auth_errors.user_not_found');
+        if (message.includes('email_in_use') || message.includes('409')) return t('auth_errors.email_in_use');
+        if (message.includes('network_failed')) return t('auth_errors.network_failed');
+        return t('auth_errors.generic', { message });
     };
 
     const [emailInput, setEmailInput] = useState('');
@@ -58,39 +56,53 @@ export default function ProfileScreen() {
 
     useEffect(() => {
         if (response?.type === 'success') {
-            const { id_token } = response.params;
-            const credential = GoogleAuthProvider.credential(id_token);
-            setLoading(true);
-            signInWithCredential(auth, credential)
-                .catch(e => setError(translateAuthError(e.message)))
-                .finally(() => setLoading(false));
+            // Google Login will be implemented in backend later
+            setError("Google Login is currently unavailable with the new backend.");
         }
     }, [response]);
-
-    // Auth State is now managed globally in _layout.tsx
 
     const handleLogin = async () => {
         setLoading(true);
         setError('');
         try {
-            await signInWithEmailAndPassword(auth, emailInput, passwordInput);
+            const res = await apiClient.post('/auth/login', {
+                email: emailInput,
+                password: passwordInput
+            });
+            const { accessToken, refreshToken, user } = res.data;
+            await SecureStore.setItemAsync('userToken', accessToken);
+            await SecureStore.setItemAsync('refreshToken', refreshToken);
+            setAuth(user.id, user.isGuest, user.email, user.email);
+            if (!user.isGuest) {
+                useUserStore.getState().syncAllLocalData();
+            }
         } catch (e: any) {
-            setError(translateAuthError(e.message));
+            setError(translateAuthError(e.response?.data?.message || e.message));
         }
         setLoading(false);
     };
 
     const handleRegister = async () => {
         if (passwordInput.length < 6) {
-            setError('Şifre en az 6 karakter olmalıdır.');
+            setError(t('auth_errors.min_password'));
             return;
         }
         setLoading(true);
         setError('');
         try {
-            await createUserWithEmailAndPassword(auth, emailInput, passwordInput);
+            const res = await apiClient.post('/auth/register', {
+                email: emailInput,
+                password: passwordInput
+            });
+            const { accessToken, refreshToken, user } = res.data;
+            await SecureStore.setItemAsync('userToken', accessToken);
+            await SecureStore.setItemAsync('refreshToken', refreshToken);
+            setAuth(user.id, user.isGuest, user.email, user.email);
+            if (!user.isGuest) {
+                useUserStore.getState().syncAllLocalData();
+            }
         } catch (e: any) {
-            setError(translateAuthError(e.message));
+            setError(translateAuthError(e.response?.data?.message || e.message));
         }
         setLoading(false);
     };
@@ -99,41 +111,54 @@ export default function ProfileScreen() {
         setLoading(true);
         setError('');
         try {
-            await signInAnonymously(auth);
+            const res = await apiClient.post('/auth/guest');
+            const { accessToken, refreshToken, user } = res.data;
+            await SecureStore.setItemAsync('userToken', accessToken);
+            await SecureStore.setItemAsync('refreshToken', refreshToken);
+            setAuth(user.id, true, null, null);
         } catch (e: any) {
-            setError(translateAuthError(e.message));
+            setError(translateAuthError(e.response?.data?.message || e.message));
         }
         setLoading(false);
     };
 
     const handleAppleLogin = async () => {
-        try {
-            const credential = await AppleAuthentication.signInAsync({
-                requestedScopes: [
-                    AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
-                    AppleAuthentication.AppleAuthenticationScope.EMAIL,
-                ],
-            });
-            const { identityToken } = credential;
-            if (identityToken) {
-                setLoading(true);
-                const provider = new OAuthProvider('apple.com');
-                const authCredential = provider.credential({
-                    idToken: identityToken,
-                });
-                await signInWithCredential(auth, authCredential);
-            }
-        } catch (e: any) {
-            if (e.code !== 'ERR_REQUEST_CANCELED') {
-                setError(e.message);
-            }
-        } finally {
-            setLoading(false);
-        }
+        setError("Apple Login is currently unavailable with the new backend.");
     };
 
     const handleLogout = async () => {
-        await signOut(auth);
+        await SecureStore.deleteItemAsync('userToken');
+        await SecureStore.deleteItemAsync('refreshToken');
+        setAuth(null, false, null, null);
+    };
+
+    const handleDeleteAccount = async () => {
+        Alert.alert(
+            t('profile.delete_confirm_title'),
+            t('profile.delete_confirm_message'),
+            [
+                { text: t('common.cancel'), style: 'cancel' },
+                { 
+                    text: t('common.delete'), 
+                    style: 'destructive',
+                    onPress: async () => {
+                        setLoading(true);
+                        try {
+                            await apiClient.delete('/user');
+                            await SecureStore.deleteItemAsync('userToken');
+                            await SecureStore.deleteItemAsync('refreshToken');
+                            // Clear all local data as well
+                            await AsyncStorage.clear(); 
+                            setAuth(null, false, null, null);
+                            router.replace('/onboarding');
+                        } catch (e: any) {
+                            Alert.alert("Error", e.response?.data?.message || e.message);
+                        }
+                        setLoading(false);
+                    }
+                }
+            ]
+        );
     };
 
     if (userId) {
@@ -144,10 +169,10 @@ export default function ProfileScreen() {
                         <Text style={styles.avatarText}>{isAnonymous ? 'M' : email?.[0]?.toUpperCase() || 'U'}</Text>
                     </View>
                     <Text style={[styles.title, { color: theme.text, marginBottom: 4 }]}>
-                        {isAnonymous ? 'Misafir Kullanıcı' : email}
+                        {isAnonymous ? t('profile.guest') : email}
                     </Text>
                     <Text style={{ color: theme.secondary, marginBottom: 16 }}>
-                        Hesap Türü: {isAnonymous ? 'Misafir' : 'Kayıtlı'}
+                        {t('profile.account_type')}: {isAnonymous ? t('profile.account_type_guest') : t('profile.account_type_registered')}
                     </Text>
                 </View>
 
@@ -155,7 +180,7 @@ export default function ProfileScreen() {
                     <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.border }]} onPress={() => router.push('/(tabs)/favorites')}>
                         <View style={styles.menuItemLeft}>
                             <Heart size={20} color={theme.primary} />
-                            <Text style={[styles.menuItemText, { color: theme.text }]}>Favorilerim</Text>
+                            <Text style={[styles.menuItemText, { color: theme.text }]}>{t('profile.favorites')}</Text>
                         </View>
                         <ChevronRight size={20} color={theme.muted} />
                     </TouchableOpacity>
@@ -163,15 +188,26 @@ export default function ProfileScreen() {
                     <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.border }]} onPress={() => router.push('/my-comments')}>
                         <View style={styles.menuItemLeft}>
                             <MessageSquare size={20} color={theme.primary} />
-                            <Text style={[styles.menuItemText, { color: theme.text }]}>Yorumlarım</Text>
+                            <Text style={[styles.menuItemText, { color: theme.text }]}>{t('profile.my_comments')}</Text>
                         </View>
                         <ChevronRight size={20} color={theme.muted} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.border }]}>
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.border }]} onPress={() => setShowLangModal(true)}>
+                        <View style={styles.menuItemLeft}>
+                            <Globe size={20} color={theme.primary} />
+                            <Text style={[styles.menuItemText, { color: theme.text }]}>{t('profile.language')}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Text style={{ color: theme.muted, marginRight: 6 }}>{LANGUAGES[language]?.nativeName}</Text>
+                            <ChevronRight size={20} color={theme.muted} />
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.border }]} onPress={() => router.push('/settings')}>
                         <View style={styles.menuItemLeft}>
                             <Settings size={20} color={theme.primary} />
-                            <Text style={[styles.menuItemText, { color: theme.text }]}>Hesap Ayarları</Text>
+                            <Text style={[styles.menuItemText, { color: theme.text }]}>{t('profile.settings')}</Text>
                         </View>
                         <ChevronRight size={20} color={theme.muted} />
                     </TouchableOpacity>
@@ -181,17 +217,36 @@ export default function ProfileScreen() {
                     <TouchableOpacity style={[styles.menuItem, { borderBottomColor: theme.border }]} onPress={handleLogout}>
                         <View style={styles.menuItemLeft}>
                             <LogOut size={20} color="#e74c3c" />
-                            <Text style={[styles.menuItemText, { color: "#e74c3c" }]}>Çıkış Yap</Text>
+                            <Text style={[styles.menuItemText, { color: "#e74c3c" }]}>{t('profile.logout')}</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[styles.menuItem, { borderBottomWidth: 0 }]}>
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomWidth: 0 }]} onPress={handleDeleteAccount}>
                         <View style={styles.menuItemLeft}>
                             <UserX size={20} color="#e74c3c" />
-                            <Text style={[styles.menuItemText, { color: "#e74c3c" }]}>Hesabı Sil</Text>
+                            <Text style={[styles.menuItemText, { color: "#e74c3c" }]}>{t('profile.delete_account')}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
+
+                {/* Dil Secici Modal */}
+                <Modal visible={showLangModal} transparent animationType="fade" onRequestClose={() => setShowLangModal(false)}>
+                    <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setShowLangModal(false)}>
+                        <View style={[styles.langModal, { backgroundColor: theme.card }]}>
+                            <Text style={[styles.langModalTitle, { color: theme.text }]}>{t('profile.language')}</Text>
+                            {(Object.keys(LANGUAGES) as AppLanguage[]).map(lang => (
+                                <TouchableOpacity
+                                    key={lang}
+                                    style={[styles.langItem, { borderBottomColor: theme.border }]}
+                                    onPress={() => { setLanguage(lang); setShowLangModal(false); }}
+                                >
+                                    <Text style={{ color: theme.text, fontSize: 16 }}>{LANGUAGES[lang].nativeName}</Text>
+                                    {language === lang && <Check size={20} color={theme.primary} />}
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                    </TouchableOpacity>
+                </Modal>
             </ScrollView>
         );
     }
@@ -200,14 +255,14 @@ export default function ProfileScreen() {
         <View style={[styles.container, { backgroundColor: theme.background }]}>
             <View style={styles.card}>
                 <Text style={[styles.title, { color: theme.text }]}>
-                    {authMode === 'login' ? 'Giriş Yap' : 'Kayıt Ol'}
+                    {authMode === 'login' ? t('profile.login') : t('profile.register')}
                 </Text>
 
                 {error ? <Text style={styles.error}>{error}</Text> : null}
 
                 <TextInput
                     style={[styles.input, { borderColor: theme.border, color: theme.text }]}
-                    placeholder="E-posta"
+                    placeholder={t('profile.email')}
                     placeholderTextColor={theme.muted}
                     value={emailInput}
                     onChangeText={setEmailInput}
@@ -217,7 +272,7 @@ export default function ProfileScreen() {
 
                 <TextInput
                     style={[styles.input, { borderColor: theme.border, color: theme.text }]}
-                    placeholder="Şifre"
+                    placeholder={t('profile.password')}
                     placeholderTextColor={theme.muted}
                     value={passwordInput}
                     onChangeText={setPasswordInput}
@@ -231,28 +286,28 @@ export default function ProfileScreen() {
                         {authMode === 'login' ? (
                             <>
                                 <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={handleLogin}>
-                                    <Text style={styles.buttonText}>Giriş Yap</Text>
+                                    <Text style={styles.buttonText}>{t('profile.login')}</Text>
                                 </TouchableOpacity>
                                 
                                 <TouchableOpacity style={{marginTop: 16, alignItems: 'center'}} onPress={() => { setAuthMode('register'); setError(''); }}>
-                                    <Text style={{color: theme.primary, fontWeight: 'bold'}}>Hesabın yok mu? Kayıt Ol</Text>
+                                    <Text style={{color: theme.primary, fontWeight: 'bold'}}>{t('profile.no_account')}</Text>
                                 </TouchableOpacity>
                             </>
                         ) : (
                             <>
                                 <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={handleRegister}>
-                                    <Text style={styles.buttonText}>Kayıt Ol</Text>
+                                    <Text style={styles.buttonText}>{t('profile.register')}</Text>
                                 </TouchableOpacity>
                                 
                                 <TouchableOpacity style={{marginTop: 16, alignItems: 'center'}} onPress={() => { setAuthMode('login'); setError(''); }}>
-                                    <Text style={{color: theme.primary, fontWeight: 'bold'}}>Zaten hesabın var mı? Giriş Yap</Text>
+                                    <Text style={{color: theme.primary, fontWeight: 'bold'}}>{t('profile.has_account')}</Text>
                                 </TouchableOpacity>
                             </>
                         )}
 
                         <View style={styles.divider}>
                             <View style={[styles.line, { backgroundColor: theme.border }]} />
-                            <Text style={{ marginHorizontal: 8, color: theme.muted }}>VEYA</Text>
+                            <Text style={{ marginHorizontal: 8, color: theme.muted }}>{t('profile.or')}</Text>
                             <View style={[styles.line, { backgroundColor: theme.border }]} />
                         </View>
 
@@ -261,7 +316,7 @@ export default function ProfileScreen() {
                             onPress={() => promptAsync()}
                             disabled={!request}
                         >
-                            <Text style={[styles.outlineButtonText, { color: theme.primary }]}>Google ile {authMode === 'login' ? 'Giriş Yap' : 'Kayıt Ol'}</Text>
+                            <Text style={[styles.outlineButtonText, { color: theme.primary }]}>{t('profile.google_login')}</Text>
                         </TouchableOpacity>
 
                         {Platform.OS === 'ios' && (
@@ -269,12 +324,12 @@ export default function ProfileScreen() {
                                 style={[styles.outlineButton, { borderColor: theme.text, backgroundColor: theme.card, marginBottom: 12 }]} 
                                 onPress={handleAppleLogin}
                             >
-                                <Text style={[styles.outlineButtonText, { color: theme.text }]}>Apple ile {authMode === 'login' ? 'Giriş Yap' : 'Kayıt Ol'}</Text>
+                                <Text style={[styles.outlineButtonText, { color: theme.text }]}>{t('profile.apple_login')}</Text>
                             </TouchableOpacity>
                         )}
 
                         <TouchableOpacity style={[styles.outlineButton, { borderColor: theme.primary }]} onPress={handleGuestLogin}>
-                            <Text style={[styles.outlineButtonText, { color: theme.primary }]}>Misafir Olarak Devam Et</Text>
+                            <Text style={[styles.outlineButtonText, { color: theme.primary }]}>{t('profile.guest_continue')}</Text>
                         </TouchableOpacity>
                     </>
                 )}
@@ -387,26 +442,37 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         textAlign: 'center',
     },
-    badgesContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        marginVertical: 16,
-    },
-    badge: {
-        width: '30%',
-        alignItems: 'center',
-        margin: '1.5%',
-        padding: 8,
-        borderRadius: 8,
-        borderWidth: 1,
-    },
-    badgeEarned: {
-        borderColor: '#B69A73',
-        backgroundColor: 'rgba(182, 154, 115, 0.1)',
-    },
     badgeLocked: {
         borderColor: '#eee',
         backgroundColor: '#fafafa',
-    }
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.4)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    langModal: {
+        width: 280,
+        borderRadius: 16,
+        overflow: 'hidden',
+        elevation: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
+    },
+    langModalTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        padding: 16,
+        paddingBottom: 8,
+    },
+    langItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 16,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    },
 });
