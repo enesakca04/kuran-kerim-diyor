@@ -17,7 +17,6 @@ import { Play, Pause, Sparkles } from 'lucide-react-native';
 import { GlobalAudioController } from '../services/globalAudioController';
 import { VerseChatModal } from './VerseChatModal';
 import { AnalyticsService } from '../services/analyticsService';
-import { getHighlightedLetterCount, splitWordAtHighlightedLetter } from '../utils/audioTextProgress';
 
 const toArabicDigits = (num: number): string => {
     const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -288,27 +287,22 @@ export const QuranPageCard: React.FC<QuranPageCardProps> = ({
                             const renderArabicWordText = (
                                 word: string,
                                 isHighlighted: boolean,
-                                highlightedInWord: number,
                             ) => {
                                 const cleanWord = word.replace(/[^\u0621-\u064A\u0671-\u06D3]/g, '');
                                 const isAllah = cleanWord === 'الله' || cleanWord === 'اللَّه' || cleanWord === 'لله' || cleanWord === 'لِلَّهِ' || cleanWord === 'للَّه';
-                                const parts = splitWordAtHighlightedLetter(word, isHighlighted ? highlightedInWord : 0);
                                 return (
                                     <Text
                                         style={[
                                             styles.arabicWordText,
                                             {
                                                 fontFamily: getArabicFont(isHighlighted ? 'bold' : 'regular'),
-                                                color: isAllah ? '#D32F2F' : theme.text,
+                                                color: isAllah ? '#D32F2F' : (isHighlighted ? theme.primary : theme.text),
                                                 fontSize: arabicFontFamily === 'noto-naskh' ? 21 : 23,
-                                                fontWeight: isAllah ? 'bold' : 'normal',
+                                                fontWeight: isAllah || isHighlighted ? 'bold' : 'normal',
                                             }
                                         ]}
                                     >
-                                        {parts.highlighted ? (
-                                            <Text style={{ color: theme.primary, fontWeight: 'bold' }}>{parts.highlighted}</Text>
-                                        ) : null}
-                                        {parts.remaining}
+                                        {word}
                                     </Text>
                                 );
                             };
@@ -319,88 +313,75 @@ export const QuranPageCard: React.FC<QuranPageCardProps> = ({
                                 return (
                                     <View key={`g_${gIdx}`} style={{ width: '100%', alignItems: 'flex-end' }}>
                                         {group.items[0].ayah.number === 1 && (
-                                            <View style={[styles.surahDivider, { borderColor: theme.border, backgroundColor: theme.card }]}>
-                                                <Text style={[styles.surahDividerText, { color: theme.primary }]}>
-                                                    {group.surahName}
-                                                </Text>
-                                            </View>
+                                             <View style={[styles.surahDivider, { borderColor: theme.border, backgroundColor: theme.card }]}>
+                                                 <Text style={[styles.surahDividerText, { color: theme.primary }]}>
+                                                     {group.surahName}
+                                                 </Text>
+                                             </View>
                                         )}
                                         {showPageBismillah && (
-                                            <View style={styles.pageBismillahContainer}>
-                                                <Text style={[styles.pageBismillahText, { color: theme.text, fontFamily: getArabicFont('bold') }]}>
-                                                    {require('../utils/quranHelpers').BISMILLAH_ARABIC_UTHMANI}
-                                                </Text>
-                                            </View>
+                                             <View style={styles.pageBismillahContainer}>
+                                                 <Text style={[styles.pageBismillahText, { color: theme.text, fontFamily: getArabicFont('bold') }]}>
+                                                     {require('../utils/quranHelpers').BISMILLAH_ARABIC_UTHMANI}
+                                                 </Text>
+                                             </View>
                                         )}
                                         <Text style={styles.arabicParagraphText}>
-                                            {group.items.map((item) => {
-                                                const isHighlighted = activeHighlightId === `${item.surahNumber}_${item.ayah.number}`;
-                                                const isSajdah = isSajdahAyah(item.surahNumber, item.ayah.number);
+                                             {group.items.map((item) => {
+                                                 const isHighlighted = activeHighlightId === `${item.surahNumber}_${item.ayah.number}`;
+                                                 const isSajdah = isSajdahAyah(item.surahNumber, item.ayah.number);
 
-                                                let textToRender = item.ayah.arabic;
-                                                if (item.ayah.number === 1 && hasBismillah(item.surahNumber)) {
-                                                    textToRender = splitBismillah(item.ayah.arabic).ayahText;
-                                                }
+                                                 let textToRender = item.ayah.arabic;
+                                                 if (item.ayah.number === 1 && hasBismillah(item.surahNumber)) {
+                                                     textToRender = splitBismillah(item.ayah.arabic).ayahText;
+                                                 }
 
-                                                const words = textToRender.replace(/\s+/g, ' ').split(' ');
-                                                const highlightedLetterCount = isHighlighted
-                                                    ? getHighlightedLetterCount(textToRender, playProgress)
-                                                    : 0;
-                                                let consumedLetters = 0;
+                                                 const words = textToRender.replace(/\s+/g, ' ').split(' ');
+                                                 const pageAyahIndex = pageAyahs.findIndex(
+                                                     (pageAyah) => pageAyah.ayah.globalNumber === item.ayah.globalNumber,
+                                                 );
 
-                                                return (
-                                                    <React.Fragment key={item.ayah.globalNumber}>
-                                                        {words.map((word, wIdx) => {
-                                                            const wordLetterCount = getHighlightedLetterCount(word, 1);
-                                                            const highlightedInWord = Math.min(
-                                                                wordLetterCount,
-                                                                Math.max(0, highlightedLetterCount - consumedLetters),
-                                                            );
-                                                            const wordStartProgress = consumedLetters / Math.max(
-                                                                1,
-                                                                getHighlightedLetterCount(textToRender, 1),
-                                                            );
-                                                            const pageAyahIndex = pageAyahs.findIndex(
-                                                                (pageAyah) => pageAyah.ayah.globalNumber === item.ayah.globalNumber,
-                                                            );
-                                                            consumedLetters += wordLetterCount;
-
-                                                            return (
-                                                                <React.Fragment key={wIdx}>
-                                                                    <Text onPress={() => {
-                                                                        if (!isPlaying) return;
-                                                                        if (isHighlighted) {
-                                                                            seekToProgress(wordStartProgress);
-                                                                        } else if (pageAyahIndex >= 0) {
-                                                                            void playAyahAtIndex(pageAyahIndex, wordStartProgress);
-                                                                        }
-                                                                    }}>
-                                                                        {renderArabicWordText(word, isHighlighted, highlightedInWord)}
-                                                                    </Text>
-                                                                    <Text> </Text>
-                                                                </React.Fragment>
-                                                            );
-                                                        })}
-                                                        <Text
-                                                            style={[
-                                                                styles.ayahNumberBadge,
-                                                                {
-                                                                    fontFamily: getArabicFont('bold'),
-                                                                    color: isHighlighted ? theme.primary : theme.muted,
-                                                                    fontSize: 16,
-                                                                }
-                                                            ]}
-                                                        >
-                                                            {` ﴾${toArabicDigits(item.ayah.number)}﴿ `}
-                                                        </Text>
-                                                        {isSajdah && (
-                                                            <Text style={{ fontSize: 18, color: theme.primary, marginLeft: 2 }}>
-                                                                ۩
-                                                            </Text>
-                                                        )}
-                                                    </React.Fragment>
-                                                );
-                                            })}
+                                                 return (
+                                                     <React.Fragment key={item.ayah.globalNumber}>
+                                                         {words.map((word, wIdx) => {
+                                                             return (
+                                                                 <React.Fragment key={wIdx}>
+                                                                     <Text onPress={() => {
+                                                                         if (pageAyahIndex >= 0) {
+                                                                             void playAyahAtIndex(pageAyahIndex);
+                                                                         }
+                                                                     }}>
+                                                                         {renderArabicWordText(word, isHighlighted)}
+                                                                     </Text>
+                                                                     <Text> </Text>
+                                                                 </React.Fragment>
+                                                             );
+                                                         })}
+                                                         <Text
+                                                             style={[
+                                                                 styles.ayahNumberBadge,
+                                                                 {
+                                                                     fontFamily: getArabicFont('bold'),
+                                                                     color: isHighlighted ? theme.primary : theme.muted,
+                                                                     fontSize: 16,
+                                                                 }
+                                                             ]}
+                                                             onPress={() => {
+                                                                 if (pageAyahIndex >= 0) {
+                                                                     void playAyahAtIndex(pageAyahIndex);
+                                                                 }
+                                                             }}
+                                                         >
+                                                             {` ﴾${toArabicDigits(item.ayah.number)}﴿ `}
+                                                         </Text>
+                                                         {isSajdah && (
+                                                             <Text style={{ fontSize: 18, color: theme.primary, marginLeft: 2 }}>
+                                                                 ۩
+                                                             </Text>
+                                                         )}
+                                                     </React.Fragment>
+                                                 );
+                                             })}
                                         </Text>
                                     </View>
                                 );

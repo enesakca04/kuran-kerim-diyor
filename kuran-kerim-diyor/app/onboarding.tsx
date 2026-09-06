@@ -127,6 +127,36 @@ export default function OnboardingScreen() {
                                 <Text style={[styles.description, { color: theme.muted, marginBottom: 30 }]}>{item.description}</Text>
                                 
                                 <View style={styles.choiceContainer}>
+                                    {/* Page Choice Card (Default) */}
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.choiceCard,
+                                            {
+                                                backgroundColor: theme.card,
+                                                borderColor: readingLayout === 'page' ? theme.primary : theme.border,
+                                                borderWidth: readingLayout === 'page' ? 2 : 1
+                                            }
+                                        ]}
+                                        onPress={() => setReadingLayout('page')}
+                                    >
+                                        <View style={[styles.choiceIconWrap, { backgroundColor: 'rgba(182, 154, 115, 0.12)' }]}>
+                                            <BookOpen size={32} color={theme.primary} />
+                                        </View>
+                                        <View style={{ flex: 1 }}>
+                                            <Text style={[styles.choiceTitle, { color: theme.text }]}>
+                                                {t('settings.layout_page')}
+                                            </Text>
+                                            <Text style={[styles.choiceDesc, { color: theme.muted }]}>
+                                                {t('onboarding.layout_page_desc')}
+                                            </Text>
+                                        </View>
+                                        {readingLayout === 'page' && (
+                                            <View style={[styles.choiceCheck, { backgroundColor: theme.primary }]}>
+                                                <Check size={12} color="#fff" />
+                                            </View>
+                                        )}
+                                    </TouchableOpacity>
+
                                     {/* Single Choice Card */}
                                     <TouchableOpacity
                                         style={[
@@ -139,48 +169,18 @@ export default function OnboardingScreen() {
                                         ]}
                                         onPress={() => setReadingLayout('single')}
                                     >
-                                        <View style={[styles.choiceIconWrap, { backgroundColor: 'rgba(182, 154, 115, 0.1)' }]}>
-                                            <BookOpen size={32} color={theme.primary} />
+                                        <View style={[styles.choiceIconWrap, { backgroundColor: 'rgba(182, 154, 115, 0.08)' }]}>
+                                            <BookOpen size={32} color={theme.muted} />
                                         </View>
                                         <View style={{ flex: 1 }}>
                                             <Text style={[styles.choiceTitle, { color: theme.text }]}>
                                                 {t('settings.layout_single')}
                                             </Text>
                                             <Text style={[styles.choiceDesc, { color: theme.muted }]}>
-                                            {t('onboarding.layout_single_desc')}
+                                                {t('onboarding.layout_single_desc')}
                                             </Text>
                                         </View>
                                         {readingLayout === 'single' && (
-                                            <View style={[styles.choiceCheck, { backgroundColor: theme.primary }]}>
-                                                <Check size={12} color="#fff" />
-                                            </View>
-                                        )}
-                                    </TouchableOpacity>
-
-                                    {/* Page Choice Card */}
-                                    <TouchableOpacity
-                                        style={[
-                                            styles.choiceCard,
-                                            {
-                                                backgroundColor: theme.card,
-                                                borderColor: readingLayout === 'page' ? theme.primary : theme.border,
-                                                borderWidth: readingLayout === 'page' ? 2 : 1
-                                            }
-                                        ]}
-                                        onPress={() => setReadingLayout('page')}
-                                    >
-                                        <View style={[styles.choiceIconWrap, { backgroundColor: 'rgba(10, 132, 255, 0.1)' }]}>
-                                            <BookOpen size={32} color="#0A84FF" />
-                                        </View>
-                                        <View style={{ flex: 1 }}>
-                                            <Text style={[styles.choiceTitle, { color: theme.text }]}>
-                                                {t('settings.layout_page')}
-                                            </Text>
-                                            <Text style={[styles.choiceDesc, { color: theme.muted }]}>
-                                            {t('onboarding.layout_page_desc')}
-                                            </Text>
-                                        </View>
-                                        {readingLayout === 'page' && (
                                             <View style={[styles.choiceCheck, { backgroundColor: theme.primary }]}>
                                                 <Check size={12} color="#fff" />
                                             </View>

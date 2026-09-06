@@ -50,6 +50,11 @@ type UserState = {
   readCounts: Record<string, number>;
   activeCelebration: string | null;
   setActiveCelebration: (badge: string | null) => void;
+  streakCount: number;
+  lastActiveDate: string | null;
+  longestStreak: number;
+  todayCompleted: boolean;
+  recordDailyActivity: () => Promise<{ streakCount: number; isNewDay: boolean }>;
   initialize: () => Promise<void>;
   login: (email: string, password: string) => Promise<AuthResponse | undefined>;
   register: (name: string, email: string, password: string) => Promise<void>;
@@ -180,7 +185,7 @@ export const useUserStore = create<UserState>((set, get) => ({
   showArabicTranslation: false,
   arabicTranslationLang: "en",
   selectedReciter: "ar.alafasy",
-  readingLayout: "single",
+  readingLayout: "page",
   arabicFontFamily: "noto-naskh",
   selectedArabicScript: "diyanet",
   isInitialProgressLoad: true,
@@ -189,6 +194,52 @@ export const useUserStore = create<UserState>((set, get) => ({
   readCounts: {},
   activeCelebration: null,
   setActiveCelebration: (badge) => set({ activeCelebration: badge }),
+  streakCount: 0,
+  lastActiveDate: null,
+  longestStreak: 0,
+  todayCompleted: false,
+
+  recordDailyActivity: async () => {
+    if (!canUseStorage()) return { streakCount: 0, isNewDay: false };
+    const state = get();
+    const d = new Date();
+    const todayStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+    if (state.lastActiveDate === todayStr) {
+      return { streakCount: state.streakCount, isNewDay: false };
+    }
+
+    let newStreak = 1;
+    let newLongest = state.longestStreak || 0;
+
+    if (state.lastActiveDate) {
+      const d1 = new Date(state.lastActiveDate + "T00:00:00");
+      const d2 = new Date(todayStr + "T00:00:00");
+      const diff = Math.round(Math.abs(d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+      if (diff === 1) {
+        newStreak = (state.streakCount || 0) + 1;
+      } else if (diff === 0) {
+        newStreak = state.streakCount || 1;
+      } else {
+        newStreak = 1;
+      }
+    }
+
+    newLongest = Math.max(newLongest, newStreak);
+
+    set({
+      streakCount: newStreak,
+      lastActiveDate: todayStr,
+      longestStreak: newLongest,
+      todayCompleted: true,
+    });
+
+    window.localStorage.setItem("@app_streak_count", String(newStreak));
+    window.localStorage.setItem("@app_last_active_date", todayStr);
+    window.localStorage.setItem("@app_longest_streak", String(newLongest));
+
+    return { streakCount: newStreak, isNewDay: true };
+  },
 
   initialize: async () => {
     if (!canUseStorage() || get().initialized) return;
@@ -215,10 +266,14 @@ export const useUserStore = create<UserState>((set, get) => ({
       arabicTranslationLang: (window.localStorage.getItem(ARABIC_LANG_KEY) as AppLanguage | null) ?? "en",
       selectedReciter: window.localStorage.getItem(RECITER_KEY) ?? "ar.alafasy",
       hideFavoriteDeleteWarning: window.localStorage.getItem("hideFavWarning") === "true",
-      readingLayout: (window.localStorage.getItem("@app_reading_layout") as "single" | "page" | null) ?? "single",
+      readingLayout: (window.localStorage.getItem("@app_reading_layout") as "single" | "page" | null) ?? "page",
       arabicFontFamily: (window.localStorage.getItem("@app_arabic_font") as "noto-naskh" | "amiri" | null) ?? "noto-naskh",
       selectedArabicScript: (window.localStorage.getItem("@app_arabic_script") as "uthmani" | "diyanet" | null) ?? 
         (((window.localStorage.getItem(LANGUAGE_KEY) as AppLanguage | null) ?? "tr") === "tr" ? "diyanet" : "uthmani"),
+      streakCount: parseInt(window.localStorage.getItem("@app_streak_count") || "0", 10),
+      lastActiveDate: window.localStorage.getItem("@app_last_active_date"),
+      longestStreak: parseInt(window.localStorage.getItem("@app_longest_streak") || "0", 10),
+      todayCompleted: window.localStorage.getItem("@app_last_active_date") === `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`,
       isInitialProgressLoad: true,
     });
 
@@ -313,6 +368,7 @@ export const useUserStore = create<UserState>((set, get) => ({
     if (shouldIncrement) {
       const key = `${surah}:${ayah}`;
       nextReadCounts[key] = (nextReadCounts[key] || 0) + 1;
+      void get().recordDailyActivity();
     }
 
     // Determine completion of Surah

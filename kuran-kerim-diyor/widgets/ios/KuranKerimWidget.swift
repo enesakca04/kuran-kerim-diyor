@@ -51,28 +51,128 @@ func getTranslation(for key: String) -> String {
     }
 }
 
+struct SimpleEntry: TimelineEntry {
+    let date: Date
+    let text: String
+    let reference: String
+    let surah: Int
+    let ayah: Int
+    let streak: Int
+    let todayCompleted: Bool
+    let streakBadge: String
+    let title: String
+}
+
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), text: getTranslation(for: "loading"), reference: "", surah: 1, ayah: 1)
+        SimpleEntry(
+            date: Date(),
+            text: getTranslation(for: "loading"),
+            reference: "",
+            surah: 1,
+            ayah: 1,
+            streak: 1,
+            todayCompleted: false,
+            streakBadge: "🔥 1 Gün",
+            title: getTranslation(for: "title")
+        )
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        completion(SimpleEntry(date: Date(), text: "Suphesiz her zorlukla beraber bir kolaylik vardir.", reference: "Insirah 5", surah: 94, ayah: 5))
+        completion(SimpleEntry(
+            date: Date(),
+            text: "Şüphesiz her zorlukla beraber bir kolaylık vardır.",
+            reference: "İnşirah 94:5",
+            surah: 94,
+            ayah: 5,
+            streak: 3,
+            todayCompleted: true,
+            streakBadge: "🔥 3 Gün",
+            title: getTranslation(for: "title")
+        ))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+        // 1. Önce UserDefaults ile senkronize edilmiş veriyi kontrol et
+        if let entryFromLocal = loadFromUserDefaults() {
+            let nextUpdate = Calendar.current.date(byAdding: .hour, value: 4, to: Date())!
+            let timeline = Timeline(entries: [entryFromLocal], policy: .after(nextUpdate))
+            completion(timeline)
+            return
+        }
+
+        // 2. Yerel veri yoksa API'den çek
         fetchDailyVerse { response in
             let entry: SimpleEntry
             if let res = response {
-                entry = SimpleEntry(date: Date(), text: res.text, reference: res.reference, surah: res.surahNumber, ayah: res.startAyah)
+                entry = SimpleEntry(
+                    date: Date(),
+                    text: res.text,
+                    reference: res.reference,
+                    surah: res.surahNumber,
+                    ayah: res.startAyah,
+                    streak: 1,
+                    todayCompleted: false,
+                    streakBadge: "🔥 1 Gün",
+                    title: getTranslation(for: "title")
+                )
             } else {
-                entry = SimpleEntry(date: Date(), text: getTranslation(for: "error"), reference: "", surah: 1, ayah: 1)
+                entry = SimpleEntry(
+                    date: Date(),
+                    text: getTranslation(for: "error"),
+                    reference: "",
+                    surah: 1,
+                    ayah: 1,
+                    streak: 1,
+                    todayCompleted: false,
+                    streakBadge: "🔥 1 Gün",
+                    title: getTranslation(for: "title")
+                )
             }
             
-            let nextUpdate = Calendar.current.date(byAdding: .hour, value: 12, to: Date())!
+            let nextUpdate = Calendar.current.date(byAdding: .hour, value: 6, to: Date())!
             let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
             completion(timeline)
         }
+    }
+
+    private func loadFromUserDefaults() -> SimpleEntry? {
+        let suite = UserDefaults(suiteName: "group.expo.modules.widgets.example.expowidgets") ?? UserDefaults.standard
+        guard let jsonString = suite.string(forKey: "MyData") ?? suite.string(forKey: "widgetdata"),
+              let data = jsonString.data(using: .utf8) else {
+            return nil
+        }
+
+        do {
+            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
+                let text = json["text"] as? String ?? ""
+                let reference = json["reference"] as? String ?? ""
+                let surah = json["surahNumber"] as? Int ?? 94
+                let ayah = json["startAyah"] as? Int ?? 5
+                let streak = json["streak"] as? Int ?? 1
+                let todayCompleted = json["todayCompleted"] as? Bool ?? false
+                let labels = json["labels"] as? [String: Any]
+                let title = labels?["title"] as? String ?? getTranslation(for: "title")
+                let streakBadge = labels?["streakBadge"] as? String ?? "🔥 \(streak) Gün"
+
+                if !text.isEmpty {
+                    return SimpleEntry(
+                        date: Date(),
+                        text: text,
+                        reference: reference,
+                        surah: surah,
+                        ayah: ayah,
+                        streak: streak,
+                        todayCompleted: todayCompleted,
+                        streakBadge: streakBadge,
+                        title: title
+                    )
+                }
+            }
+        } catch {
+            print("Widget local decode error: \(error)")
+        }
+        return nil
     }
     
     private func fetchDailyVerse(completion: @escaping (DailyVerseResponse?) -> Void) {
@@ -92,48 +192,121 @@ struct Provider: TimelineProvider {
                 let decoded = try JSONDecoder().decode(DailyVerseResponse.self, from: data)
                 completion(decoded)
             } catch {
-                print("Decoding failed: \(error)")
                 completion(nil)
             }
         }.resume()
     }
 }
 
-struct SimpleEntry: TimelineEntry {
-    let date: Date
-    let text: String
-    let reference: String
-    let surah: Int
-    let ayah: Int
-}
-
 struct KuranKerimWidgetEntryView : View {
+    @Environment(\.widgetFamily) var family
     var entry: Provider.Entry
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(getTranslation(for: "title"))
-                .font(.system(size: 10, weight: .bold))
-                .foregroundColor(Color(hex: "B69A73"))
-                .tracking(1)
-            
+        switch family {
+        case .systemMedium:
+            mediumView
+        default:
+            smallView
+        }
+    }
+
+    // Küçük Widget (SystemSmall)
+    private var smallView: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text(entry.title)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundColor(Color(hex: "B69A73"))
+                    .lineLimit(1)
+                Spacer()
+                Text(entry.streakBadge)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundColor(Color(hex: "9E7D47"))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Color(hex: "B69A73").opacity(0.18))
+                    .clipShape(Capsule())
+            }
+
+            Spacer()
+
             Text("“\(entry.text)”")
-                .font(.system(size: 14, weight: .medium, design: .serif))
+                .font(.system(size: 13, weight: .medium, design: .serif))
                 .italic()
                 .lineLimit(4)
                 .minimumScaleFactor(0.8)
                 .foregroundColor(.primary)
-            
+
             Spacer()
-            
+
             HStack {
-                Spacer()
                 Text(entry.reference)
-                    .font(.system(size: 11, weight: .bold))
+                    .font(.system(size: 10, weight: .bold))
                     .foregroundColor(Color(hex: "B69A73"))
+                Spacer()
+                if entry.todayCompleted {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 11))
+                        .foregroundColor(Color(hex: "2E7D32"))
+                }
             }
         }
-        .padding()
+        .padding(14)
+        .widgetURL(URL(string: "kuran-kerim-diyor://ayet?id=\(entry.surah):\(entry.ayah)"))
+    }
+
+    // Orta Boy Widget (SystemMedium)
+    private var mediumView: some View {
+        HStack(spacing: 14) {
+            // Sol Taraf: Seri Kartı
+            VStack(spacing: 8) {
+                Text(entry.streakBadge)
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundColor(Color(hex: "9E7D47"))
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color(hex: "B69A73").opacity(0.18))
+                    .clipShape(Capsule())
+
+                Image(systemName: entry.todayCompleted ? "flame.fill" : "flame")
+                    .font(.system(size: 28))
+                    .foregroundColor(Color(hex: "B69A73"))
+
+                Text(entry.todayCompleted ? "✓ Okundu" : "Devam Et")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundColor(entry.todayCompleted ? Color(hex: "2E7D32") : Color(hex: "B69A73"))
+            }
+            .frame(width: 86)
+            .padding(.vertical, 8)
+            .background(Color(hex: "B69A73").opacity(0.08))
+            .cornerRadius(14)
+
+            // Sağ Taraf: Ayet Metni ve Referans
+            VStack(alignment: .leading, spacing: 6) {
+                Text(entry.title)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundColor(Color(hex: "B69A73"))
+                    .tracking(0.5)
+
+                Text("“\(entry.text)”")
+                    .font(.system(size: 13, weight: .medium, design: .serif))
+                    .italic()
+                    .lineLimit(4)
+                    .minimumScaleFactor(0.85)
+                    .foregroundColor(.primary)
+
+                Spacer()
+
+                HStack {
+                    Spacer()
+                    Text(entry.reference)
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(Color(hex: "B69A73"))
+                }
+            }
+        }
+        .padding(14)
         .widgetURL(URL(string: "kuran-kerim-diyor://ayet?id=\(entry.surah):\(entry.ayah)"))
     }
 }
@@ -147,7 +320,7 @@ struct KuranKerimWidget: Widget {
                 .containerBackground(.background, for: .widget)
         }
         .configurationDisplayName("Kuran Kerim Diyor")
-        .description("Gunun ayetini ana ekraninizda gorun.")
+        .description("Günün ayetini ve okuma serinizi ana ekranınızda görün.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Dimensions, NativeSyntheticEvent, NativeScrollEvent, Text, PanResponder, GestureResponderEvent, I18nManager, Animated } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ChevronLeft, Heart, Sparkles } from 'lucide-react-native';
+import { ChevronLeft, Heart, Sparkles, Flame } from 'lucide-react-native';
+import { StreakModal } from '../../components/StreakModal';
 import { DailyVerseService, DailyVerse } from '../../services/dailyVerseService';
 import { VerseShareCard } from '../../components/VerseShareCard';
 import { Modal, ScrollView } from 'react-native';
@@ -53,10 +54,13 @@ export default function MainFeedScreen() {
         setHideFavoriteDeleteWarning,
         readingLayout,
         arabicFontFamily,
+        streakCount,
+        todayCompleted,
     } = useUserStore();
     const [showDeleteWarning, setShowDeleteWarning] = useState(false);
     const [dailyVerse, setDailyVerse] = useState<DailyVerse | null>(null);
     const [showDailyModal, setShowDailyModal] = useState(false);
+    const [showStreakModal, setShowStreakModal] = useState(false);
     const [activePageMode, setActivePageMode] = useState<'arabic' | 'translation'>('arabic');
     const [highlightedAyahId, setHighlightedAyahId] = useState<string | null>(null);
     const [isAudioInteracting, setIsAudioInteracting] = useState(false);
@@ -87,6 +91,7 @@ export default function MainFeedScreen() {
 
     const flatListRef = useRef<FlatList>(null);
     const scrubTimer = useRef<NodeJS.Timeout | null>(null);
+    const autoNextTimer = useRef<NodeJS.Timeout | null>(null);
     const currentIndexRef = useRef(Math.max(0, (currentAyah || 1) - 1));
     const storeRef = useRef({ barHeight: 0, surah, uiAyah, isScrubbing });
 
@@ -190,6 +195,21 @@ export default function MainFeedScreen() {
         }
     }, [currentSurah, currentAyah, readingLayout]);
 
+    // Bir sonraki sureye geç (1-114 arasında)
+    const goToNextSurah = React.useCallback(() => {
+        if (!surah || surah.number >= 114) return;
+        const nextSurahNum = surah.number + 1;
+        if (autoNextTimer.current) clearTimeout(autoNextTimer.current);
+        currentIndexRef.current = 0;
+        setProgress(nextSurahNum, 1);
+        setUiAyah(1);
+        setTimeout(() => {
+            try { flatListRef.current?.scrollToIndex({ index: 0, animated: false }); } catch (_) {}
+        }, 100);
+    }, [surah, setProgress]);
+
+    const nextSurah = surah && surah.number < 114 ? getSurah(surah.number + 1) : undefined;
+
     useEffect(() => {
         AsyncStorage.getItem('hasSeenSwipeHint').then(val => {
             if (val !== 'true') setShowSwipeHint(true);
@@ -245,6 +265,28 @@ export default function MainFeedScreen() {
         navigation.setOptions({
             headerRight: () => (
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    {/* Streak Button */}
+                    <TouchableOpacity
+                        onPress={() => setShowStreakModal(true)}
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginRight: 10,
+                            paddingHorizontal: 8,
+                            paddingVertical: 4,
+                            borderRadius: 14,
+                            backgroundColor: todayCompleted ? 'rgba(226, 88, 34, 0.12)' : 'rgba(182, 154, 115, 0.10)',
+                            borderWidth: 1,
+                            borderColor: todayCompleted ? '#E25822' : 'transparent',
+                            gap: 4,
+                        }}
+                    >
+                        <Flame size={17} color="#E25822" fill={todayCompleted ? '#E25822' : 'transparent'} />
+                        <Text style={{ fontSize: 12, fontWeight: '800', color: theme.text }}>
+                            {streakCount}
+                        </Text>
+                    </TouchableOpacity>
+
                     {dailyVerse && (
                         <TouchableOpacity onPress={() => setShowDailyModal(true)} style={{ marginRight: 8, padding: 4 }}>
                             <Sparkles size={24} color={theme.primary} />
@@ -267,7 +309,7 @@ export default function MainFeedScreen() {
                 </View>
             ),
         });
-    }, [navigation, isFavorited, handleToggleFavorite, theme.primary, scaleAnim, globalFavCount]);
+    }, [navigation, isFavorited, handleToggleFavorite, theme.primary, theme.text, scaleAnim, globalFavCount, dailyVerse, streakCount, todayCompleted]);
 
     if (!surah) return null;
 
@@ -300,9 +342,25 @@ export default function MainFeedScreen() {
                             currentIndexRef.current = newIndex;
                             const visibleAyahNumber = currentSurahObj.ayahs[newIndex].number;
                             setUiAyah(visibleAyahNumber);
-                            // isProgrammaticJump'u false bırak: bu kullanıcı swipe'i,
-                            // useEffect bu değişikliğe tepki VERMEYECEK.
                             setProgress(currentSurahObj.number, visibleAyahNumber);
+
+                            // Son ayete gelindi mi? → 800ms sonra otomatik geçiş
+                            const isLast = newIndex === currentSurahObj.ayahs.length - 1;
+                            if (autoNextTimer.current) clearTimeout(autoNextTimer.current);
+                            if (isLast && currentSurahObj.number < 114) {
+                                autoNextTimer.current = setTimeout(() => {
+                                    // Kullanıcı zaten kendi geçmediyse geç
+                                    if (currentIndexRef.current === newIndex) {
+                                        const nextNum = currentSurahObj.number + 1;
+                                        currentIndexRef.current = 0;
+                                        useUserStore.getState().setProgress(nextNum, 1);
+                                        setUiAyah(1);
+                                        setTimeout(() => {
+                                            try { flatListRef.current?.scrollToIndex({ index: 0, animated: false }); } catch (_) {}
+                                        }, 100);
+                                    }
+                                }, 800);
+                            }
                         }
                     }
                 }
@@ -338,6 +396,10 @@ export default function MainFeedScreen() {
                     } else {
                         const { language } = useUserStore.getState();
                         const surahName = language === 'ar' ? surah.name.ar : language === 'tr' ? surah.name.tr : surah.name.en;
+                        const isLastAyah = (item as any).number === surah.ayahs[surah.ayahs.length - 1]?.number;
+                        const nextSurahNameStr = nextSurah
+                            ? (language === 'ar' ? nextSurah.name.ar : language === 'tr' ? nextSurah.name.tr : nextSurah.name.en)
+                            : undefined;
                         return (
                             <View style={{ height: containerHeight, width }}>
                                 <AyahCard
@@ -345,6 +407,9 @@ export default function MainFeedScreen() {
                                     surahName={surahName}
                                     surahNumber={surah.number}
                                     onAudioInteractionChange={setIsAudioInteracting}
+                                    isLastAyah={isLastAyah}
+                                    nextSurahName={nextSurahNameStr}
+                                    onNextSurah={goToNextSurah}
                                 />
                             </View>
                         );
@@ -420,12 +485,19 @@ export default function MainFeedScreen() {
                                 <VerseShareCard 
                                     text={dailyVerse.text} 
                                     reference={dailyVerse.reference} 
+                                    onClose={() => setShowDailyModal(false)}
                                 />
                             )}
                         </ScrollView>
                     </View>
                 </View>
             </Modal>
+
+            {/* Günlük Seri (Streak) Modalı */}
+            <StreakModal 
+                visible={showStreakModal}
+                onClose={() => setShowStreakModal(false)}
+            />
         </View>
     );
 }

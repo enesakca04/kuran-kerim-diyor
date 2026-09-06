@@ -21,42 +21,84 @@ class VerseWidget : AppWidgetProvider() {
     private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
         thread {
             try {
-                // Sistem dilini tespit et, desteklenen dillerdense API'ye gec, degilse tr varsayilan
-                val lang = java.util.Locale.getDefault().language
-                val supportedLangs = listOf("tr", "en", "de", "fr", "es", "ar")
-                val apiLang = if (supportedLangs.contains(lang)) lang else "tr"
+                // 1. Önce uygulamadan senkronize edilmiş yerel veriyi kontrol et (anında, internetsiz)
+                val prefs = context.getSharedPreferences(context.packageName + ".widgetdata", Context.MODE_PRIVATE)
+                val cachedJson = prefs.getString("widgetdata", null)
 
-                // API'den veri cek (Gunun Ayeti)
-                val jsonText = URL("https://api.kurannediyor.com.tr/api/daily-context?lang=$apiLang").readText()
-                val data = JSONObject(jsonText)
-                
-                val text = data.getString("text")
-                val reference = data.getString("reference")
-                
-                // surahNumber ve startAyah bilgilerini al
-                val surahNumber = data.optInt("surahNumber", 1)
-                val startAyah = data.optInt("startAyah", 1)
+                var text = ""
+                var reference = ""
+                var surahNumber = 94
+                var startAyah = 5
+                var title = "GÜNÜN AYETİ"
+                var streakBadge = "🔥 1 Gün"
+                var todayStatus = ""
 
+                if (!cachedJson.isNullOrEmpty()) {
+                    try {
+                        val payload = JSONObject(cachedJson)
+                        text = payload.optString("text", "")
+                        reference = payload.optString("reference", "")
+                        surahNumber = payload.optInt("surahNumber", 94)
+                        startAyah = payload.optInt("startAyah", 5)
+
+                        val labels = payload.optJSONObject("labels")
+                        if (labels != null) {
+                            title = labels.optString("title", title)
+                            streakBadge = labels.optString("streakBadge", streakBadge)
+                            todayStatus = labels.optString("todayStatus", todayStatus)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                // 2. Eğer yerel veri boşsa API'den çek
+                if (text.isEmpty()) {
+                    try {
+                        val lang = java.util.Locale.getDefault().language
+                        val supportedLangs = listOf("tr", "en", "de", "fr", "es", "ar")
+                        val apiLang = if (supportedLangs.contains(lang)) lang else "tr"
+
+                        val conn = URL("https://api.kurannediyor.com.tr/api/daily-context?lang=$apiLang").openConnection()
+                        conn.connectTimeout = 4000
+                        conn.readTimeout = 4000
+                        val jsonText = conn.getInputStream().bufferedReader().use { it.readText() }
+                        val data = JSONObject(jsonText)
+                        
+                        text = data.optString("text", "Şüphesiz her zorlukla beraber bir kolaylık vardır.")
+                        reference = data.optString("reference", "İnşirah 94:5")
+                        surahNumber = data.optInt("surahNumber", 94)
+                        startAyah = data.optInt("startAyah", 5)
+                    } catch (netErr: Exception) {
+                        if (text.isEmpty()) {
+                            text = "Şüphesiz her zorlukla beraber bir kolaylık vardır."
+                            reference = "İnşirah 94:5"
+                        }
+                    }
+                }
+
+                // 3. RemoteViews oluştur ve elemanları bağla
                 val views = RemoteViews(context.packageName, R.layout.verse_widget)
+                views.setTextViewText(R.id.widget_title, title)
+                views.setTextViewText(R.id.widget_streak, streakBadge)
                 views.setTextViewText(R.id.widget_text, "“$text”")
                 views.setTextViewText(R.id.widget_reference, reference)
+                views.setTextViewText(R.id.widget_status, todayStatus)
 
-                // Derin baglanti (Deep Link) Intent yapilandirmasi
+                // 4. Derin bağlantı (Deep Link) Intent yapılandırması
                 val intent = Intent(Intent.ACTION_VIEW).apply {
                     this.data = Uri.parse("kuran-kerim-diyor://ayet?id=$surahNumber:$startAyah")
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 }
-                
-                // PendingIntent ile widget tiklandiginda tetiklenecek eylem
+
                 val pendingIntent = PendingIntent.getActivity(
                     context, 
                     appWidgetId, 
                     intent, 
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
-                
-                views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
 
+                views.setOnClickPendingIntent(R.id.widget_container, pendingIntent)
                 appWidgetManager.updateAppWidget(appWidgetId, views)
             } catch (e: Exception) {
                 e.printStackTrace()

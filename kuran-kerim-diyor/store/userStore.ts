@@ -68,7 +68,30 @@ interface UserState {
     removeFromAllCollections: (ayahId: string) => void; // Called when removed from general favs
     setCollections: (cols: Record<string, Collection>) => void;
     syncAllLocalData: () => Promise<void>;
+
+    // Streak (Günlük Seri)
+    streakCount: number;
+    lastActiveDate: string | null;
+    longestStreak: number;
+    streakHistory: Record<string, boolean>;
+    todayCompleted: boolean;
+    recordDailyActivity: () => Promise<{ streakCount: number; isNewDay: boolean }>;
 }
+
+const getTodayDateStr = (): string => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+const getDiffDays = (dateStr1: string, dateStr2: string): number => {
+    const d1 = new Date(dateStr1 + 'T00:00:00');
+    const d2 = new Date(dateStr2 + 'T00:00:00');
+    const diffTime = Math.abs(d2.getTime() - d1.getTime());
+    return Math.round(diffTime / (1000 * 60 * 60 * 24));
+};
 
 const saveLocal = (key: string, data: any) => {
     import('@react-native-async-storage/async-storage').then(AsyncStorage => {
@@ -121,7 +144,7 @@ export const useUserStore = create<UserState>((set, get) => ({
     showArabicTranslation: false,
     arabicTranslationLang: 'en',
     selectedReciter: 'ar.alafasy',
-    readingLayout: 'single',
+    readingLayout: 'page',
     arabicFontFamily: 'noto-naskh',
     selectedArabicScript: 'diyanet',
 
@@ -131,6 +154,13 @@ export const useUserStore = create<UserState>((set, get) => ({
     readCounts: {},
     activeCelebration: null,
     setActiveCelebration: (badge) => set({ activeCelebration: badge }),
+
+    // Streak initial state
+    streakCount: 0,
+    lastActiveDate: null,
+    longestStreak: 0,
+    streakHistory: {},
+    todayCompleted: false,
 
     userId: null,
     isAnonymous: false,
@@ -177,6 +207,7 @@ export const useUserStore = create<UserState>((set, get) => ({
                     throttleMs: 30000,
                 });
             });
+            void get().recordDailyActivity();
         }
 
         // Determine completion of Surah
@@ -403,7 +434,11 @@ export const useUserStore = create<UserState>((set, get) => ({
             if (storedReciter) set({ selectedReciter: storedReciter });
 
             const storedLayout = await AsyncStorage.getItem('@app_reading_layout');
-            if (storedLayout) set({ readingLayout: storedLayout as 'single' | 'page' });
+            if (storedLayout) {
+                set({ readingLayout: storedLayout as 'single' | 'page' });
+            } else {
+                set({ readingLayout: 'page' });
+            }
 
             const storedFont = await AsyncStorage.getItem('@app_arabic_font');
             if (storedFont) set({ arabicFontFamily: storedFont as 'noto-naskh' | 'amiri' });
@@ -416,7 +451,46 @@ export const useUserStore = create<UserState>((set, get) => ({
                 set({ selectedArabicScript: currentLang === 'tr' ? 'diyanet' : 'uthmani' });
             }
 
-            set({ isInitialProgressLoad: false });
+            // Streak yükleme
+            const storedStreak = await AsyncStorage.getItem('@app_streak_count');
+            const storedLastActive = await AsyncStorage.getItem('@app_last_active_date');
+            const storedLongest = await AsyncStorage.getItem('@app_longest_streak');
+            const storedHistory = await AsyncStorage.getItem('@app_streak_history');
+
+            const todayStr = getTodayDateStr();
+            let initialStreak = storedStreak ? parseInt(storedStreak, 10) : 0;
+            const initialLastActive = storedLastActive || null;
+            let initialLongest = storedLongest ? parseInt(storedLongest, 10) : initialStreak;
+            const initialHistory = storedHistory ? JSON.parse(storedHistory) : {};
+
+            let isTodayCompleted = false;
+            if (initialLastActive) {
+                if (initialLastActive === todayStr) {
+                    isTodayCompleted = true;
+                } else {
+                    const diff = getDiffDays(initialLastActive, todayStr);
+                    if (diff > 1) {
+                        initialStreak = 0;
+                    }
+                }
+            }
+
+            set({
+                streakCount: initialStreak,
+                lastActiveDate: initialLastActive,
+                longestStreak: initialLongest,
+                streakHistory: initialHistory,
+                todayCompleted: isTodayCompleted,
+                isInitialProgressLoad: false,
+            });
+
+            import('../services/widgetSyncService').then(({ WidgetSyncService }) => {
+                WidgetSyncService.sync({
+                    streak: initialStreak,
+                    todayCompleted: isTodayCompleted,
+                    longestStreak: initialLongest,
+                });
+            });
         } catch (e) {
             console.error('Failed to load favorites/collections', e);
             set({ isInitialProgressLoad: false });
@@ -468,6 +542,58 @@ export const useUserStore = create<UserState>((set, get) => ({
         import('@react-native-async-storage/async-storage').then(({ default: AsyncStorage }) => {
             AsyncStorage.setItem('@app_arabic_script', script);
         });
+    },
+
+    recordDailyActivity: async () => {
+        const state = get();
+        const todayStr = getTodayDateStr();
+
+        if (state.lastActiveDate === todayStr) {
+            return { streakCount: state.streakCount, isNewDay: false };
+        }
+
+        let newStreak = 1;
+        let newLongest = state.longestStreak || 0;
+
+        if (state.lastActiveDate) {
+            const diff = getDiffDays(state.lastActiveDate, todayStr);
+            if (diff === 1) {
+                newStreak = (state.streakCount || 0) + 1;
+            } else if (diff === 0) {
+                newStreak = state.streakCount || 1;
+            } else {
+                newStreak = 1;
+            }
+        }
+
+        newLongest = Math.max(newLongest, newStreak);
+        const updatedHistory = { ...state.streakHistory, [todayStr]: true };
+
+        set({
+            streakCount: newStreak,
+            lastActiveDate: todayStr,
+            longestStreak: newLongest,
+            streakHistory: updatedHistory,
+            todayCompleted: true,
+        });
+
+        import('@react-native-async-storage/async-storage').then(({ default: AsyncStorage }) => {
+            AsyncStorage.setItem('@app_streak_count', String(newStreak));
+            AsyncStorage.setItem('@app_last_active_date', todayStr);
+            AsyncStorage.setItem('@app_longest_streak', String(newLongest));
+            AsyncStorage.setItem('@app_streak_history', JSON.stringify(updatedHistory));
+        });
+
+        import('../services/widgetSyncService').then(({ WidgetSyncService }) => {
+            WidgetSyncService.sync({
+                streak: newStreak,
+                todayCompleted: true,
+                longestStreak: newLongest,
+                language: state.language,
+            });
+        });
+
+        return { streakCount: newStreak, isNewDay: true };
     },
 
     addCollection: (name: string, initialAyahId?: string) => {

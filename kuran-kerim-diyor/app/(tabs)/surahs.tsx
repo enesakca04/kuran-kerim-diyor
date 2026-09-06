@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { CheckCircle2 } from 'lucide-react-native';
+import { CheckCircle2, Heart, Sparkles, BookOpen } from 'lucide-react-native';
 import { getAllSurahs } from '../../services/quranData';
 import { useProgress } from '../../hooks/useProgress';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +25,45 @@ export default function SurahsScreen() {
                 data={surahs}
                 keyExtractor={(item) => item.number.toString()}
                 contentContainerStyle={{ paddingBottom: 24 }}
+                ListHeaderComponent={
+                    <View style={styles.headerCardsContainer}>
+                        <TouchableOpacity
+                            onPress={() => router.push('/names99')}
+                            style={[styles.quickCard, { backgroundColor: theme.card, borderColor: theme.border }]}
+                            activeOpacity={0.7}
+                        >
+                            <View style={[styles.quickIconCircle, { backgroundColor: 'rgba(182, 154, 115, 0.15)' }]}>
+                                <Heart size={20} color={theme.primary} />
+                            </View>
+                            <View style={styles.quickCardTextContainer}>
+                                <Text style={[styles.quickCardTitle, { color: theme.text }]}>
+                                    {t('names.title', "Esma-ül Hüsna")}
+                                </Text>
+                                <Text style={[styles.quickCardDesc, { color: theme.muted }]}>
+                                    {t('names.subtitle_short', "Allah'ın 99 İsmi ve Anlamları")}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={() => router.push('/dua-generator')}
+                            style={[styles.quickCard, { backgroundColor: theme.card, borderColor: theme.border }]}
+                            activeOpacity={0.7}
+                        >
+                            <View style={[styles.quickIconCircle, { backgroundColor: 'rgba(182, 154, 115, 0.15)' }]}>
+                                <Sparkles size={20} color={theme.primary} />
+                            </View>
+                            <View style={styles.quickCardTextContainer}>
+                                <Text style={[styles.quickCardTitle, { color: theme.text }]}>
+                                    {t('dua.title', "AI Dua Asistanı")}
+                                </Text>
+                                <Text style={[styles.quickCardDesc, { color: theme.muted }]}>
+                                    {t('dua.subtitle_short', "İslami Âdâba Uygun Dua Oluştur")}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                }
                 renderItem={({ item }) => {
                     const isCompleted = completedSurahs?.includes(item.number) ?? false;
 
@@ -90,5 +129,37 @@ const styles = StyleSheet.create({
     surahNameAr: {
         fontFamily: 'Amiri_400Regular',
         fontSize: 24,
+    },
+    headerCardsContainer: {
+        paddingHorizontal: 16,
+        paddingTop: 12,
+        paddingBottom: 4,
+        gap: 10,
+    },
+    quickCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        borderRadius: 14,
+        borderWidth: 1,
+        gap: 12,
+    },
+    quickIconCircle: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    quickCardTextContainer: {
+        flex: 1,
+    },
+    quickCardTitle: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginBottom: 2,
+    },
+    quickCardDesc: {
+        fontSize: 11,
     },
 });

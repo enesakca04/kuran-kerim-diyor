@@ -376,6 +376,18 @@ export function SurahReaderClient({ surah }: SurahReaderClientProps) {
               <AyahCard key={ayah.globalNumber} ayah={ayah} surahName={surah.name[lang] || surah.name.tr} surahNumber={surah.number} />
             ))
           )}
+
+          {surah.number < 114 && (
+            <div className="mt-8 mb-12 flex justify-center">
+              <Link
+                href={`/surah/${surah.number + 1}`}
+                className="group inline-flex items-center gap-3 rounded-2xl border border-primary bg-card px-8 py-4 text-base font-bold text-primary shadow-sm transition hover:bg-primary hover:text-white"
+              >
+                <span>{t("common.next_surah", "Sonraki Sure")}</span>
+                <ChevronRight size={20} className="transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+          )}
         </div>
       ) : (
         <>
@@ -458,6 +470,24 @@ export function SurahReaderClient({ surah }: SurahReaderClientProps) {
                   </div>
                 </section>
               ))
+            )}
+
+            {surah.number < 114 && (
+              <section className="w-full max-w-full flex-shrink-0 snap-start flex items-center justify-center">
+                <div className="min-h-[calc(100vh-260px)] px-1 w-full max-w-full flex items-center justify-center">
+                  <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
+                    <h3 className="mb-2 text-xl font-bold text-text">{t("common.next_surah", "Sonraki Sure")}</h3>
+                    <p className="mb-6 text-sm text-muted">{t("common.next_surah_desc", "Bu sureyi tamamladınız. Bir sonraki sureye geçebilirsiniz.")}</p>
+                    <Link
+                      href={`/surah/${surah.number + 1}`}
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 font-bold text-white shadow-sm transition hover:opacity-90"
+                    >
+                      <span>{t("common.next_surah", "Sonraki Sure")}</span>
+                      <ChevronRight size={18} />
+                    </Link>
+                  </div>
+                </div>
+              </section>
             )}
           </div>
 

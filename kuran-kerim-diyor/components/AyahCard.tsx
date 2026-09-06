@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, Animated } from 'react-native';
 import { useAppTheme } from '../hooks/useAppTheme';
 import { Ayah } from '../services/quranData';
 import { useUserStore } from '../store/userStore';
-import { MessageSquare, Share2, Sparkles } from 'lucide-react-native';
+import { MessageSquare, Share2, Sparkles, ChevronRight, BookOpen } from 'lucide-react-native';
 import { CommentSheet } from './CommentSheet';
 import { AudioPlayer } from './AudioPlayer';
 import { VerseShareCard } from './VerseShareCard';
@@ -12,16 +12,18 @@ import { useAyahStats } from '../hooks/useAyahStats';
 import { splitBismillah, isSajdahAyah, hasBismillah } from '../utils/quranHelpers';
 import { VerseChatModal } from './VerseChatModal';
 import { AnalyticsService } from '../services/analyticsService';
-import { getHighlightedLetterCount, splitWordAtHighlightedLetter } from '../utils/audioTextProgress';
 
 interface AyahCardProps {
     ayah: Ayah;
     surahName: string;
     surahNumber: number;
     onAudioInteractionChange?: (isInteracting: boolean) => void;
+    isLastAyah?: boolean;
+    nextSurahName?: string;
+    onNextSurah?: () => void;
 }
 
-export function AyahCard({ ayah, surahName, surahNumber, onAudioInteractionChange }: AyahCardProps) {
+export function AyahCard({ ayah, surahName, surahNumber, onAudioInteractionChange, isLastAyah, nextSurahName, onNextSurah }: AyahCardProps) {
     const { language, showArabicTranslation, arabicTranslationLang, selectedArabicScript } = useUserStore();
     const { stats, refresh } = useAyahStats(surahNumber, ayah.number);
     const { theme } = useAppTheme();
@@ -30,6 +32,21 @@ export function AyahCard({ ayah, surahName, surahNumber, onAudioInteractionChang
     const [showVerseChat, setShowVerseChat] = useState(false);
     const [audioProgress, setAudioProgress] = useState(0);
     const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+    const nextSurahAnim = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        if (isLastAyah) {
+            Animated.spring(nextSurahAnim, {
+                toValue: 1,
+                useNativeDriver: true,
+                tension: 60,
+                friction: 8,
+                delay: 300,
+            }).start();
+        } else {
+            nextSurahAnim.setValue(0);
+        }
+    }, [isLastAyah]);
     const [seekProgress, setSeekProgress] = useState<number | null>(null);
     const { t } = useTranslation();
 
@@ -51,22 +68,15 @@ export function AyahCard({ ayah, surahName, surahNumber, onAudioInteractionChang
         finalArabicText = splitResult.ayahText;
     }
 
-    // Lafzatullah renklendirme (Allah ve lillah lafizlari)
+    // Lafzatullah renklendirme (Allah ve lillah lafizlari) - Arapça hat bütünlüğünü korumak için kelimeler bölünmez
     const renderArabicText = (text: string) => {
         const words = text.split(/\s+/);
-        const highlightedLetterCount = getHighlightedLetterCount(text, audioProgress);
-        let consumedLetters = 0;
 
         return words.map((word, index) => {
             // Arapcadaki Allah ve Lillah kelimeleri (farkli harekelere ve harflere gore)
             const cleanWord = word.replace(/[^\u0621-\u064A\u0671-\u06D3]/g, '');
             const isAllah = cleanWord === 'الله' || cleanWord === 'اللَّه' || cleanWord === 'لله' || cleanWord === 'لِلَّهِ' || cleanWord === 'للَّه';
-            const wordLetterCount = getHighlightedLetterCount(word, 1);
-            const highlightedInWord = Math.min(wordLetterCount, Math.max(0, highlightedLetterCount - consumedLetters));
-            const parts = splitWordAtHighlightedLetter(word, highlightedInWord);
-            const wordStartProgress = consumedLetters / Math.max(1, getHighlightedLetterCount(text, 1));
-            consumedLetters += wordLetterCount;
-            
+
             return (
                 <Text 
                     key={index} 
@@ -74,19 +84,8 @@ export function AyahCard({ ayah, surahName, surahNumber, onAudioInteractionChang
                         color: isAllah ? '#D32F2F' : theme.text,
                         fontWeight: isAllah ? 'bold' : 'normal'
                     }}
-                    onPress={() => {
-                        if (!isAudioPlaying) return;
-                        setSeekProgress(null);
-                        requestAnimationFrame(() => setSeekProgress(wordStartProgress));
-                    }}
                 >
-                    {parts.highlighted ? (
-                        <Text style={{ color: theme.primary, fontWeight: 'bold' }}>{parts.highlighted}</Text>
-                    ) : null}
-                    {parts.remaining ? (
-                        <Text style={{ color: isAllah ? '#D32F2F' : theme.text }}>{parts.remaining}</Text>
-                    ) : null}
-                    {index < words.length - 1 ? ' ' : ''}
+                    {word}{index < words.length - 1 ? ' ' : ''}
                 </Text>
             );
         });
@@ -177,6 +176,40 @@ export function AyahCard({ ayah, surahName, surahNumber, onAudioInteractionChang
                     </TouchableOpacity>
                 </View>
             </View>
+
+            {/* Son ayet: Sonraki Sure kartı */}
+            {isLastAyah && nextSurahName && onNextSurah && (
+                <Animated.View
+                    style={[
+                        styles.nextSurahBanner,
+                        { backgroundColor: theme.card, borderColor: theme.primary },
+                        {
+                            opacity: nextSurahAnim,
+                            transform: [{
+                                translateY: nextSurahAnim.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [24, 0],
+                                }),
+                            }],
+                        },
+                    ]}
+                >
+                    <View style={styles.nextSurahLabel}>
+                        <BookOpen size={14} color={theme.muted} />
+                        <Text style={[styles.nextSurahLabelText, { color: theme.muted }]}>
+                            {t('common.next_surah', 'Sonraki Sure')}
+                        </Text>
+                    </View>
+                    <TouchableOpacity
+                        style={[styles.nextSurahBtn, { backgroundColor: theme.primary }]}
+                        onPress={onNextSurah}
+                        activeOpacity={0.85}
+                    >
+                        <Text style={styles.nextSurahBtnText}>{nextSurahName}</Text>
+                        <ChevronRight size={18} color="#fff" />
+                    </TouchableOpacity>
+                </Animated.View>
+            )}
 
             <Modal visible={showComments} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => {
                 setShowComments(false);
@@ -342,5 +375,38 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
         alignItems: 'flex-start',
-    }
+    },
+    nextSurahBanner: {
+        marginHorizontal: 20,
+        marginBottom: 12,
+        borderRadius: 16,
+        borderWidth: 1,
+        padding: 14,
+        gap: 10,
+    },
+    nextSurahLabel: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+    },
+    nextSurahLabelText: {
+        fontSize: 11,
+        fontWeight: '600',
+        letterSpacing: 0.4,
+        textTransform: 'uppercase',
+    },
+    nextSurahBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderRadius: 12,
+    },
+    nextSurahBtnText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '700',
+        letterSpacing: 0.3,
+    },
 });

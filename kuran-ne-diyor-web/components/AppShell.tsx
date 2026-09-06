@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { BookOpen, Heart, Home, LogIn, MessageSquare, Search, Settings, User, Menu, X, Shield } from "lucide-react";
+import { BookOpen, Heart, Home, LogIn, MessageSquare, Search, Settings, User, Menu, X, Shield, Sparkles, Flame } from "lucide-react";
 import { useAppInit } from "@/hooks/useAppInit";
 import { useUserStore } from "@/store/userStore";
 import { InstallPrompt } from "./InstallPrompt";
@@ -12,13 +12,17 @@ import { useTranslation } from "react-i18next";
 export function AppShell({ children }: { children: React.ReactNode }) {
   useAppInit();
   const user = useUserStore((state) => state.user);
+  const streakCount = useUserStore((state) => state.streakCount);
+  const todayCompleted = useUserStore((state) => state.todayCompleted);
   const { t } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
     { href: "/", label: t("tabs.quran", "Ana Sayfa"), icon: Home },
+    { href: "/names", label: t("names.nav_title", "Esma-ül Hüsna"), icon: Heart },
+    { href: "/dua-generator", label: t("dua.nav_title", "Dua Asistanı"), icon: Sparkles },
     { href: "/search", label: t("tabs.search", "Ara"), icon: Search },
-    { href: "/favorites", label: t("favorites.title", "Favoriler"), icon: Heart },
+    { href: "/favorites", label: t("favorites.title", "Favoriler"), icon: BookOpen },
     { href: "/collections", label: t("collections.title", "Koleksiyonlar"), icon: BookOpen },
     { href: "/my-comments", label: t("my_comments.title", "Yorumlarım"), icon: MessageSquare },
     { href: "/profile", label: t("tabs.profile", "Profil"), icon: User },
@@ -52,7 +56,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </button>
           </div>
           <nav className="hidden items-center gap-1 lg:flex">
-            {navItems.slice(0, 4).map((item) => {
+            {navItems.slice(0, 5).map((item) => {
               const Icon = item.icon;
               return (
                 <Link
@@ -65,6 +69,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </Link>
               );
             })}
+            <div
+              className={`inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-xs font-extrabold transition ${
+                todayCompleted
+                  ? "border border-orange-500/30 bg-orange-500/10 text-orange-600"
+                  : "border border-primary/25 bg-primary/10 text-primary"
+              }`}
+              title={t("streak.title", "Günlük Seri")}
+            >
+              <Flame size={16} className={todayCompleted ? "fill-orange-500 text-orange-500" : "text-primary"} />
+              <span>{streakCount} {t("streak.badge_short", { count: streakCount, defaultValue: `${streakCount}g` })}</span>
+            </div>
             <Link
               href={user ? "/profile" : "/login"}
               className="inline-flex h-10 items-center gap-2 rounded-md bg-primary px-3 text-sm font-bold text-white transition hover:opacity-90"

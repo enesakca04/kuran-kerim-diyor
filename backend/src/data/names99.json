@@ -1,0 +1,2873 @@
+[
+  {
+    "id": 1,
+    "arabic": "الرَّحْمَنُ",
+    "transliteration": {
+      "tr": "Er-Rahmân",
+      "en": "Ar-Rahman",
+      "de": "Ar-Rahman",
+      "fr": "Ar-Rahman",
+      "es": "Ar-Rahman",
+      "ar": "الرحمن"
+    },
+    "meaning": {
+      "tr": "Sonsuz Merhamet Sahibi",
+      "en": "The Entirely Merciful",
+      "ar": "الذي وسعت رحمته كل شيء في الدنيا",
+      "de": "Der Allerbarmer",
+      "fr": "Le Tout-Miséricordieux",
+      "es": "El Clementísimo"
+    },
+    "explanation": {
+      "tr": "Dünyada inanan ve inanmayan bütün mahlukata ayrım yapmaksızın sayısız nimetler veren, sonsuz lütuf ve şefkat sahibi Yaratıcı.",
+      "en": "The One who wills and bestows infinite mercy upon all creation in this world without distinction.",
+      "ar": "صاحب الرحمة العامة الشاملة لجميع الخلائق في الدنيا بإيجادهم والرزق والإمداد.",
+      "de": "Derjenige, dessen Barmherzigkeit alle Geschöpfe im Diesseits umfasst.",
+      "fr": "Celui dont la miséricorde infinie embrasse toutes les créatures en ce bas monde.",
+      "es": "Aquel cuya infinita compasión abarca a todas las criaturas en esta vida."
+    },
+    "quranReference": "Fâtiha 1:1"
+  },
+  {
+    "id": 2,
+    "arabic": "الرَّحِيمُ",
+    "transliteration": {
+      "tr": "Er-Rahîm",
+      "en": "Ar-Rahim",
+      "de": "Ar-Rahim",
+      "fr": "Ar-Rahim",
+      "es": "Ar-Rahim",
+      "ar": "الرحيم"
+    },
+    "meaning": {
+      "tr": "Çok Merhametli, Ebedi Şefkat Sahibi",
+      "en": "The Especially Merciful",
+      "ar": "الذي يرحم عباده المؤمنين بالهداية والجنة",
+      "de": "Der Barmherzige",
+      "fr": "Le Très-Miséricordieux",
+      "es": "El Misericordioso"
+    },
+    "explanation": {
+      "tr": "Ahirette özellikle iman eden kullarına engin merhametini tecelli ettiren, onları ebedi cennet ve mağfiretiyle mükafatlandıran.",
+      "en": "The One who grants enduring, specialized mercy to the believers in the Hereafter.",
+      "ar": "المختص برحمته عباده المؤمنين في الآخرة بالمغفرة والرضوان ودار السلام.",
+      "de": "Derjenige, der den Gläubigen im Jenseits Seine besondere Barmherzigkeit schenkt.",
+      "fr": "Celui qui accorde une miséricorde toute particulière aux croyants dans l'Au-delà.",
+      "es": "Aquel que concede una misericordia singular a los creyentes en la vida eterna."
+    },
+    "quranReference": "Fâtiha 1:3"
+  },
+  {
+    "id": 3,
+    "arabic": "الْمَلِكُ",
+    "transliteration": {
+      "tr": "El-Melik",
+      "en": "Al-Malik",
+      "de": "Al-Malik",
+      "fr": "Al-Malik",
+      "es": "Al-Malik",
+      "ar": "الملك"
+    },
+    "meaning": {
+      "tr": "Mülkün Gerçek Sahibi ve Hükümdarı",
+      "en": "The Sovereign King",
+      "ar": "المتصرف في ملكه كيف يشاء بلا منازع",
+      "de": "Der Herrscher",
+      "fr": "Le Souverain",
+      "es": "El Soberano"
+    },
+    "explanation": {
+      "tr": "Bütün kâinatın mutlak sahibi ve hükümdarı; emri ve iradesi her şeyin üstünde olan egemen.",
+      "en": "The Absolute Sovereign and Master of the universe, possessing supreme authority.",
+      "ar": "المتصرف في مملكته وسلطانه كما يشاء، المالك الحقيقي لكل ما في الوجود.",
+      "de": "Der absolute Herrscher des Kosmos, dessen Macht und Autorität unbestritten sind.",
+      "fr": "Le Maître absolu de toute la création, régnant en souverain suprême.",
+      "es": "El Dueño indiscutible y Rey supremo de todo cuanto existe."
+    },
+    "quranReference": "Haşr 59:23"
+  },
+  {
+    "id": 4,
+    "arabic": "الْقُدُّوسُ",
+    "transliteration": {
+      "tr": "El-Kuddûs",
+      "en": "Al-Quddus",
+      "de": "Al-Quddus",
+      "fr": "Al-Quddous",
+      "es": "Al-Quddus",
+      "ar": "القدوس"
+    },
+    "meaning": {
+      "tr": "Her Kusurdan Münezzeh, Mukaddes",
+      "en": "The Most Sacred and Pure",
+      "ar": "المنزه عن كل نقص وعيب وشريك",
+      "de": "Der Heilige",
+      "fr": "Le Très-Saint",
+      "es": "El Santísimo"
+    },
+    "explanation": {
+      "tr": "Her türlü eksiklikten, kusurdan, leke ve acziyetten tamamen uzak, sonsuz kutsiyet sahibi.",
+      "en": "The Pure and Holy One, free from any deficiency, error, or resemblance to creation.",
+      "ar": "المنزه والمطهر من كل نقص يطرأ على المخلوقات، الكامل في ذاته وصفاته.",
+      "de": "Der vollkommen Reine, Erhabene über alle Unvollkommenheiten und Mängel.",
+      "fr": "L'Infiniment Pur et Saint, exempt de tout défaut ou limitation.",
+      "es": "El Inmaculado y Santísimo, trascendente a cualquier defecto."
+    },
+    "quranReference": "Haşr 59:23"
+  },
+  {
+    "id": 5,
+    "arabic": "السَّلَامُ",
+    "transliteration": {
+      "tr": "Es-Selâm",
+      "en": "As-Salam",
+      "de": "As-Salam",
+      "fr": "As-Salam",
+      "es": "As-Salam",
+      "ar": "السلام"
+    },
+    "meaning": {
+      "tr": "Esenlik ve Barış Veren",
+      "en": "The Source of Peace",
+      "ar": "السالم من كل عيب والواهب للأمن والسلام",
+      "de": "Der Friede",
+      "fr": "La Paix",
+      "es": "La Paz"
+    },
+    "explanation": {
+      "tr": "Kullarına selamet, güven ve huzur bağışlayan; her türlü tehlikeden esenliğe çıkaran.",
+      "en": "The Giver of peace, security, and tranquility to His creation.",
+      "ar": "الذي سلمت ذاته وصفاته من كل عيب، والواهب للأمان والطمأنينة.",
+      "de": "Die Quelle allen Friedens, der Seinen Dienern Ruhe und Geborgenheit schenkt.",
+      "fr": "La Source de paix et de salut qui accorde quiétude à Ses serviteurs.",
+      "es": "La Fuente de paz y serenidad que libra de temores a Sus siervos."
+    },
+    "quranReference": "Haşr 59:23"
+  },
+  {
+    "id": 6,
+    "arabic": "الْمُؤْمِنُ",
+    "transliteration": {
+      "tr": "El-Mü'min",
+      "en": "Al-Mu'min",
+      "de": "Al-Mu'min",
+      "fr": "Al-Mou'min",
+      "es": "Al-Mu'min",
+      "ar": "المؤمن"
+    },
+    "meaning": {
+      "tr": "Güven Veren, İman Bahşeden",
+      "en": "The Granter of Security",
+      "ar": "المصدق لرسله والواهب للأمان في القلوب",
+      "de": "Der Gewährer der Sicherheit",
+      "fr": "Le Sécurisant",
+      "es": "El Dispensador de Seguridad"
+    },
+    "explanation": {
+      "tr": "Kalplere iman ve emniyet duygusu yerleştiren, vaadinde sadık olan Yaratıcı.",
+      "en": "The Bestower of faith, trust, and security who confirms His promises.",
+      "ar": "الذي يصدق رسله ويهب الأمان والسكينة لعباده المؤمنين.",
+      "de": "Derjenige, der den Gläubigen Glauben und Geborgenheit schenkt.",
+      "fr": "Celui qui inspire la foi et dissipe la peur, accordant la paix intérieure.",
+      "es": "Aquel que otorga certeza y resguarda a los creyentes de todo temor."
+    },
+    "quranReference": "Haşr 59:23"
+  },
+  {
+    "id": 7,
+    "arabic": "الْمُهَيْمِنُ",
+    "transliteration": {
+      "tr": "El-Müheymin",
+      "en": "Al-Muhaymin",
+      "de": "Al-Muhaymin",
+      "fr": "Al-Mouhaymin",
+      "es": "Al-Muhaymin",
+      "ar": "المهيمن"
+    },
+    "meaning": {
+      "tr": "Her Şeyi Gözeten ve Koruyan",
+      "en": "The All-Preserving Guardian",
+      "ar": "المطلع على خفايا الأمور والشهيد الحافظ",
+      "de": "Der Beschützer und Hüter",
+      "fr": "Le Préservateur Suprême",
+      "es": "El Custodio Vigilante"
+    },
+    "explanation": {
+      "tr": "Bütün varlıkları gözetip kollayan, gizliyi de açığı da bilen koruyucu şahit.",
+      "en": "The Guardian over all, who observes and oversees every detail of His creation.",
+      "ar": "الشهيد على خلقه، الرقيب المطلع على سرائرهم وحافظ كل شيء.",
+      "de": "Der vollkommene Hüter, der alle Dinge überblickt und bewahrt.",
+      "fr": "Le Protecteur vigilant qui embrasse et sauvegarde chaque aspect de l'univers.",
+      "es": "El Testigo y Guardián supremo que vela por todas las criaturas."
+    },
+    "quranReference": "Haşr 59:23"
+  },
+  {
+    "id": 8,
+    "arabic": "الْعَزِيزُ",
+    "transliteration": {
+      "tr": "El-Azîz",
+      "en": "Al-Aziz",
+      "de": "Al-Aziz",
+      "fr": "Al-Aziz",
+      "es": "Al-Aziz",
+      "ar": "العزيز"
+    },
+    "meaning": {
+      "tr": "Üstün, Galip, Mağlup Edilemez",
+      "en": "The Almighty",
+      "ar": "القوي الغالب الذي لا يقهر ولا يغلب",
+      "de": "Der Allmächtige",
+      "fr": "Le Tout-Puissant",
+      "es": "El Todopoderoso"
+    },
+    "explanation": {
+      "tr": "İzzet ve kudret sahibi, asla mağlup edilemeyen, her şeye galip gelen mutlak güç.",
+      "en": "The Invincible, whose might cannot be resisted and who overcomes all things.",
+      "ar": "صاحب العزة والجبروت والقوة التي لا تقهر، فكل شيء خاضع لعظمته.",
+      "de": "Der Allmächtige und Unbesiegbare, dessen Willen nichts widerstehen kann.",
+      "fr": "Le Tout-Puissant dont la force triomphe de toute chose.",
+      "es": "El Insuperable e Invencible, dotado de un poder sublime."
+    },
+    "quranReference": "Haşr 59:23"
+  },
+  {
+    "id": 9,
+    "arabic": "الْجَبَّارُ",
+    "transliteration": {
+      "tr": "El-Cebbâr",
+      "en": "Al-Jabbar",
+      "de": "Al-Jabbar",
+      "fr": "Al-Jabbar",
+      "es": "Al-Jabbar",
+      "ar": "الجبار"
+    },
+    "meaning": {
+      "tr": "Kırılanları Onaran, Kudretiyle Hükmeden",
+      "en": "The Compeller, The Restorer",
+      "ar": "الذي يجبر كسر القلوب وينفذ مشيئته في خلقه",
+      "de": "Der Unterwerfer und Heiler",
+      "fr": "Le Réparateur Suprême",
+      "es": "El Restaurador"
+    },
+    "explanation": {
+      "tr": "Kırılan kalpleri ve durumları onaran; aynı zamanda iradesini her varlığa yürüten.",
+      "en": "The One who mends the broken hearts and executes His will with authority.",
+      "ar": "الذي يجبر الكسير ويقهر الجبابرة وتنفذ مشيئته في خلقه رغماً عن كل شيء.",
+      "de": "Der Vollstrecker Seines Willens, der die zerbrochenen Herzen heilt.",
+      "fr": "Celui qui répare les cœurs brisés et soumet toute la création à Sa volonté.",
+      "es": "Aquel que sana los corazones quebrantados y ante cuyo poder todo se somete."
+    },
+    "quranReference": "Haşr 59:23"
+  },
+  {
+    "id": 10,
+    "arabic": "الْمُتَكَبِّرُ",
+    "transliteration": {
+      "tr": "El-Mütekebbir",
+      "en": "Al-Mutakabbir",
+      "de": "Al-Mutakabbir",
+      "fr": "Al-Moutakabbir",
+      "es": "Al-Mutakabbir",
+      "ar": "المتكبر"
+    },
+    "meaning": {
+      "tr": "Büyüklükte Eşi Olmayan",
+      "en": "The Supreme, The Majestic",
+      "ar": "المتعالي عن صفات الخلق والمستحق للتعظيم وحده",
+      "de": "Der Erhabene",
+      "fr": "Le Majestueux Suprême",
+      "es": "El Majestuoso"
+    },
+    "explanation": {
+      "tr": "Büyüklük ve azamet ancak Kendisine layık olan mutlak yücelik sahibi.",
+      "en": "The Tremendously Supreme One, who rightfully possesses all majesty and pride.",
+      "ar": "المتعالي عن صفات المخلوقين، صاحب الكبرياء والعظمة الحقيقية وحده.",
+      "de": "Der einzig Wahre im Majestätischen, dem alle Größe gebührt.",
+      "fr": "Le Majestueux au-dessus de toute création, digne de toute louange.",
+      "es": "El Único digno de toda grandeza, infinitamente superior a lo creado."
+    },
+    "quranReference": "Haşr 59:23"
+  },
+  {
+    "id": 11,
+    "arabic": "الْخَالِقُ",
+    "transliteration": {
+      "tr": "El-Hâlık",
+      "en": "Al-Khaliq",
+      "de": "Al-Khaliq",
+      "fr": "Al-Khaliq",
+      "es": "Al-Jaliq",
+      "ar": "الخالق"
+    },
+    "meaning": {
+      "tr": "Yoktan Var Eden, Yaratan",
+      "en": "The Creator",
+      "ar": "الموجد للأشياء من العدم على غير مثال سابق",
+      "de": "Der Schöpfer",
+      "fr": "Le Créateur",
+      "es": "El Creador"
+    },
+    "explanation": {
+      "tr": "Her şeyi yokluktan varlık sahnesine çıkaran yegane Yaratıcı.",
+      "en": "The Creator who brings everything into existence from absolute nonexistence.",
+      "ar": "المبدع لكل ما في الوجود بعد أن لم يكن شيئاً مذكوراً.",
+      "de": "Der Schöpfer aller Dinge, der das Universum aus dem Nichts erschaffen hat.",
+      "fr": "Le Créateur qui donne l'existence à toute chose à partir du néant.",
+      "es": "El Creador que origina todo cuanto existe de la nada."
+    },
+    "quranReference": "Haşr 59:24"
+  },
+  {
+    "id": 12,
+    "arabic": "الْبَارِئُ",
+    "transliteration": {
+      "tr": "El-Bâri'",
+      "en": "Al-Bari'",
+      "de": "Al-Bari'",
+      "fr": "Al-Bari'",
+      "es": "Al-Bari'",
+      "ar": "البارئ"
+    },
+    "meaning": {
+      "tr": "Kusursuz ve Uyumlu Yaratan",
+      "en": "The Originator",
+      "ar": "الذي يبرز ما قدره إلى الوجود متناسباً بريئاً من التفاوت",
+      "de": "Der Erschaffer ohne Vorbild",
+      "fr": "Le Concepteur Parfait",
+      "es": "El Productor Inmaculado"
+    },
+    "explanation": {
+      "tr": "Maddeleri ve canlıları birbirine dengeli ve pürüzsüz bir uyumla yaratan.",
+      "en": "The Originator who creates forms with flawless harmony and proportion.",
+      "ar": "الذي يخلق الخلق سالماً من العيوب والتفاوت، متناسقاً في بديع صنعته.",
+      "de": "Der Vollender, der Seine Schöpfung harmonisch hervorbringt.",
+      "fr": "Le Concepteur qui donne naissance aux créatures avec harmonie.",
+      "es": "El Artífice sublime que modela la creación con perfecto equilibrio."
+    },
+    "quranReference": "Haşr 59:24"
+  },
+  {
+    "id": 13,
+    "arabic": "الْمُصَوِّرُ",
+    "transliteration": {
+      "tr": "El-Musavvir",
+      "en": "Al-Musawwir",
+      "de": "Al-Musawwir",
+      "fr": "Al-Mousawwir",
+      "es": "Al-Musawwir",
+      "ar": "المصور"
+    },
+    "meaning": {
+      "tr": "Her Şeye Şekil Veren",
+      "en": "The Fashioner of Forms",
+      "ar": "المعطي لكل مخلوق صورته وهيئته الخاصة الفريدة",
+      "de": "Der Bildner",
+      "fr": "Le Formateur",
+      "es": "El Diseñador"
+    },
+    "explanation": {
+      "tr": "Her varlığa kendine has, eşsiz ve hikmetli bir biçim ve suret veren sanatkâr.",
+      "en": "The Shaper who gives each created entity its distinct and beautiful appearance.",
+      "ar": "الذي صاغ المخلوقات وهيأها بأشكال وهيئات بديعة لا تتشابه.",
+      "de": "Der Gestalter, der jedem Lebewesen seine einzigartige Form verleiht.",
+      "fr": "Le Façonneur qui attribue à chaque être une forme singulière.",
+      "es": "El Diseñador supremo que concede a cada ser su figura y rasgos."
+    },
+    "quranReference": "Haşr 59:24"
+  },
+  {
+    "id": 14,
+    "arabic": "الْغَفَّارُ",
+    "transliteration": {
+      "tr": "El-Gaffâr",
+      "en": "Al-Ghaffar",
+      "de": "Al-Ghafar",
+      "fr": "Al-Ghaffar",
+      "es": "Al-Ghafar",
+      "ar": "الغفار"
+    },
+    "meaning": {
+      "tr": "Günahları Çokça Bağışlayan",
+      "en": "The All-Forgiving",
+      "ar": "الذي يستر الذنوب ويتجاوز عنها تكراراً برحمته",
+      "de": "Der Vergebende",
+      "fr": "Le Grand Pardonneur",
+      "es": "El Constante Perdonador"
+    },
+    "explanation": {
+      "tr": "Kullarının kusurlarını tekrar tekrar örtüp bağışlayan sonsuz af sahibi.",
+      "en": "The Continually Forgiving, who repeatedly covers the sins of His servants.",
+      "ar": "الستار للعيوب، الغافر للذنوب مهما عظمت وتكررت بالتوبة.",
+      "de": "Der immer wieder Vergebende, der Sünden gnädig verhüllt.",
+      "fr": "Le Grand Pardonneur qui absout inlassablement les fautes.",
+      "es": "El Eterno Perdonador que cubre las faltas y acepta el arrepentimiento."
+    },
+    "quranReference": "Tâhâ 20:82"
+  },
+  {
+    "id": 15,
+    "arabic": "الْقَهَّارُ",
+    "transliteration": {
+      "tr": "El-Kahhâr",
+      "en": "Al-Qahhar",
+      "de": "Al-Qahhar",
+      "fr": "Al-Qahhar",
+      "es": "Al-Qajar",
+      "ar": "القهار"
+    },
+    "meaning": {
+      "tr": "Mutlak Hükümran, Kahredici",
+      "en": "The Subduer",
+      "ar": "الغالب الذي خضعت له الرقاب وذلت له الصعاب",
+      "de": "Der Bezwingende",
+      "fr": "Le Dominateur Suprême",
+      "es": "El Conquistador Supremo"
+    },
+    "explanation": {
+      "tr": "Bütün varlıkları kudreti karşısında aciz bırakan, her şeye boyun eğdiren güç.",
+      "en": "The Supreme Subduer, before whose undeniable authority all creation bows.",
+      "ar": "الذي قهر الجبابرة وأذل المتكبرين وكل شيء خاضع لمشيئته.",
+      "de": "Der Allbezwinger, vor dessen Macht sich alle Geschöpfe beugen.",
+      "fr": "Le Dominateur absolu devant lequel tout s'incline humblement.",
+      "es": "El Subyugador irresistible ante cuyo poderío todo se somete."
+    },
+    "quranReference": "Zümer 39:4"
+  },
+  {
+    "id": 16,
+    "arabic": "الْوَهَّابُ",
+    "transliteration": {
+      "tr": "El-Vehhâb",
+      "en": "Al-Wahhab",
+      "de": "Al-Wahhab",
+      "fr": "Al-Wahhab",
+      "es": "Al-Wahhab",
+      "ar": "الوهاب"
+    },
+    "meaning": {
+      "tr": "Karşılıksız Çokça Veren",
+      "en": "The Supreme Bestower",
+      "ar": "الجواد بالعطايا الكثيرة بغير عوض ولا سؤال",
+      "de": "Der Schenkende",
+      "fr": "Le Donateur Prodigue",
+      "es": "El Donante Supremo"
+    },
+    "explanation": {
+      "tr": "Hiçbir karşılık beklemeden mahlukatına sayılamayacak kadar bol nimet bahşeden.",
+      "en": "The Giver of gifts, bestowing countless bounties without expecting return.",
+      "ar": "الذي يجود بالنعم الجليلة على عباده بلا مقابل ولا منة.",
+      "de": "Der unendlich Freigebige, der Seinen Geschöpfen unzählige Gaben schenkt.",
+      "fr": "Le Donateur magnifique qui dispense Ses bienfaits avec pure générosité.",
+      "es": "El Donador generosísimo que derrama bendiciones sin límite."
+    },
+    "quranReference": "Âl-i İmrân 3:8"
+  },
+  {
+    "id": 17,
+    "arabic": "الرَّزَّاقُ",
+    "transliteration": {
+      "tr": "Er-Rezzâk",
+      "en": "Ar-Razzaq",
+      "de": "Ar-Razzaq",
+      "fr": "Ar-Razzaq",
+      "es": "Ar-Razaq",
+      "ar": "الرزاق"
+    },
+    "meaning": {
+      "tr": "Rızık Veren, Doyuran",
+      "en": "The Total Provider",
+      "ar": "المتكفل بأقوات جميع الخلائق، الظاهرة والباطنة",
+      "de": "Der Versorger",
+      "fr": "Le Pourvoyeur",
+      "es": "El Sustentador"
+    },
+    "explanation": {
+      "tr": "Yarattığı her canlının maddi ve manevi rızkını veren, kimseyi mahrum bırakmayan.",
+      "en": "The Sustaining Provider, guaranteeing physical and spiritual sustenance for all.",
+      "ar": "المتكفل بأرزاق العباد وأقواتهم جميعاً على اختلاف أنواعهم.",
+      "de": "Der allbarmherzige Versorger, der für die Nahrung jedes Geschöpfes bürgt.",
+      "fr": "Le Pourvoyeur infini qui assure la subsistance de toute vie.",
+      "es": "El Gran Proveedor que abastece y nutre a todas las criaturas."
+    },
+    "quranReference": "Zâriyât 51:58"
+  },
+  {
+    "id": 18,
+    "arabic": "الْفَتَّاحُ",
+    "transliteration": {
+      "tr": "El-Fettâh",
+      "en": "Al-Fattah",
+      "de": "Al-Fattah",
+      "fr": "Al-Fattah",
+      "es": "Al-Fatah",
+      "ar": "الفتاح"
+    },
+    "meaning": {
+      "tr": "Hayır Kapılarını Açan, Hükmeden",
+      "en": "The Opener, The Supreme Judge",
+      "ar": "الذي يفتح أبواب الرحمة والرزق ويحكم بالحق",
+      "de": "Der Eröffner",
+      "fr": "L'Ouvreur Suprême",
+      "es": "El Vencedor de Dificultades"
+    },
+    "explanation": {
+      "tr": "Kullarına rahmet, ilim ve ferahlık kapılarını açan; hak ile adalet tesis eden.",
+      "en": "The Opener of doors of mercy and knowledge, judging with perfect equity.",
+      "ar": "الذي يفتح برحمته كل مغلق من أسباب الخير، ويقضي بالحق.",
+      "de": "Der Eröffner aller Tore des Guten und der Barmherzigkeit.",
+      "fr": "Celui qui ouvre grand les portes de la miséricorde et du secours.",
+      "es": "El que abre los caminos del bien y resuelve los asuntos con justicia."
+    },
+    "quranReference": "Sebe' 34:26"
+  },
+  {
+    "id": 19,
+    "arabic": "الْعَلِيمُ",
+    "transliteration": {
+      "tr": "El-Alîm",
+      "en": "Al-Alim",
+      "de": "Al-Alim",
+      "fr": "Al-Alim",
+      "es": "Al-Alim",
+      "ar": "العليم"
+    },
+    "meaning": {
+      "tr": "Her Şeyi Bilen, İlim Sahibi",
+      "en": "The All-Knowing",
+      "ar": "المحيط علمه بكل شيء، ظاهره وباطنه",
+      "de": "Der Allwissende",
+      "fr": "L'Omniscient",
+      "es": "El Omnisciente"
+    },
+    "explanation": {
+      "tr": "Geçmişi, geleceği, kalplerin en derin sırlarını eksiksiz bilen ilim kaynağı.",
+      "en": "The All-Knowing, whose knowledge encompasses everything visible and invisible.",
+      "ar": "الذي لا يعزب عن علمه مثقال ذرة، يعلم السر وأخفى.",
+      "de": "Der Allwissende, dessen Wissen das Offensichtliche und Verborgene umfasst.",
+      "fr": "L'Omniscient dont la science embrasse chaque pensée et chaque atome.",
+      "es": "El Sapientísimo que todo lo conoce al detalle, visible e invisible."
+    },
+    "quranReference": "Bakara 2:29"
+  },
+  {
+    "id": 20,
+    "arabic": "الْقَابِضُ",
+    "transliteration": {
+      "tr": "El-Kâbıd",
+      "en": "Al-Qabid",
+      "de": "Al-Qabid",
+      "fr": "Al-Qabid",
+      "es": "Al-Qabid",
+      "ar": "القابض"
+    },
+    "meaning": {
+      "tr": "Daraltan, Sıkıntı Veren",
+      "en": "The Withholder",
+      "ar": "الذي يضيق الرزق ويبسطه بحكمته، ويقبض الأرواح",
+      "de": "Der Zurückhaltende",
+      "fr": "Celui qui Resserre",
+      "es": "El que Restringe"
+    },
+    "explanation": {
+      "tr": "Hikmetiyle rızkı ve imkanları daraltarak imtihan eden, canları kabzeden.",
+      "en": "The Withholder who constricts sustenance or circumstances according to His wisdom.",
+      "ar": "الذي يقبض الأرزاق والأرواح بحكمته وعدله امتحاناً وتأديباً.",
+      "de": "Derjenige, der Gaben nach Seiner Weisheit zurückhält, um zu prüfen.",
+      "fr": "Celui qui restreint la subsistance selon Sa sagesse impénétrable.",
+      "es": "Aquel que restringe los recursos para probar la fe y templar el alma."
+    },
+    "quranReference": "Bakara 2:245"
+  },
+  {
+    "id": 21,
+    "arabic": "الْبَاسِطُ",
+    "transliteration": {
+      "tr": "El-Bâsıt",
+      "en": "Al-Basit",
+      "de": "Al-Basit",
+      "fr": "Al-Basit",
+      "es": "Al-Basit",
+      "ar": "الباسط"
+    },
+    "meaning": {
+      "tr": "Genişleten, Ferahlık Veren",
+      "en": "The Extender",
+      "ar": "الموسع للأرزاق والنفوس برحمته وجوده",
+      "de": "Der Ausbreitende",
+      "fr": "Celui qui Élargit",
+      "es": "El que Dilata"
+    },
+    "explanation": {
+      "tr": "Rızkı bollaştıran, daralan gönüllere inşirah ve sevinç bahşeden cömert.",
+      "en": "The Expander who enlarges sustenance, comforts troubled hearts, and bestows joy.",
+      "ar": "الذي يبسط الرزق لمن يشاء بفضله، ويشرح صدور أوليائه بالسكينة.",
+      "de": "Derjenige, der Gaben großzügig mehrt und den Herzen Weite schenkt.",
+      "fr": "Celui qui dilate la subsistance et apaise les cœurs avec générosité.",
+      "es": "Aquel que ensancha el sustento y conforta los corazones afligidos."
+    },
+    "quranReference": "Bakara 2:245"
+  },
+  {
+    "id": 22,
+    "arabic": "الْخَافِضُ",
+    "transliteration": {
+      "tr": "El-Hâfıd",
+      "en": "Al-Khafid",
+      "de": "Al-Khafid",
+      "fr": "Al-Khafid",
+      "es": "Al-Jafid",
+      "ar": "الخافض"
+    },
+    "meaning": {
+      "tr": "Dereceleri Alçaltan",
+      "en": "The Abaser",
+      "ar": "الذي يخفض الجبابرة والمتكبرين ويحط من قدر العصاة",
+      "de": "Der Erniedrigende",
+      "fr": "L'Abaisseur",
+      "es": "El que Humilla"
+    },
+    "explanation": {
+      "tr": "Kibirlenenleri, zalimleri ve haddi aşanları zelil kılan adalet sahibi.",
+      "en": "The One who humbles the arrogant and lowers the status of the unjust.",
+      "ar": "الذي يحط من شأن المتجبرين ويخفض أقدار الظالمين عقوبة لهم.",
+      "de": "Derjenige, der die Hochmütigen erniedrigt und Unrecht bestraft.",
+      "fr": "Celui qui rabaisse les orgueilleux et brise l'arrogance des tyrans.",
+      "es": "Aquel que humilla a los soberbios y doblega a los opresores."
+    },
+    "quranReference": "Vâkı'a 56:3"
+  },
+  {
+    "id": 23,
+    "arabic": "الرَّافِعُ",
+    "transliteration": {
+      "tr": "Er-Râfi'",
+      "en": "Ar-Rafi'",
+      "de": "Ar-Rafi'",
+      "fr": "Ar-Rafi'",
+      "es": "Ar-Rafi'",
+      "ar": "الرافع"
+    },
+    "meaning": {
+      "tr": "Makamları Yükselten",
+      "en": "The Exalter",
+      "ar": "الذي يرفع درجات أوليائه وأهل طاعته في الدارين",
+      "de": "Der Erhöhende",
+      "fr": "L'Éleveur",
+      "es": "El que Enaltece"
+    },
+    "explanation": {
+      "tr": "Müminleri, ilim ve takva sahiplerini hem dünyada hem ahirette yücelten.",
+      "en": "The Exalter who elevates the ranks of the faithful and grants them honor.",
+      "ar": "الذي يرفع شأن الصالحين بالعلم والإيمان ويعلي منازلهم في الجنة.",
+      "de": "Der Erhöhende, der die Rechtschaffenen mit Würde und Ehren krönt.",
+      "fr": "Celui qui élève le rang des croyants et des âmes pures.",
+      "es": "Aquel que ensalza en honor y virtud a los rectos de corazón."
+    },
+    "quranReference": "En'âm 6:83"
+  },
+  {
+    "id": 24,
+    "arabic": "الْمُعِزُّ",
+    "transliteration": {
+      "tr": "El-Mu'izz",
+      "en": "Al-Mu'izz",
+      "de": "Al-Mu'izz",
+      "fr": "Al-Mou'izz",
+      "es": "Al-Mu'iz",
+      "ar": "المعز"
+    },
+    "meaning": {
+      "tr": "İzzet ve Şeref Veren",
+      "en": "The Bestower of Honor",
+      "ar": "الواهب للعزة والتمكين لمن يشاء من عباده",
+      "de": "Der Ehre Verleihende",
+      "fr": "Celui qui Rend Puissant",
+      "es": "El que Honra"
+    },
+    "explanation": {
+      "tr": "Dilediği kuluna itibar, izzet, şeref ve manevi üstünlük bahşeden.",
+      "en": "The Bestower of true honor, strength, and dignity to whomsoever He wills.",
+      "ar": "الذي يلبس رداء العزة والكرامة من أطاعه، ويعلي قدر من توكل عليه.",
+      "de": "Derjenige, der Würde, Ansehen und wahre Ehre schenkt, wem Er will.",
+      "fr": "Celui qui confère la noblesse et l'honneur authentique à qui Il veut.",
+      "es": "El Dispensador del honor genuino que reviste de grandeza a los justos."
+    },
+    "quranReference": "Âl-i İmrân 3:26"
+  },
+  {
+    "id": 25,
+    "arabic": "الْمُذِلُّ",
+    "transliteration": {
+      "tr": "El-Müzill",
+      "en": "Al-Mudhill",
+      "de": "Al-Mudhill",
+      "fr": "Al-Moudhill",
+      "es": "Al-Mudhil",
+      "ar": "المذل"
+    },
+    "meaning": {
+      "tr": "Zelil Kılan, Alçaltan",
+      "en": "The Dishonorer",
+      "ar": "المذل لأهل المعاصي وأعداء الحق بحرمانه",
+      "de": "Der Demütigende",
+      "fr": "Celui qui Avilit",
+      "es": "El que Deshonra"
+    },
+    "explanation": {
+      "tr": "Hakka karşı direnenleri, kötülük önderlerini perişan ve zelil kılan.",
+      "en": "The One who deprives the arrogant wrongdoers of honor, leaving them in shame.",
+      "ar": "الذي يسلب العزة عمن استكبر عن الحق فيصيرون أذلاء خاسئين.",
+      "de": "Derjenige, der die Feinde der Wahrheit der Ehre beraubt und erniedrigt.",
+      "fr": "Celui qui dépouille les rebelles de tout prestige et les humilie.",
+      "es": "Aquel que despoja de gloria a quienes obran la iniquidad."
+    },
+    "quranReference": "Âl-i İmrân 3:26"
+  },
+  {
+    "id": 26,
+    "arabic": "السَّمِيعُ",
+    "transliteration": {
+      "tr": "Es-Semî'",
+      "en": "As-Sami'",
+      "de": "As-Sami'",
+      "fr": "As-Sami'",
+      "es": "As-Sami'",
+      "ar": "السميع"
+    },
+    "meaning": {
+      "tr": "Her Şeyi İşiten",
+      "en": "The All-Hearing",
+      "ar": "الذي يسمع كل صوت خفي أو جلي بلا حد",
+      "de": "Der Allhörende",
+      "fr": "L'Audient Parfait",
+      "es": "El Omnioyente"
+    },
+    "explanation": {
+      "tr": "Fısıltıları da, duaları da, kainattaki her sesi vasıtasız ve anında işiten.",
+      "en": "The All-Hearing, perceiving every sound, whisper, and secret prayer.",
+      "ar": "الذي وسع سمعه جميع الأصوات، يسمع دعاء الضارعين ونداء الخافتين.",
+      "de": "Der Allhörende, der jeden Laut und jedes Flüstern vollkommen vernimmt.",
+      "fr": "L'Audient Suprême qui perçoit sans intermédiaire chaque murmure.",
+      "es": "El que todo lo oye a la perfección, desde el clamor hasta el susurro."
+    },
+    "quranReference": "Bakara 2:127"
+  },
+  {
+    "id": 27,
+    "arabic": "الْبَصِيرُ",
+    "transliteration": {
+      "tr": "El-Basîr",
+      "en": "Al-Basir",
+      "de": "Al-Basir",
+      "fr": "Al-Basir",
+      "es": "Al-Basir",
+      "ar": "البصير"
+    },
+    "meaning": {
+      "tr": "Her Şeyi Gören",
+      "en": "The All-Seeing",
+      "ar": "المحيط ببصره بكل مرئي في ظلمات البر والبحر",
+      "de": "Der Allsehende",
+      "fr": "Le Clairvoyant Parfait",
+      "es": "El Vidente Absoluto"
+    },
+    "explanation": {
+      "tr": "Açık veya gizli her şeyi, zifiri karanlıktaki en küçük hareketi gören.",
+      "en": "The All-Seeing One, whose sight penetrates all veils and darknesses.",
+      "ar": "الذي يرى كل موجود مهما دق أو خفي في السماوات والأرض.",
+      "de": "Der Allsehende, dessen Blick alle Schleier und Dunkelheiten durchdringt.",
+      "fr": "Le Clairvoyant infini devant le regard duquel rien ne demeure caché.",
+      "es": "El que todo lo ve con infinita agudeza, descubriendo todo secreto."
+    },
+    "quranReference": "Şûrâ 42:11"
+  },
+  {
+    "id": 28,
+    "arabic": "الْحَكَمُ",
+    "transliteration": {
+      "tr": "El-Hakem",
+      "en": "Al-Hakam",
+      "de": "Al-Hakam",
+      "fr": "Al-Hakam",
+      "es": "Al-Hakam",
+      "ar": "الحكم"
+    },
+    "meaning": {
+      "tr": "Mutlak Hâkim, Adil Hakem",
+      "en": "The Supreme Judge",
+      "ar": "الحاكم العادل الذي لا يرد قضاؤه ولا يجور",
+      "de": "Der Richter",
+      "fr": "L'Arbitre Suprême",
+      "es": "El Juez Supremo"
+    },
+    "explanation": {
+      "tr": "Hüküm yetkisi yalnızca Kendisine ait olan, hak ile batılı ayıran adil Yargıç.",
+      "en": "The Impartial Judge whose decrees are indisputable and eternally just.",
+      "ar": "صاحب الحكم المطلق، الذي يقضي بين عباده بالعدل التام.",
+      "de": "Der vollkommene Richter, dessen Urteil stets wahrhaftig und bindend ist.",
+      "fr": "Le Juge suprême dont les décrets sont irrévocables et justes.",
+      "es": "El Juez soberano que dictamina con infalible justicia y equidad."
+    },
+    "quranReference": "En'âm 6:114"
+  },
+  {
+    "id": 29,
+    "arabic": "الْعَدْلُ",
+    "transliteration": {
+      "tr": "El-Adl",
+      "en": "Al-Adl",
+      "de": "Al-Adl",
+      "fr": "Al-Adl",
+      "es": "Al-Adl",
+      "ar": "العدل"
+    },
+    "meaning": {
+      "tr": "Mutlak Adalet Sahibi",
+      "en": "The Utterly Just",
+      "ar": "المنزه عن الجور والظلم في أفعاله وتقديره",
+      "de": "Der Gerechte",
+      "fr": "Le Juste Absolu",
+      "es": "El Justiciero"
+    },
+    "explanation": {
+      "tr": "Her işinde adaletle muamele eden, kimseye kıl payı haksızlık yapmayan.",
+      "en": "The Embodiment of Perfect Justice, acting with pure equity towards all.",
+      "ar": "الذي اتصف بالعدل المطلق، فلا يظلم أحداً مثقال ذرة.",
+      "de": "Der absolut Gerechte, der keinem Geschöpf auch nur im Geringsten unrecht tut.",
+      "fr": "La Justice incarnée qui n'opprime personne et rétribue selon l'équité.",
+      "es": "El Justo por excelencia, incapaz de la menor opresión en Sus designios."
+    },
+    "quranReference": "En'âm 6:115"
+  },
+  {
+    "id": 30,
+    "arabic": "اللَّطِيفُ",
+    "transliteration": {
+      "tr": "El-Latîf",
+      "en": "Al-Latif",
+      "de": "Al-Latif",
+      "fr": "Al-Latif",
+      "es": "Al-Latif",
+      "ar": "اللطيف"
+    },
+    "meaning": {
+      "tr": "Lütufkâr, İncelikleri Bilen",
+      "en": "The Subtly Kind",
+      "ar": "البر بعباده بلطف لا تدركه الأفهام والعليم بالدقائق",
+      "de": "Der Feinfühlige und Gütige",
+      "fr": "Le Subtil et Bienveillant",
+      "es": "El Sutilmente Bondadoso"
+    },
+    "explanation": {
+      "tr": "Kullarına sezilmez yollardan lütuflar ulaştıran, en ince ayrıntılara vakıf olan.",
+      "en": "The Subtly Kind One, bestowing favors through delicate, hidden ways.",
+      "ar": "الذي يوصل الإحسان إلى عباده بطرق خفية، العليم بغوامض الأمور.",
+      "de": "Der unendlich Gütige, der Seinen Dienern auf ungeahnten Wegen hilft.",
+      "fr": "Le Bienveillant Subtil qui dispense Ses grâces par des voies insoupçonnées.",
+      "es": "El Sutil en bondad, que prodiga gracias imprevistas a Sus siervos."
+    },
+    "quranReference": "Mülk 67:14"
+  },
+  {
+    "id": 31,
+    "arabic": "الْخَبِيرُ",
+    "transliteration": {
+      "tr": "El-Habîr",
+      "en": "Al-Khabir",
+      "de": "Al-Khabir",
+      "fr": "Al-Khabir",
+      "es": "Al-Jabir",
+      "ar": "الخبير"
+    },
+    "meaning": {
+      "tr": "Her Şeyin İçyüzünü Bilen",
+      "en": "The All-Aware",
+      "ar": "العالم ببواطن الأشياء كظواهرها، المحيط بالسرائر",
+      "de": "Der Kundige",
+      "fr": "Le Parfaitement Informé",
+      "es": "El Omnisciente de lo Oculto"
+    },
+    "explanation": {
+      "tr": "Varlıkların iç dünyasından, gizli niyetlerden ve hakikatlerden haberdar olan.",
+      "en": "The All-Aware, thoroughly cognizant of innermost secrets and hidden motives.",
+      "ar": "الذي لا يخفى عليه شيء، المطلع على مكنونات الصدور وخفايا النفوس.",
+      "de": "Der allzeit Unterrichtete, dem die verborgensten Motive vertraut sind.",
+      "fr": "Le Parfaitement Informé qui sonde les tréfonds secrets des âmes.",
+      "es": "El Informado de todo detalle que conoce la raíz oculta de los sucesos."
+    },
+    "quranReference": "Mülk 67:14"
+  },
+  {
+    "id": 32,
+    "arabic": "الْحَلِيمُ",
+    "transliteration": {
+      "tr": "El-Halîm",
+      "en": "Al-Halim",
+      "de": "Al-Halim",
+      "fr": "Al-Halim",
+      "es": "Al-Halim",
+      "ar": "الحليم"
+    },
+    "meaning": {
+      "tr": "Cezada Acele Etmeyen",
+      "en": "The Most Forbearing",
+      "ar": "الذي لا يعاجل بالعقوبة بل يمهل عباده ليتوبوا",
+      "de": "Der Nachsichtige",
+      "fr": "Le Magnanime",
+      "es": "El Paciente Tolerante"
+    },
+    "explanation": {
+      "tr": "Kullarının isyanına rağmen hemen cezalandırmayan, tövbe için mühlet veren.",
+      "en": "The Most Clement and Forbearing, who grants ample time for repentance.",
+      "ar": "الصبور الذي لا يعاجل العاصين بالعقوبة تأكيداً لرحمته وسعة حلمه.",
+      "de": "Der Geduldige, der Sünder nicht übereilt straft, sondern Barmherzigkeit übt.",
+      "fr": "L'Infiniment Indulgent qui accorde le temps du repentir avec patience.",
+      "es": "El Benigno y Forbearante que posterga el castigo dando paso al perdón."
+    },
+    "quranReference": "Bakara 2:225"
+  },
+  {
+    "id": 33,
+    "arabic": "الْعَظِيمُ",
+    "transliteration": {
+      "tr": "El-Azîm",
+      "en": "Al-Azim",
+      "de": "Al-Azim",
+      "fr": "Al-Azim",
+      "es": "Al-Azim",
+      "ar": "العظيم"
+    },
+    "meaning": {
+      "tr": "Pek Yüce, Azamet Sahibi",
+      "en": "The Magnificent",
+      "ar": "صاحب المجد والكبرياء الذي لا يحيط بعظمته عقل",
+      "de": "Der Erhabene und Gewaltige",
+      "fr": "Le Magnifique",
+      "es": "El Inconmensurable"
+    },
+    "explanation": {
+      "tr": "Büyüklüğünün sınırı olmayan, akılların kavramaktan aciz kaldığı sonsuz yücelik.",
+      "en": "The Magnificent One, whose grandeur exceeds all human intellect and limit.",
+      "ar": "الذي جاوزت عظمته حدود العقول، صاحب الفخر والجلال الذي لا يضاهى.",
+      "de": "Der Majestätische, vor dessen unendlicher Größe jede irdische Macht verblasst.",
+      "fr": "Le Magnifique Suprême dont la grandeur infinie commande la vénération.",
+      "es": "El Magnífico e Inmenso cuya infinita majestad colma el universo."
+    },
+    "quranReference": "Bakara 2:255"
+  },
+  {
+    "id": 34,
+    "arabic": "الْغَفُورُ",
+    "transliteration": {
+      "tr": "El-Gafûr",
+      "en": "Al-Ghafur",
+      "de": "Al-Ghafur",
+      "fr": "Al-Ghafour",
+      "es": "Al-Ghafur",
+      "ar": "الغفور"
+    },
+    "meaning": {
+      "tr": "Affı ve Bağışlaması Bol",
+      "en": "The Exceedingly Forgiving",
+      "ar": "الذي يكثر منه الصفح والستر لذنوب عباده",
+      "de": "Der Allverzeihende",
+      "fr": "Le Tout-Pardonnant",
+      "es": "El Sumamente Perdonador"
+    },
+    "explanation": {
+      "tr": "Kullarının günahlarını silen, ayıplarını örterek azaptan koruyan bağışlayıcı.",
+      "en": "The Exceedingly Forgiving One, who pardons offenses and protects from guilt.",
+      "ar": "عظيم المغفرة وواسع الصفح، الذي يتجاوز عن خطايا عباده التائبين.",
+      "de": "Der Allverzeihende, dessen Gnade die Sünden der Reumütigen tilgt.",
+      "fr": "Le Grand Indulgent qui efface les fautes et protège du tourment.",
+      "es": "El Magnánimo en el perdón que borra las faltas con inmensa piedad."
+    },
+    "quranReference": "Bakara 2:173"
+  },
+  {
+    "id": 35,
+    "arabic": "الشَّكُورُ",
+    "transliteration": {
+      "tr": "Eş-Şekûr",
+      "en": "Ash-Shakur",
+      "de": "Ash-Shakur",
+      "fr": "Ach-Chakour",
+      "es": "Ash-Shakur",
+      "ar": "الشكور"
+    },
+    "meaning": {
+      "tr": "Az Ameli Çokça Mükafatlandıran",
+      "en": "The Most Grateful",
+      "ar": "الذي يجزي على العمل القليل بالثواب الجزيل",
+      "de": "Der Dankbare",
+      "fr": "Le Très-Reconnaissant",
+      "es": "El Agradecido Recompensador"
+    },
+    "explanation": {
+      "tr": "Kullarının samimi küçük amellerine dahi kat kat büyük mükafatlar lütfeden.",
+      "en": "The Appreciative One, rewarding the smallest sincere deeds with boundless bounty.",
+      "ar": "الذي يتقبل من عباده القليل من العمل ويجازيهم بالكثير من الأجر.",
+      "de": "Der Dankbare, der die geringste gute Tat mit reichem Lohn segnet.",
+      "fr": "Le Très-Reconnaissant qui magnifie la plus modeste action vertueuse.",
+      "es": "El Agradecido que premia abundantemente las buenas obras sinceras."
+    },
+    "quranReference": "Fâtır 35:30"
+  },
+  {
+    "id": 36,
+    "arabic": "الْعَلِيُّ",
+    "transliteration": {
+      "tr": "El-Aliyy",
+      "en": "Al-Aliyy",
+      "de": "Al-Aliyy",
+      "fr": "Al-Aliyy",
+      "es": "Al-Ali",
+      "ar": "العلي"
+    },
+    "meaning": {
+      "tr": "Pek Yüce, En Yüksek",
+      "en": "The Most High",
+      "ar": "المتعالي في ذاته وصفاته عن كل نقص وشريك",
+      "de": "Der Allerhöchste",
+      "fr": "Le Très-Haut",
+      "es": "El Altísimo"
+    },
+    "explanation": {
+      "tr": "Kudreti, ilmi ve şerefiyle her şeyin fevkinde olan, en yüksek makam sahibi.",
+      "en": "The Most High, transcendent above all creation in rank, power, and essence.",
+      "ar": "الذي علا بذاته وصفاته على جميع خلقه، فليس فوقه شيء.",
+      "de": "Der Allerhöchste, dessen Würde und Rang über allen Geschöpfen stehen.",
+      "fr": "Le Très-Haut dont l'essence et les attributs surpassent toute chose.",
+      "es": "El Altísimo, infinitamente supremo en rango, poder y soberanía."
+    },
+    "quranReference": "Bakara 2:255"
+  },
+  {
+    "id": 37,
+    "arabic": "الْكَبِيرُ",
+    "transliteration": {
+      "tr": "El-Kebîr",
+      "en": "Al-Kabir",
+      "de": "Al-Kabir",
+      "fr": "Al-Kabir",
+      "es": "Al-Kabir",
+      "ar": "الكبير"
+    },
+    "meaning": {
+      "tr": "Büyüklüğü Sınırsız Olan",
+      "en": "The Most Great",
+      "ar": "صاحب الكبرياء الذي كل شيء دونه صغير حقير",
+      "de": "Der Allgroße",
+      "fr": "L'Infiniment Grand",
+      "es": "El Infinitamente Grande"
+    },
+    "explanation": {
+      "tr": "Varlığının ve azametinin büyüklüğüne hiçbir ölçü ve sınır biçilemeyen yüce zat.",
+      "en": "The Most Great, whose greatness has no limits and dwarfs all created things.",
+      "ar": "العظيم في كبريائه وجلاله، الذي تصغر كل عظمة أمام سلطانه.",
+      "de": "Der unendlich Große, vor dessen Majestät alle Dinge klein sind.",
+      "fr": "L'Infiniment Grand devant la majesté duquel toute création s'efface.",
+      "es": "El Grandioso ante cuya inmensidad todo lo creado empequeñece."
+    },
+    "quranReference": "Hac 22:62"
+  },
+  {
+    "id": 38,
+    "arabic": "الْحَفِيظُ",
+    "transliteration": {
+      "tr": "El-Hafîz",
+      "en": "Al-Hafiz",
+      "de": "Al-Hafiz",
+      "fr": "Al-Hafidh",
+      "es": "Al-Hafiz",
+      "ar": "الحفيظ"
+    },
+    "meaning": {
+      "tr": "Her Şeyi Koruyan ve Saklayan",
+      "en": "The All-Preserving",
+      "ar": "الذي يحفظ الموجودات من التلف والضياع ويحصي أعمال العباد",
+      "de": "Der Bewahrer",
+      "fr": "Le Gardien Suprême",
+      "es": "El Preservador"
+    },
+    "explanation": {
+      "tr": "Kâinattaki intizamı, mahlukatın varlığını ve kulların amellerini koruyup gözeten.",
+      "en": "The Preserver who maintains order in the universe and guards deeds faithfully.",
+      "ar": "الحافظ لما خلقه من الزوال، المحصي لأعمال العباد ليجازيهم عليها.",
+      "de": "Der unermüdliche Bewahrer, der alle Dinge vor Verfall schützt und Taten zählt.",
+      "fr": "Le Gardien suprême qui protège Sa création et préserve chaque œuvre.",
+      "es": "El Custodio que vela por el orden cósmico y registra fielmente toda acción."
+    },
+    "quranReference": "Hûd 11:57"
+  },
+  {
+    "id": 39,
+    "arabic": "الْمُقِيتُ",
+    "transliteration": {
+      "tr": "El-Mukît",
+      "en": "Al-Muqit",
+      "de": "Al-Muqit",
+      "fr": "Al-Mouqit",
+      "es": "Al-Muqit",
+      "ar": "المقيت"
+    },
+    "meaning": {
+      "tr": "Rızıkları Yaratan ve Canları Besleyen",
+      "en": "The Sustainer, The Nourisher",
+      "ar": "المتكفل بقوت الأبدان والقلوب والشهيد المقتدر",
+      "de": "Der Erhalter und Ernährer",
+      "fr": "Le Nourricier",
+      "es": "El Mantenedor Nutricio"
+    },
+    "explanation": {
+      "tr": "Her canlıya yetecek kadar gıda ve manevi kuvvet veren, onları ayakta tutan.",
+      "en": "The Sustainer who creates nourishment and dispatches vitality to all beings.",
+      "ar": "الذي خلق الأقوات وقسمها بين الخلائق، والقدير الحافظ لأرزاقهم.",
+      "de": "Der Ernährer, der jedem Lebewesen die nötige Nahrung und Lebenskraft spendet.",
+      "fr": "Le Nourricier qui pourvoit à la vigueur du corps et à la vie du cœur.",
+      "es": "El Nutridor que suministra el sustento y vigoriza a todo ser vivo."
+    },
+    "quranReference": "Nisâ 4:85"
+  },
+  {
+    "id": 40,
+    "arabic": "الْحَسِيبُ",
+    "transliteration": {
+      "tr": "El-Hasîb",
+      "en": "Al-Hasib",
+      "de": "Al-Hasib",
+      "fr": "Al-Hasib",
+      "es": "Al-Hasib",
+      "ar": "الحسيب"
+    },
+    "meaning": {
+      "tr": "Hesaba Çeken, Her Şeye Yeten",
+      "en": "The Reckoner, The Sufficient",
+      "ar": "الكافي لعباده في كل أمورهم، والمحاسب لهم على أعمالهم",
+      "de": "Der Abrechner und Genügende",
+      "fr": "Le Comptable Suprême",
+      "es": "El Ajustador de Cuentas"
+    },
+    "explanation": {
+      "tr": "Kullarına her hususta yeten; kıyamet günü herkesi eksiksiz hesaba çekecek olan.",
+      "en": "The Reckoner who satisfies all needs and holds everyone to exact account.",
+      "ar": "الذي يكفي عبده المتوكل عليه، ومجازي الخلائق بأعمالهم بدقة تامة.",
+      "de": "Der allgenügende Beschützer und gerechte Richter, der über jede Tat abrechnet.",
+      "fr": "Celui qui suffit à Ses serviteurs et demandera des comptes avec exactitude.",
+      "es": "El Suficiente para Quien en Él confía y Justo ajustador de toda cuenta."
+    },
+    "quranReference": "Nisâ 4:6"
+  },
+  {
+    "id": 41,
+    "arabic": "الْجَلِيلُ",
+    "transliteration": {
+      "tr": "El-Celîl",
+      "en": "Al-Jalil",
+      "de": "Al-Jalil",
+      "fr": "Al-Djalil",
+      "es": "Al-Yalil",
+      "ar": "الجليل"
+    },
+    "meaning": {
+      "tr": "Ululuk ve Heybet Sahibi",
+      "en": "The Majestic",
+      "ar": "المتصف بصفات الجلال والكبرياء والهيبة",
+      "de": "Der Majestätische",
+      "fr": "Le Majestueux",
+      "es": "El Sublime en Majestad"
+    },
+    "explanation": {
+      "tr": "Sonsuz heybet, kemal ve ululuk sahibi, kalplerde derin saygı uyandıran.",
+      "en": "The Sublime and Majestic One, possessing ultimate dignity and awe-inspiring presence.",
+      "ar": "الموصوف بنعوت الجلال والعظمة التي تملأ القلوب هيبة وتوقيراً.",
+      "de": "Der Majestätische, dessen Herrlichkeit und Erhabenheit ehrfürchtig stimmt.",
+      "fr": "Le Majestueux dont la splendeur et la grandeur inspirent une vénération profonde.",
+      "es": "El Sublime cuya grandeza infunde reverencia y sobrecoge los corazones."
+    },
+    "quranReference": "Rahmân 55:27"
+  },
+  {
+    "id": 42,
+    "arabic": "الْكَرِيمُ",
+    "transliteration": {
+      "tr": "El-Kerîm",
+      "en": "Al-Karim",
+      "de": "Al-Karim",
+      "fr": "Al-Karim",
+      "es": "Al-Karim",
+      "ar": "الكريم"
+    },
+    "meaning": {
+      "tr": "Sonsuz Cömert, İkramı Bol",
+      "en": "The Most Generous",
+      "ar": "الكثير الخير والفضل الذي يعطي بلا مقابل ويصفح عن الذنب",
+      "de": "Der Großzügige",
+      "fr": "Le Très-Généreux",
+      "es": "El Más Generoso"
+    },
+    "explanation": {
+      "tr": "Lütfu ve ikramı tükenmeyen, hak etmeyene dahi cömertçe veren ulu lütufkâr.",
+      "en": "The Most Bountiful and Generous, who bestows favors freely and forgives nobly.",
+      "ar": "الذي لا ينفد عطاؤه، يعطي من سأله ومن لم يسأله، ويعفو بكرمه عن الزلات.",
+      "de": "Der unendlich Großmütige, der Seinen Geschöpfen unaufhörlich Gutes erweist.",
+      "fr": "Le Très-Généreux qui comble de Ses dons et pardonne avec noblesse.",
+      "es": "El Generosísimo que prodiga bienes inagotables y perdona con magnanimidad."
+    },
+    "quranReference": "Neml 27:40"
+  },
+  {
+    "id": 43,
+    "arabic": "الرَّقِيبُ",
+    "transliteration": {
+      "tr": "Er-Rakîb",
+      "en": "Ar-Raqib",
+      "de": "Ar-Raqib",
+      "fr": "Ar-Raqib",
+      "es": "Ar-Raqib",
+      "ar": "الرقيب"
+    },
+    "meaning": {
+      "tr": "Her An Gözeten, Denetleyen",
+      "en": "The Watchful Observer",
+      "ar": "المطلع على ما أكنته الصدور والشهيد الحاضر الذي لا يغفل",
+      "de": "Der Wachsame",
+      "fr": "Le Vigilant",
+      "es": "El Vigilante Supremo"
+    },
+    "explanation": {
+      "tr": "Hiçbir an gaflette olmayan, her varlığı ve davranışı kesintisiz gözetleyen.",
+      "en": "The Ever-Watchful Guardian, from whose gaze not a single movement escapes.",
+      "ar": "الذي يراقب أحوال خلقه ولا يغفل عنهم طرفة عين، شاهداً على كل سر.",
+      "de": "Der stets Wachsame, dessen aufmerksamer Blick nichts im Kosmos entgeht.",
+      "fr": "Le Vigilant absolu dont l'attention constante englobe toute la création.",
+      "es": "El Observador atento que no se distrae y vela por todo cuanto acontece."
+    },
+    "quranReference": "Mâide 5:117"
+  },
+  {
+    "id": 44,
+    "arabic": "الْمُجِيبُ",
+    "transliteration": {
+      "tr": "El-Mücîb",
+      "en": "Al-Mujib",
+      "de": "Al-Mujib",
+      "fr": "Al-Moudjib",
+      "es": "Al-Muyib",
+      "ar": "المجيب"
+    },
+    "meaning": {
+      "tr": "Duaları Kabul Eden",
+      "en": "The Responsive",
+      "ar": "الذي يقابل الدعاء بالإجابة والنداء بالعطاء",
+      "de": "Der Erhöhrer",
+      "fr": "Celui qui Exauce",
+      "es": "El que Responde las Súplicas"
+    },
+    "explanation": {
+      "tr": "Kendisine samimiyetle yalvaran kullarının dualarına icabet eden ve yardım eden.",
+      "en": "The Responsive One, who answers the prayers and supplications of the sincere.",
+      "ar": "الذي يجيب دعوة الداع إذا دعاه، ويكشف الضر عن المضطرين بفضله.",
+      "de": "Der Erhörer der Gebete, der die Bitten der Notleidenden barmherzig erhört.",
+      "fr": "Celui qui exauce les prières et répond à l'appel de l'affligé avec bienveillance.",
+      "es": "El que responde al clamor del necesitado y acoge las plegarias sinceras."
+    },
+    "quranReference": "Hûd 11:61"
+  },
+  {
+    "id": 45,
+    "arabic": "الْوَاسِعُ",
+    "transliteration": {
+      "tr": "El-Vâsi'",
+      "en": "Al-Wasi'",
+      "de": "Al-Wasi'",
+      "fr": "Al-Wasi'",
+      "es": "Al-Wasi'",
+      "ar": "الواسع"
+    },
+    "meaning": {
+      "tr": "Kuşatıcılığı Sonsuz Olan",
+      "en": "The All-Encompassing",
+      "ar": "الذي وسع علمه ورحمته ورزقه ومغفرته كل مخلوق",
+      "de": "Der Allumfassende",
+      "fr": "L'Immense",
+      "es": "El Vasto en Bondad"
+    },
+    "explanation": {
+      "tr": "İlmi, rahmeti, kudreti ve lütfu bütün alemleri kuşatan, sınırsız zenginlik sahibi.",
+      "en": "The All-Embracing, whose capacity, knowledge, and mercy encompass all existence.",
+      "ar": "الذي وسعت رحمته وعظمته وسلطانه كل كائن، الغني الذي لا تنفد خزائنه.",
+      "de": "Der Allumfassende, dessen Güte, Barmherzigkeit und Wissen unermesslich weit sind.",
+      "fr": "L'Immense dont la miséricorde, la science et les bienfaits embrassent l'univers.",
+      "es": "El Inmenso cuya misericordia, ciencia y provisiones cubren toda la creación."
+    },
+    "quranReference": "Bakara 2:115"
+  },
+  {
+    "id": 46,
+    "arabic": "الْحَكِيمُ",
+    "transliteration": {
+      "tr": "El-Hakîm",
+      "en": "Al-Hakim",
+      "de": "Al-Hakim",
+      "fr": "Al-Hakim",
+      "es": "Al-Hakim",
+      "ar": "الحكيم"
+    },
+    "meaning": {
+      "tr": "Hüküm ve Hikmet Sahibi",
+      "en": "The All-Wise",
+      "ar": "المصيب في أفعاله وتدبيره، الذي يضع كل شيء في موضعه",
+      "de": "Der Allweise",
+      "fr": "Le Sage Suprême",
+      "es": "El Sabio por Excelencia"
+    },
+    "explanation": {
+      "tr": "Yarattığı her şeyde, verdiği her emirde sayısız hikmet ve derin gaye bulunan.",
+      "en": "The All-Wise One, whose every act, law, and decree is filled with divine wisdom.",
+      "ar": "المتقن لصنعته، الذي يفعل ما ينبغي على الوجه الأكمل بحكمته البالغة.",
+      "de": "Der Allweise, dessen Handlungen und Gesetze von vollendeter Weisheit zeugen.",
+      "fr": "Le Sage suprême dont les décrets et les œuvres révèlent une perfection sans faille.",
+      "es": "El Sabio supremo que dispone todas las cosas con propósito y perfección."
+    },
+    "quranReference": "Bakara 2:129"
+  },
+  {
+    "id": 47,
+    "arabic": "الْوَدُودُ",
+    "transliteration": {
+      "tr": "El-Vedûd",
+      "en": "Al-Wadud",
+      "de": "Al-Wadud",
+      "fr": "Al-Wadoud",
+      "es": "Al-Wadud",
+      "ar": "الودود"
+    },
+    "meaning": {
+      "tr": "Çok Seven ve Sevilen",
+      "en": "The Most Loving",
+      "ar": "المحب لعباده الصالحين والمحبوب في قلوب أوليائه",
+      "de": "Der Liebende",
+      "fr": "Le Tout-Aimant",
+      "es": "El Afectuoso Lleno de Amor"
+    },
+    "explanation": {
+      "tr": "Kullarını çok seven, sevilmeye en layık olan ve kalplere muhabbet tohumu eken.",
+      "en": "The Most Loving One, who cherishes His righteous servants and is beloved by them.",
+      "ar": "الذي يحب أولياءه الصالحين ويفيض عليهم بوداده ولطفه، وهو أحب إليهم من كل شيء.",
+      "de": "Der unendlich Liebende, der Seine Diener mit Zuneigung und Barmherzigkeit umgibt.",
+      "fr": "Le Tout-Aimant qui chérit Ses créatures dévouées et inspire l'amour divin.",
+      "es": "El Amoroso y Afectuoso que ama a Sus siervos devotos y despierta devoción."
+    },
+    "quranReference": "Burûc 85:14"
+  },
+  {
+    "id": 48,
+    "arabic": "الْمَجِيدُ",
+    "transliteration": {
+      "tr": "El-Mecîd",
+      "en": "Al-Majid",
+      "de": "Al-Majid",
+      "fr": "Al-Madjid",
+      "es": "Al-Mayid",
+      "ar": "المجيد"
+    },
+    "meaning": {
+      "tr": "Şanı Yüce ve Şerefli",
+      "en": "The All-Glorious",
+      "ar": "الكريم المفضال، صاحب الشرف والكمال والثناء الحسن",
+      "de": "Der Ruhmreiche",
+      "fr": "Le Glorieux",
+      "es": "El Glorioso"
+    },
+    "explanation": {
+      "tr": "Şanı, şerefi ve azameti pek yüce olan; sonsuz ihsan ve kerem sahibi Yaratıcı.",
+      "en": "The All-Glorious, possessing boundless nobility, magnificence, and honor.",
+      "ar": "المتصف بصفات المجد والكرم وعلو الشأن الذي يستوجب دوام الحمد والثناء.",
+      "de": "Der Ruhmreiche, dem aller Preis und alle Herrlichkeit gebühren.",
+      "fr": "Le Glorieux, digne de toute louange et revêtu d'un honneur sublime.",
+      "es": "El Glorioso, dotado de inmensa nobleza, esplendor y magnificencia."
+    },
+    "quranReference": "Hûd 11:73"
+  },
+  {
+    "id": 49,
+    "arabic": "الْبَاعِثُ",
+    "transliteration": {
+      "tr": "El-Bâis",
+      "en": "Al-Ba'ith",
+      "de": "Al-Ba'ith",
+      "fr": "Al-Ba'ith",
+      "es": "Al-Baiz",
+      "ar": "الباعث"
+    },
+    "meaning": {
+      "tr": "Ölüleri Dirilten, Peygamber Gönderen",
+      "en": "The Resurrector",
+      "ar": "المحيي للموتى يوم الحساب، والباعث للرسل لهداية الخلق",
+      "de": "Der Auferwecker",
+      "fr": "Le Résurrecteur",
+      "es": "El Resucitador"
+    },
+    "explanation": {
+      "tr": "Kıyamet günü bütün canlıları yeniden dirilten, insanlığa peygamberler gönderen.",
+      "en": "The Resurrector who brings the dead back to life for judgment and sent prophets.",
+      "ar": "الذي يبعث الخلائق بعد الموت للحساب والجزاء، باعث الأنبياء بالهدى.",
+      "de": "Der Auferwecker, der alle Toten zum Jüngsten Gericht wieder zum Leben erweckt.",
+      "fr": "Celui qui ressuscite les morts au Jour du Jugement et envoie les prophètes.",
+      "es": "El Resucitador que devuelve la vida a los muertos y envía mensajeros."
+    },
+    "quranReference": "Hac 22:7"
+  },
+  {
+    "id": 50,
+    "arabic": "الشَّهِيدُ",
+    "transliteration": {
+      "tr": "Eş-Şehîd",
+      "en": "Ash-Shahid",
+      "de": "Ash-Shahid",
+      "fr": "Ach-Chahid",
+      "es": "Ash-Shahid",
+      "ar": "الشهيد"
+    },
+    "meaning": {
+      "tr": "Her Şeye Şahit Olan",
+      "en": "The Universal Witness",
+      "ar": "المطلع على كل شيء، الحاضر الذي لا يغيب عنه أمر",
+      "de": "Der Zeuge",
+      "fr": "Le Témoin Universel",
+      "es": "El Testigo Presencial"
+    },
+    "explanation": {
+      "tr": "Bütün varlıkların amellerine, gizli ve açık tüm hallerine bizzat şahit olan.",
+      "en": "The Ultimate Witness, present everywhere and observing all occurrences directly.",
+      "ar": "الذي لا يغيب عن علمه ومشاهدته شيء، الشاهد على أعمال عباده يوم المعاد.",
+      "de": "Der allgegenwärtige Zeuge, vor dessen Augen sich jedes Geschehen abspielt.",
+      "fr": "Le Témoin universel qui observe et certifie chaque acte et chaque parole.",
+      "es": "El Testigo presencial ante Quien nada se oculta y todo queda atestiguado."
+    },
+    "quranReference": "Nisâ 4:79"
+  },
+  {
+    "id": 51,
+    "arabic": "الْحَقُّ",
+    "transliteration": {
+      "tr": "El-Hakk",
+      "en": "Al-Haqq",
+      "de": "Al-Haqq",
+      "fr": "Al-Haqq",
+      "es": "Al-Haqq",
+      "ar": "الحق"
+    },
+    "meaning": {
+      "tr": "Varlığı Değişmeyen, Gerçek",
+      "en": "The Ultimate Truth",
+      "ar": "الموجود حقاً الثابت الذي لا يزول ولا يتغير",
+      "de": "Die Wahrheit",
+      "fr": "La Vérité Absolue",
+      "es": "La Verdad Absoluta"
+    },
+    "explanation": {
+      "tr": "Varlığı mutlak ve daimi olan, hakikatin ta kendisi olan yegane sabit Gerçek.",
+      "en": "The Ultimate Reality and Absolute Truth, whose existence is eternal and unshakeable.",
+      "ar": "الثابت الوجود يقيناً، الكامل في صفاته، وكل ما يأتي منه فهو حق وعدل.",
+      "de": "Die ewige Wahrheit, deren Existenz unveränderlich und absolut gewiss ist.",
+      "fr": "La Vérité suprême dont l'existence est éternelle et incontestable.",
+      "es": "La Verdad inmutable y eterna, fuente de toda certidumbre y realidad."
+    },
+    "quranReference": "Hac 22:6"
+  },
+  {
+    "id": 52,
+    "arabic": "الْوَكِيلُ",
+    "transliteration": {
+      "tr": "El-Vekîl",
+      "en": "Al-Wakil",
+      "de": "Al-Wakil",
+      "fr": "Al-Wakil",
+      "es": "Al-Wakil",
+      "ar": "الوكيل"
+    },
+    "meaning": {
+      "tr": "Güvenilen Dayanak, İşleri Yöneten",
+      "en": "The Dependable Trustee",
+      "ar": "المتفرد بتدبير أمور عباده الكافي لمن توكل عليه",
+      "de": "Der Sachwalter",
+      "fr": "Le Garant de Confiance",
+      "es": "El Protector Confiable"
+    },
+    "explanation": {
+      "tr": "Kendisine güvenip dayananların işlerini en güzel şekilde yöneten ve koruyan.",
+      "en": "The Supreme Trustee and Guardian, who flawlessly manages the affairs of those who rely on Him.",
+      "ar": "الكفيل بأرزاق العباد، الكافي لمن فوض أمره إليه وتوكل عليه بصدق.",
+      "de": "Der zuverlässige Sachwalter, der für alle sorgt, die Ihm ihr Vertrauen schenken.",
+      "fr": "Le Protecteur de confiance qui prend en charge les affaires de ceux qui s'en remettent à Lui.",
+      "es": "El Garante fidelísimo que administra los asuntos de quienes se encomiendan a Él."
+    },
+    "quranReference": "Âl-i İmrân 3:173"
+  },
+  {
+    "id": 53,
+    "arabic": "الْقَوِيُّ",
+    "transliteration": {
+      "tr": "El-Kaviyy",
+      "en": "Al-Qawiyy",
+      "de": "Al-Qawiyy",
+      "fr": "Al-Qawiyy",
+      "es": "Al-Qawiyy",
+      "ar": "القوي"
+    },
+    "meaning": {
+      "tr": "Sonsuz Güç Sahibi",
+      "en": "The All-Strong",
+      "ar": "صاحب القدرة التامة التي لا يعتريها عجز ولا وهن",
+      "de": "Der Allstarke",
+      "fr": "Le Fort Absolu",
+      "es": "El Fuerte Invencible"
+    },
+    "explanation": {
+      "tr": "Kudretine sınır olmayan, hiçbir iş Kendisine zor gelmeyen mutlak kuvvet.",
+      "en": "The All-Strong One, possessing unlimited, indefatigable power over all things.",
+      "ar": "الذي لا تنفد قدرته ولا تلحقه مشقة، القادر على كل ممتنع في حكم العقول.",
+      "de": "Der Allstarke, dessen unendliche Kraft niemals schwach oder müde wird.",
+      "fr": "Le Fort Suprême dont la puissance absolue ne connaît aucune défaillance.",
+      "es": "El Fuerte inquebrantable cuyo inmenso poder jamás mengua."
+    },
+    "quranReference": "Hac 22:40"
+  },
+  {
+    "id": 54,
+    "arabic": "الْمَتِينُ",
+    "transliteration": {
+      "tr": "El-Metîn",
+      "en": "Al-Matin",
+      "de": "Al-Matin",
+      "fr": "Al-Matin",
+      "es": "Al-Matin",
+      "ar": "المتين"
+    },
+    "meaning": {
+      "tr": "Kudreti Sarsılmaz, Pek Sağlam",
+      "en": "The Steadfast, The Forceful",
+      "ar": "الشديد في قوته وقدرته، الذي لا يتزعزع سلطانه",
+      "de": "Der Feste",
+      "fr": "L'Inébranlable",
+      "es": "El Firme Inalterable"
+    },
+    "explanation": {
+      "tr": "Kuvvetinde en küçük bir sarsıntı, zaaf veya gevşeme bulunmayan sapasağlam kudret.",
+      "en": "The Firm and Unyielding One, whose strength remains perpetually unshakable.",
+      "ar": "البالغ أقصى القوة، الذي لا يمسه تعب في أفعاله ولا تنقص قدرته بمرور الزمان.",
+      "de": "Der Standhafte und Unbeugsame, dessen Kraft von unerschütterlicher Festigkeit ist.",
+      "fr": "L'Inébranlable dont la fermeté souveraine ne faiblit jamais.",
+      "es": "El Firme e inconmovible cuya fuerza permanece inalterable por siempre."
+    },
+    "quranReference": "Zâriyât 51:58"
+  },
+  {
+    "id": 55,
+    "arabic": "الْوَلِيُّ",
+    "transliteration": {
+      "tr": "El-Veliyy",
+      "en": "Al-Waliyy",
+      "de": "Al-Waliyy",
+      "fr": "Al-Waliyy",
+      "es": "Al-Waliyy",
+      "ar": "الولي"
+    },
+    "meaning": {
+      "tr": "Dost ve Yardımcı",
+      "en": "The Protecting Friend",
+      "ar": "المتولي لأمور خلقه بالنصرة والمعونة لأوليائه الصالحين",
+      "de": "Der Beistand und Schutzherr",
+      "fr": "L'Ami Protecteur",
+      "es": "El Amigo Protector"
+    },
+    "explanation": {
+      "tr": "Müminlerin gerçek dostu, onları karanlıklardan aydınlığa çıkaran yardımcısı.",
+      "en": "The Protecting Friend and Ally, guiding His believers from darkness into light.",
+      "ar": "ناصر المؤمنين ومحبهم، الذي يتولى رعاية شؤونهم وتثبيت قلوبهم على الهدى.",
+      "de": "Der liebende Schutzherr, der Seine Gläubigen aus der Finsternis ins Licht führt.",
+      "fr": "L'Ami intime et Protecteur qui soutient Ses fidèles et les illumine.",
+      "es": "El Amigo leal y Auxiliador que guía a los creyentes hacia la luz."
+    },
+    "quranReference": "Bakara 2:257"
+  },
+  {
+    "id": 56,
+    "arabic": "الْحَمِيدُ",
+    "transliteration": {
+      "tr": "El-Hamîd",
+      "en": "Al-Hamid",
+      "de": "Al-Hamid",
+      "fr": "Al-Hamid",
+      "es": "Al-Hamid",
+      "ar": "الحميد"
+    },
+    "meaning": {
+      "tr": "Övgüye Layık Olan",
+      "en": "The Praiseworthy",
+      "ar": "المستحق لجميع المحامد والثناء لكمال صفاته",
+      "de": "Der Preiswürdige",
+      "fr": "Le Digne de Louange",
+      "es": "El Digno de Toda Alabanza"
+    },
+    "explanation": {
+      "tr": "Bütün varlıkların lisanıyla övülen, her türlü şükür ve senaya layık olan.",
+      "en": "The Ever-Praiseworthy, deserving of all gratitude and veneration in all states.",
+      "ar": "المحمود في ذاته وصفاته وأفعاله، المستحق للحمد المطلق في السراء والضراء.",
+      "de": "Der Allgepriesene, dem allein wahrer Dank und grenzenlose Lobpreisung gebühren.",
+      "fr": "Le Digne de toute louange, célébré pour la perfection de Ses attributs.",
+      "es": "El Loable que merece eterna gratitud y alabanza por Su infinita bondad."
+    },
+    "quranReference": "Nisâ 4:131"
+  },
+  {
+    "id": 57,
+    "arabic": "الْمُحْصِي",
+    "transliteration": {
+      "tr": "El-Muhsî",
+      "en": "Al-Muhsi",
+      "de": "Al-Muhsi",
+      "fr": "Al-Mouhsi",
+      "es": "Al-Muhsi",
+      "ar": "المحصي"
+    },
+    "meaning": {
+      "tr": "Her Şeyin Sayısını Bilen",
+      "en": "The Appraiser, The Counter",
+      "ar": "الذي أحاط علمه بعدد كل كائن ومخلوق لا يفوته شيء",
+      "de": "Der alles Erfassende",
+      "fr": "Le Dénombreur",
+      "es": "El Computador Minucioso"
+    },
+    "explanation": {
+      "tr": "Kainattaki her zerrenin, yaprağın ve nefesin sayısını eksiksiz bilen ve kaydeden.",
+      "en": "The Accounter, who enumerates and knows the precise quantity of all created things.",
+      "ar": "الذي لا يغيب عن علمه عدد حبات الرمال وقطرات الأمطار وحركات الأنفاس.",
+      "de": "Derjenige, der die genaue Zahl aller Dinge und Taten im Kosmos kennt.",
+      "fr": "Celui qui recense et dénombre chaque particule et chaque souffle avec précision.",
+      "es": "El que contabiliza con exactitud infinita cada partícula y latido en el cosmos."
+    },
+    "quranReference": "Meryem 19:94"
+  },
+  {
+    "id": 58,
+    "arabic": "الْمُبْدِئُ",
+    "transliteration": {
+      "tr": "El-Mübdi'",
+      "en": "Al-Mubdi'",
+      "de": "Al-Mubdi'",
+      "fr": "Al-Moubdi'",
+      "es": "Al-Mubdi'",
+      "ar": "المبدئ"
+    },
+    "meaning": {
+      "tr": "Varlıkları İlk Kez Yaratan",
+      "en": "The Originator",
+      "ar": "المبتدئ لخلق الأشياء من العدم بلا سابق نموذج",
+      "de": "Der Urheber",
+      "fr": "L'Initiateur Suprême",
+      "es": "El Iniciador Primordial"
+    },
+    "explanation": {
+      "tr": "Mahlukatı maddesiz ve örneksiz olarak ilk defa yaratan büyük başlangıç sahibi.",
+      "en": "The Originator who initiates creation without any prior model or pre-existing material.",
+      "ar": "الذي أنشأ الخلق وابتدأه بقدرته وحكمته من غير مثال يحتذى.",
+      "de": "Der Urheber, der die Schöpfung zum ersten Mal ins Dasein gerufen hat.",
+      "fr": "L'Initiateur qui suscite la création pour la toute première fois.",
+      "es": "El Iniciador original que dio comienzo a la creación sin precedente alguno."
+    },
+    "quranReference": "Bürûc 85:13"
+  },
+  {
+    "id": 59,
+    "arabic": "الْمُعِيدُ",
+    "transliteration": {
+      "tr": "El-Mu'îd",
+      "en": "Al-Mu'id",
+      "de": "Al-Mu'id",
+      "fr": "Al-Mou'id",
+      "es": "Al-Mu'id",
+      "ar": "المعيد"
+    },
+    "meaning": {
+      "tr": "Ölümden Sonra Yeniden Yaratan",
+      "en": "The Restorer",
+      "ar": "الذي يعيد الخلق بعد الموت والفناء كهيئتهم الأولى",
+      "de": "Der Wiederhersteller",
+      "fr": "Le Restaurateur",
+      "es": "El Restaurador de Vida"
+    },
+    "explanation": {
+      "tr": "Yok olan veya ölen varlıkları kıyamette tekrar eski haline döndüren kudret.",
+      "en": "The Restorer who re-creates life after death, restoring existence for the Judgment.",
+      "ar": "الذي يرجع الخلائق بعد الفناء أحياء كما بدأهم أول مرة للبعث والجزاء.",
+      "de": "Der Wiederhersteller, der alles Vergangene nach dem Tode neu erstehen lässt.",
+      "fr": "Le Restaurateur qui ressuscite la création après son anéantissement.",
+      "es": "El Restaurador supremo que recreará a los seres tras la muerte."
+    },
+    "quranReference": "Bürûc 85:13"
+  },
+  {
+    "id": 60,
+    "arabic": "الْمُحْيِي",
+    "transliteration": {
+      "tr": "El-Muhyî",
+      "en": "Al-Muhyi",
+      "de": "Al-Muhyi",
+      "fr": "Al-Mouhyi",
+      "es": "Al-Muhyi",
+      "ar": "المحيي"
+    },
+    "meaning": {
+      "tr": "Hayat Veren, Dirilten",
+      "en": "The Giver of Life",
+      "ar": "الذي يبث الروح في الأجساد ويهب الحياة لكل حي",
+      "de": "Der Lebenspender",
+      "fr": "Le Vivificateur",
+      "es": "El Dador de Vida"
+    },
+    "explanation": {
+      "tr": "Cansız maddelere can veren, ölü kalpleri imanla dirilten hayat kaynağı.",
+      "en": "The Giver of Life, who breathes souls into bodies and revives dormant hearts.",
+      "ar": "خالق الحياة في النطف والأجساد، ومحيي القلوب الميتة بنور الإيمان والقرآن.",
+      "de": "Der Lebensspender, der toter Materie Geist einhaucht und Herzen belebt.",
+      "fr": "Le Donateur de vie qui insuffle l'âme aux corps et anime les cœurs.",
+      "es": "El Vivificador que concede la chispa de la vida e ilumina los corazones."
+    },
+    "quranReference": "Rûm 30:50"
+  },
+  {
+    "id": 61,
+    "arabic": "الْمُمِيتُ",
+    "transliteration": {
+      "tr": "El-Mümît",
+      "en": "Al-Mumit",
+      "de": "Al-Mumit",
+      "fr": "Al-Moumît",
+      "es": "Al-Mumit",
+      "ar": "المميت"
+    },
+    "meaning": {
+      "tr": "Ölümü Tattıran",
+      "en": "The Destroyer of Life",
+      "ar": "المقدر للموت والوفاة على كل نفس في أجلها المحتوم",
+      "de": "Der Tötende",
+      "fr": "Le Donateur de Mort",
+      "es": "El que Decretó la Muerte"
+    },
+    "explanation": {
+      "tr": "Her canlının ecelini tayin eden, vakti gelince canı alarak dünyadan ayıran.",
+      "en": "The Bringer of Death, who decrees the appointed time for all living souls.",
+      "ar": "الذي ينزع الأرواح عند انقضاء الآجال بمشيئته، فلا مفر من قدره.",
+      "de": "Derjenige, der das Sterben bestimmt und Seelen zur festgesetzten Zeit abberuft.",
+      "fr": "Celui qui décrète la fin de l'existence terrestre et rappelle les âmes.",
+      "es": "Aquel que determina el término de la vida terrena según Su decreto."
+    },
+    "quranReference": "Âl-i İmrân 3:156"
+  },
+  {
+    "id": 62,
+    "arabic": "الْحَيُّ",
+    "transliteration": {
+      "tr": "El-Hayy",
+      "en": "Al-Hayy",
+      "de": "Al-Hayy",
+      "fr": "Al-Hayy",
+      "es": "Al-Hayy",
+      "ar": "الحي"
+    },
+    "meaning": {
+      "tr": "Daima Diri, Sonsuz Canlı",
+      "en": "The Ever-Living",
+      "ar": "الدائم الباقي الذي لا يموت ولا يطرأ عليه فناء",
+      "de": "Der Ewiglebende",
+      "fr": "Le Vivant Éternel",
+      "es": "El Viviente Eterno"
+    },
+    "explanation": {
+      "tr": "Hayatı ezeli ve ebedi olan, asla ölmeyen, bütün hayatların kaynağı.",
+      "en": "The Ever-Living One, whose existence is absolute, beginningless, and endless.",
+      "ar": "صاحب الحياة الكاملة الأزلية الأبدية التي لا أول لها ولا زوال، لا يموت أبداً.",
+      "de": "Der Ewiglebende, dessen vollkommenes Leben keinen Anfang und kein Ende kennt.",
+      "fr": "Le Vivant par essence, immortel et source inépuisable de toute vie.",
+      "es": "El Viviente absoluto que jamás muere, sostén de toda existencia."
+    },
+    "quranReference": "Bakara 2:255"
+  },
+  {
+    "id": 63,
+    "arabic": "الْقَيُّومُ",
+    "transliteration": {
+      "tr": "El-Kayyûm",
+      "en": "Al-Qayyum",
+      "de": "Al-Qayyum",
+      "fr": "Al-Qayyoum",
+      "es": "Al-Qayyum",
+      "ar": "القيوم"
+    },
+    "meaning": {
+      "tr": "Her Şeyi Ayakta Tutan",
+      "en": "The Self-Subsisting Sustainer",
+      "ar": "القائم بنفسه الذي يقيم كل ما في الوجود ولا يغفل",
+      "de": "Der Beständige Erhalter",
+      "fr": "Le Subsistant Par Lui-Même",
+      "es": "El Sustentador Autónomo"
+    },
+    "explanation": {
+      "tr": "Varlığı Kendinden olan, hiçbir şeye muhtaç olmadan bütün kâinatı ayakta tutan.",
+      "en": "The Self-Subsisting Sustainer, upon whom all creation depends for every moment.",
+      "ar": "القائم بذاته الغني عن كل مخلوق، والمقيم لجميع الكائنات بحفظه وتدبيره.",
+      "de": "Der aus sich selbst Bestehende, der alle Welten durch Seine Fürsorge erhält.",
+      "fr": "L'Immuable qui subsiste par Lui-même et maintient l'ordre de tout l'univers.",
+      "es": "El Autosuficiente que sostiene sin descanso la existencia del cosmos."
+    },
+    "quranReference": "Bakara 2:255"
+  },
+  {
+    "id": 64,
+    "arabic": "الْوَاجِدُ",
+    "transliteration": {
+      "tr": "El-Vâcid",
+      "en": "Al-Wajid",
+      "de": "Al-Wajid",
+      "fr": "Al-Wadid",
+      "es": "Al-Wajid",
+      "ar": "الواجد"
+    },
+    "meaning": {
+      "tr": "İstediğini İstediği An Bulan",
+      "en": "The Perceiver, The Finder",
+      "ar": "الذي لا يعوزه شيء ولا يفوته مطلوب، غني عن كل فقر",
+      "de": "Der Finder",
+      "fr": "L'Opulent",
+      "es": "El que Todo lo Halla"
+    },
+    "explanation": {
+      "tr": "Hiçbir şey Kendisinden gizlenemeyen, her murat ettiğini dilediği an bulan zengin.",
+      "en": "The Finder, from whom nothing is ever hidden, lacking nothing in His richness.",
+      "ar": "الذي يجد كل ما يطلبه، لا يعجزه شيء في الوجود، الغني بالكمال.",
+      "de": "Der Finder, dem nichts entgeht und der alles Verlangte augenblicklich besitzt.",
+      "fr": "Celui à qui rien n'échappe et qui trouve tout ce qu'Il désire sans effort.",
+      "es": "El que todo lo encuentra a Su voluntad, sin carencia ni limitación."
+    },
+    "quranReference": "Duhâ 93:6-8"
+  },
+  {
+    "id": 65,
+    "arabic": "الْمَاجِدُ",
+    "transliteration": {
+      "tr": "El-Mâcid",
+      "en": "Al-Majid",
+      "de": "Al-Majid",
+      "fr": "Al-Madjid",
+      "es": "Al-Mayid",
+      "ar": "الماجد"
+    },
+    "meaning": {
+      "tr": "Kadir ve Şanı Yüce",
+      "en": "The Noble, The Splendid",
+      "ar": "العظيم الواسع الكرم والفضل والكمال",
+      "de": "Der Herrliche",
+      "fr": "L'Illustre",
+      "es": "El Noble Esplendoroso"
+    },
+    "explanation": {
+      "tr": "Cömertliği, şanı ve lütufları sonsuz olan, sonsuz şeref sahibi.",
+      "en": "The Illustrious One, characterized by immense benevolence and grandeur.",
+      "ar": "الذي له المجد والشرف والعطاء الواسع والكمال التام في كل وصف.",
+      "de": "Der Ruhmreiche und Großmütige, reich an Güte und ewiger Vollkommenheit.",
+      "fr": "L'Illustre dont la magnificence et la générosité dépassent toute mesure.",
+      "es": "El Ilustre colmado de inmensa nobleza y derramador de bienes sin fin."
+    },
+    "quranReference": "Hûd 11:73"
+  },
+  {
+    "id": 66,
+    "arabic": "الْوَاحِدُ",
+    "transliteration": {
+      "tr": "El-Vâhid",
+      "en": "Al-Wahid",
+      "de": "Al-Wahid",
+      "fr": "Al-Wahid",
+      "es": "Al-Wahid",
+      "ar": "الواحد"
+    },
+    "meaning": {
+      "tr": "Tek ve Eşsiz Olan",
+      "en": "The Unique, The One",
+      "ar": "المتفرد الذي لا شريك له في ذاته ولا في صفاته",
+      "de": "Der Eine",
+      "fr": "L'Unique",
+      "es": "El Uno Único"
+    },
+    "explanation": {
+      "tr": "Zatında, sıfatlarında ve fiillerinde asla ortağı ve benzeri olmayan tek İlah.",
+      "en": "The Unique One, who has no partner, associate, or equal in His divinity.",
+      "ar": "المنفرد بالألوهية والربوبية، الذي لا شبيه له ولا ند في كماله.",
+      "de": "Der Einzige, der keinen Teilhaber, Gehilfen oder Gleichen hat.",
+      "fr": "L'Unique qui n'a point d'associé ni d'égal dans Sa souveraineté.",
+      "es": "El Único e indivisible que no comparte Su divinidad con nada ni nadie."
+    },
+    "quranReference": "Bakara 2:163"
+  },
+  {
+    "id": 67,
+    "arabic": "الْأَحَدُ",
+    "transliteration": {
+      "tr": "El-Ehad",
+      "en": "Al-Ahad",
+      "de": "Al-Ahad",
+      "fr": "Al-Ahad",
+      "es": "Al-Ahad",
+      "ar": "الأحد"
+    },
+    "meaning": {
+      "tr": "Bölünmez Tek",
+      "en": "The Indivisible One",
+      "ar": "الواحد الأحد الذي لم يلد ولم يولد ولم يكن له كفؤاً أحد",
+      "de": "Der absolut Eine",
+      "fr": "L'Un Absolu",
+      "es": "El Absolutamente Uno"
+    },
+    "explanation": {
+      "tr": "Bölünmesi, parçalanması ve dengi bulunması imkansız olan mutlak tek.",
+      "en": "The Singular, Indivisible One, who begets not nor was He begotten.",
+      "ar": "الذي تفرد بصفات الأحدية، لا يتجزأ ولا يتعدد، الصمد الذي لا نظير له.",
+      "de": "Der absolut Eine und Unteilbare, der weder zeugt noch gezeugt wurde.",
+      "fr": "L'Un Absolu et Inaltérable qui n'engendre point et n'a point été engendré.",
+      "es": "El Uno absoluto e indivisible, incomparable y sin semejante."
+    },
+    "quranReference": "İhlâs 112:1"
+  },
+  {
+    "id": 68,
+    "arabic": "الصَّمَدُ",
+    "transliteration": {
+      "tr": "Es-Samed",
+      "en": "As-Samad",
+      "de": "As-Samad",
+      "fr": "As-Samad",
+      "es": "As-Samad",
+      "ar": "الصمد"
+    },
+    "meaning": {
+      "tr": "Herkesin Muhtaç Olduğu, Kendisi Muhtaç Olmayan",
+      "en": "The Eternal Refuge",
+      "ar": "السيد المقصود في الحوائج الذي يحتاجه كل شيء ولا يحتاج إلى شيء",
+      "de": "Der Unabhängige Zufluchtsort",
+      "fr": "Le Seul Recours Absolu",
+      "es": "El Refugio Eterno"
+    },
+    "explanation": {
+      "tr": "Bütün varlıkların her ihtiyacında yöneldiği, Kendisi hiçbir şeye muhtaç olmayan.",
+      "en": "The Eternal Refuge upon whom all creation relies, while He needs nothing.",
+      "ar": "المقصود في قضاء الحوائج، الغني عن العالمين وكل من سواه مفتقر إليه.",
+      "de": "Der unvergängliche Zufluchtsort, den alle Wesen in ihrer Not anflehen.",
+      "fr": "Le Refuge éternel vers qui convergent tous les besoins de l'univers.",
+      "es": "El Sustento y Refugio eterno al que acuden todas las necesidades de la creación."
+    },
+    "quranReference": "İhlâs 112:2"
+  },
+  {
+    "id": 69,
+    "arabic": "الْقَادِرُ",
+    "transliteration": {
+      "tr": "El-Kâdir",
+      "en": "Al-Qadir",
+      "de": "Al-Qadir",
+      "fr": "Al-Qadir",
+      "es": "Al-Qadir",
+      "ar": "القادر"
+    },
+    "meaning": {
+      "tr": "Her Şeye Gücü Yeten",
+      "en": "The All-Capable",
+      "ar": "صاحب القدرة المطلقة الذي إذا أراد شيئاً قال له كن فيكون",
+      "de": "Der Allvermögende",
+      "fr": "Le Tout-Capable",
+      "es": "El Capaz de Todo"
+    },
+    "explanation": {
+      "tr": "Dilediği her şeyi dilediği gibi yapmaya gücü yeten sonsuz kudret sahibi.",
+      "en": "The All-Capable One, who possesses supreme capacity to accomplish whatever He wills.",
+      "ar": "الذي لا يعجزه شيء في السماوات ولا في الأرض، يغير ما يشاء بمشيئته.",
+      "de": "Der Allvermögende, der alles nach Seinem Willen ins Dasein ruft.",
+      "fr": "Le Tout-Capable qui réalise souverainement tout ce qu'Il décrète.",
+      "es": "El Omnipotente que ejecuta Su voluntad con infalible eficacia."
+    },
+    "quranReference": "En'âm 6:65"
+  },
+  {
+    "id": 70,
+    "arabic": "الْمُقْتَدِرُ",
+    "transliteration": {
+      "tr": "El-Muktedir",
+      "en": "Al-Muqtadir",
+      "de": "Al-Muqtadir",
+      "fr": "Al-Mouqtadir",
+      "es": "Al-Muqtadir",
+      "ar": "المقتدر"
+    },
+    "meaning": {
+      "tr": "Kudretini Eksiksiz Kullanan",
+      "en": "The Omnipotent Determiner",
+      "ar": "البالغ كمال الاقتدار الذي لا يقف في وجه مشيئته عائق",
+      "de": "Der allmächtige Herrscher",
+      "fr": "Le Puissant Déterminateur",
+      "es": "El Omnipotente Determinante"
+    },
+    "explanation": {
+      "tr": "Kuvveti üzerinde hiçbir kuvvet bulunmayan, takdirini tam uygulayan mutlak güç.",
+      "en": "The Determiner of all power, whose immense might dominates every law of nature.",
+      "ar": "الذي أظهر كمال قدرته في تصريف الأكوان، فلا راد لقضائه.",
+      "de": "Der Übermächtige, vor dessen vollkommener Macht kein Hindernis Bestand hat.",
+      "fr": "Le Tout-Puissant qui gouverne la destinée des mondes avec autorité.",
+      "es": "El Supremo Hacedor cuya omnipotencia rige el curso de todas las cosas."
+    },
+    "quranReference": "Kamer 54:42"
+  },
+  {
+    "id": 71,
+    "arabic": "الْمُقَدِّمُ",
+    "transliteration": {
+      "tr": "El-Mukaddim",
+      "en": "Al-Muqaddim",
+      "de": "Al-Muqaddim",
+      "fr": "Al-Mouqaddim",
+      "es": "Al-Muqaddim",
+      "ar": "المقدم"
+    },
+    "meaning": {
+      "tr": "Dilediğini Öne Alan",
+      "en": "The Advancer",
+      "ar": "الذي يقدم الأشياء والأشخاص في الرتب والأوقات بحكمته",
+      "de": "Der Voranbringende",
+      "fr": "Celui qui Avance",
+      "es": "El que Promueve"
+    },
+    "explanation": {
+      "tr": "Dilediği kulunu veya hadiseyi hikmeti gereği öne geçiren, lütufla yükselten.",
+      "en": "The Advancer who brings forward whoever and whatever He wills according to wisdom.",
+      "ar": "الذي يقدم من يشاء من خلقه في الفضل والمكانة والزمان لحكمة بالغة.",
+      "de": "Derjenige, der nach Seiner Weisheit Dinge und Menschen voranbringt.",
+      "fr": "Celui qui avance et favorise qui Il veut selon Sa juste sagesse.",
+      "es": "Aquel que adelanta y promueve en rango y tiempo a quien Él dispone."
+    },
+    "quranReference": "Kaf 50:28"
+  },
+  {
+    "id": 72,
+    "arabic": "الْمُؤَخِّرُ",
+    "transliteration": {
+      "tr": "El-Muahhir",
+      "en": "Al-Mu'akhkhir",
+      "de": "Al-Mu'akhkhir",
+      "fr": "Al-Mou'akhkhir",
+      "es": "Al-Mu'ajir",
+      "ar": "المؤخر"
+    },
+    "meaning": {
+      "tr": "Dilediğini Geriye Bırakan",
+      "en": "The Postponer",
+      "ar": "الذي يؤخر الأشياء والأقدار بحكمته وعدله",
+      "de": "Der Zurückstellende",
+      "fr": "Celui qui Retarde",
+      "es": "El que Posterga"
+    },
+    "explanation": {
+      "tr": "Hikmeti gereği bazı şeyleri sonraya bırakan, müstahak olanları geride tutan.",
+      "en": "The Postponer who delays whatever He wills in terms of time, rank, or consequence.",
+      "ar": "الذي يؤخر ما يشاء من الأمور لحين وقتها المعلوم، ويؤخر الظالمين للجزاء.",
+      "de": "Derjenige, der nach Seiner Weisheit Dinge zurückstellt oder aufschiebt.",
+      "fr": "Celui qui retarde les événements ou le châtiment pour un terme fixé.",
+      "es": "Aquel que pospone con sabiduría lo que conviene hasta su sazón."
+    },
+    "quranReference": "İbrâhîm 14:42"
+  },
+  {
+    "id": 73,
+    "arabic": "الْأَوَّلُ",
+    "transliteration": {
+      "tr": "El-Evvel",
+      "en": "Al-Awwal",
+      "de": "Al-Awwal",
+      "fr": "Al-Awwal",
+      "es": "Al-Awwal",
+      "ar": "الأول"
+    },
+    "meaning": {
+      "tr": "Başlangıcı Olmayan, İlk",
+      "en": "The Very First",
+      "ar": "السابق لجميع الكائنات، الذي ليس لوجوده بداية",
+      "de": "Der Erste",
+      "fr": "Le Tout-Premier",
+      "es": "El Primero"
+    },
+    "explanation": {
+      "tr": "Varlığının başlangıcı bulunmayan, her şeyden önce var olan ezeli Yaratıcı.",
+      "en": "The Very First, whose existence has no beginning, preceding all created things.",
+      "ar": "الذي كان موجوداً قبل كل شيء، وليس قبله شيء في الأزل.",
+      "de": "Der Erste, dessen Dasein keinen Anfang hat und der vor allem existierte.",
+      "fr": "Le Tout-Premier qui précède toute existence sans commencement.",
+      "es": "El Primero antes del cual nada existía, fuente primordial del ser."
+    },
+    "quranReference": "Hadîd 57:3"
+  },
+  {
+    "id": 74,
+    "arabic": "الْآخِرُ",
+    "transliteration": {
+      "tr": "El-Âhir",
+      "en": "Al-Akhir",
+      "de": "Al-Akhir",
+      "fr": "Al-Akhir",
+      "es": "Al-Ajir",
+      "ar": "الآخر"
+    },
+    "meaning": {
+      "tr": "Sonu Olmayan, Ebedi",
+      "en": "The Infinite Last",
+      "ar": "الباقي بعد فناء جميع الخلائق، الذي ليس لوجوده نهاية",
+      "de": "Der Letzte",
+      "fr": "Le Dernier Éternel",
+      "es": "El Último"
+    },
+    "explanation": {
+      "tr": "Her şey yok olduktan sonra da varlığı ebediyen sürecek olan nihai Baki.",
+      "en": "The Infinite Last, who remains forever after all creation has passed away.",
+      "ar": "الباقي بعد فناء كل ما سواه، وليس بعده شيء في الأبدية.",
+      "de": "Der Letzte, der ewig fortbesteht, wenn alle Geschöpfe vergangen sind.",
+      "fr": "Le Dernier qui subsiste à jamais après l'extinction de toute chose.",
+      "es": "El Último que perdurará por siempre tras el fin de toda la creación."
+    },
+    "quranReference": "Hadîd 57:3"
+  },
+  {
+    "id": 75,
+    "arabic": "الظَّاهِرُ",
+    "transliteration": {
+      "tr": "Ez-Zâhir",
+      "en": "Az-Zahir",
+      "de": "Az-Zahir",
+      "fr": "Az-Zahir",
+      "es": "Az-Zahir",
+      "ar": "الظاهر"
+    },
+    "meaning": {
+      "tr": "Varlığı Delilleriyle Aşikar",
+      "en": "The Manifest",
+      "ar": "الذي ظهرت قدرته وحكمته في كل آيات الكون ودلائله",
+      "de": "Der Offenbare",
+      "fr": "Le Manifeste",
+      "es": "El Manifiesto Evidente"
+    },
+    "explanation": {
+      "tr": "Varlığını ve birliğini gösteren sayısız delillerle apaçık meydanda olan.",
+      "en": "The Manifest One, whose existence and wisdom are evident throughout all creation.",
+      "ar": "الذي دلت عليه آياته الباهرة وبراهين عظمته في كل أرجاء الكون.",
+      "de": "Der Offenbare, dessen Spuren und Zeichen im gesamten Universum strahlen.",
+      "fr": "Le Manifeste dont la gloire et l'art resplendissent à travers les merveilles du monde.",
+      "es": "El Evidente cuyos sublimes signos y sabiduría brillan en todo el cosmos."
+    },
+    "quranReference": "Hadîd 57:3"
+  },
+  {
+    "id": 76,
+    "arabic": "الْبَاطِنُ",
+    "transliteration": {
+      "tr": "El-Bâtın",
+      "en": "Al-Batin",
+      "de": "Al-Batin",
+      "fr": "Al-Batin",
+      "es": "Al-Batin",
+      "ar": "الباطن"
+    },
+    "meaning": {
+      "tr": "Mahiyeti Akılla Kavranamayan, Gizli",
+      "en": "The Hidden Reality",
+      "ar": "المحتجب عن أبصار خلقه في الدنيا، العليم بالبواطن",
+      "de": "Der Verborgene",
+      "fr": "L'Intime Caché",
+      "es": "El Oculto a la Vista"
+    },
+    "explanation": {
+      "tr": "Gözlerle görülemeyen, duyularla kuşatılamayan, her şeyin içyüzünü kuşatan.",
+      "en": "The Hidden One, concealed from sight yet fully knowledgeable of inner realities.",
+      "ar": "الذي لا تدركه الأبصار ولا تحيط به الأوهام، المطلع على أسرار الصدور.",
+      "de": "Der Verborgene, den keine irdischen Augen erfassen können.",
+      "fr": "Le Caché qui échappe aux regards tout en pénétrant le secret de chaque âme.",
+      "es": "El Oculto que ninguna mirada terrenal abarca pero que penetra todo secreto."
+    },
+    "quranReference": "Hadîd 57:3"
+  },
+  {
+    "id": 77,
+    "arabic": "الْوَالِي",
+    "transliteration": {
+      "tr": "El-Vâlî",
+      "en": "Al-Wali",
+      "de": "Al-Wali",
+      "fr": "Al-Wali",
+      "es": "Al-Wali",
+      "ar": "الوالي"
+    },
+    "meaning": {
+      "tr": "Kâinatı İdare Eden Yönetici",
+      "en": "The Sole Governor",
+      "ar": "المالك المتصرف المدبر لأمور خلقه بالرعاية والعدل",
+      "de": "Der waltende Herrscher",
+      "fr": "Le Gouverneur Unique",
+      "es": "El Gobernador Soberano"
+    },
+    "explanation": {
+      "tr": "Bütün mülkü tek başına idare eden, her varlığın düzenini sağlayan egemen.",
+      "en": "The Sole Governor who rules, manages, and directs all aspects of the universe.",
+      "ar": "المتولي لشؤون مملكته وحده، فلا يجري في كونه أمر إلا بأمره.",
+      "de": "Der waltende Herrscher, der den gesamten Kosmos in vollendeter Ordnung lenkt.",
+      "fr": "Le Gouverneur unique qui dirige et administre toute la création avec équité.",
+      "es": "El Soberano que gobierna y conduce el orden del universo con perfecta armonía."
+    },
+    "quranReference": "Ra'd 13:11"
+  },
+  {
+    "id": 78,
+    "arabic": "الْمُتَعَالِي",
+    "transliteration": {
+      "tr": "El-Müteâlî",
+      "en": "Al-Muta'ali",
+      "de": "Al-Muta'ali",
+      "fr": "Al-Mouta'ali",
+      "es": "Al-Muta'ali",
+      "ar": "المتعالي"
+    },
+    "meaning": {
+      "tr": "Yüceliğinde Emsalsiz",
+      "en": "The Most Exalted",
+      "ar": "المتنزه عن كل نقصان، الرفيع فوق كل عظمة وتخيل",
+      "de": "Der Höchsterhabene",
+      "fr": "Le Suprêmement Élevé",
+      "es": "El Altísimamente Elevado"
+    },
+    "explanation": {
+      "tr": "Mahlukatın her türlü hayal, zan ve tasavvurunun çok üzerinde olan yüceler yücesi.",
+      "en": "The Supremely Exalted, transcending all limitations, conjectures, and creations.",
+      "ar": "المتعالي عن كل شائبة نقص، البالغ أقصى مراتب العلو والشرف.",
+      "de": "Der unermesslich Erhabene über alle Vorstellungen und Begrenzungen der Geschöpfe.",
+      "fr": "Le Suprêmement Élevé, infiniment au-dessus de toute limitation humaine.",
+      "es": "El Altísimo en grado y pureza, infinitamente por encima de toda conjetura."
+    },
+    "quranReference": "Ra'd 13:9"
+  },
+  {
+    "id": 79,
+    "arabic": "الْبَرُّ",
+    "transliteration": {
+      "tr": "El-Berr",
+      "en": "Al-Barr",
+      "de": "Al-Barr",
+      "fr": "Al-Barr",
+      "es": "Al-Barr",
+      "ar": "البر"
+    },
+    "meaning": {
+      "tr": "İyiliği ve Lütfu Çok Olan",
+      "en": "The Source of All Goodness",
+      "ar": "الكثير الإحسان والبر، الصادق في وعده والرحيم بعباده",
+      "de": "Der Gütige",
+      "fr": "Le Bienfaisant",
+      "es": "El Manantial de Bondad"
+    },
+    "explanation": {
+      "tr": "Kullarına daima iyilik, şefkat ve kolaylık dileyen, vadinde sadık yüce iyilik kaynağı.",
+      "en": "The Source of All Goodness and Benevolence, fulfilling His promises with generosity.",
+      "ar": "الواسع الإحسان واللطف، الذي يغمر خلقه ببره وعطاياه ويقبل توبتهم.",
+      "de": "Der Quell aller Güte, der Seinen Dienern unaufhörlich Gutes erweist.",
+      "fr": "Le Bienfaisant qui comble le monde de bienfaits et tient Ses promesses.",
+      "es": "El Manantial inagotable de bondad que prodiga favores a Sus criaturas."
+    },
+    "quranReference": "Tûr 52:28"
+  },
+  {
+    "id": 80,
+    "arabic": "التَّوَّابُ",
+    "transliteration": {
+      "tr": "Et-Tevvâb",
+      "en": "At-Tawwab",
+      "de": "At-Tawwab",
+      "fr": "At-Tawwab",
+      "es": "At-Tawwab",
+      "ar": "التواب"
+    },
+    "meaning": {
+      "tr": "Tövbeleri Kabul Eden",
+      "en": "The Acceptor of Repentance",
+      "ar": "الذي ييسر التوبة لعباده ويقبل رجوعهم إليه بمغفرته",
+      "de": "Der die Reue Annehmende",
+      "fr": "L'Accueillant au Repentir",
+      "es": "El que Acoge el Arrepentimiento"
+    },
+    "explanation": {
+      "tr": "Pişmanlıkla kapısına gelen kullarının tövbesini kabul edip günahlarını bağışlayan.",
+      "en": "The Ever-Pardoning Acceptor of Repentance, who welcomes the penitent with mercy.",
+      "ar": "الذي يوفق عباده للتوبة ثم يتقبلها منهم ويفرح بعودتهم إليه.",
+      "de": "Derjenige, der die aufrichtige Reue Seiner Diener immer wieder gnädig annimmt.",
+      "fr": "Celui qui accueille avec tendresse le repentir sincère et efface les fautes.",
+      "es": "Aquel que facilita el perdón y acoge siempre al pecador arrepentido."
+    },
+    "quranReference": "Tevbe 9:104"
+  },
+  {
+    "id": 81,
+    "arabic": "الْمُنْتَقِمُ",
+    "transliteration": {
+      "tr": "El-Müntekim",
+      "en": "Al-Muntaqim",
+      "de": "Al-Muntaqim",
+      "fr": "Al-Mountaqim",
+      "es": "Al-Muntaqim",
+      "ar": "المنتقم"
+    },
+    "meaning": {
+      "tr": "Zalimlerden İntikam Alan, Adaleti Sağlayan",
+      "en": "The Just Avenger",
+      "ar": "الذي يعاقب الظالمين والمفسدين بعد الإنذار عدلاً وقسطاً",
+      "de": "Der gerechte Vergelter",
+      "fr": "Le Rétributeur Juste",
+      "es": "El Vengador de los Oprimidos"
+    },
+    "explanation": {
+      "tr": "Zulümde direnen, mazlumlara eziyet eden zorbaları layık oldukları cezaya çarptıran.",
+      "en": "The Just Avenger who holds the tyrants accountable and avenges the oppressed.",
+      "ar": "الذي يقصم الجبابرة والمعاندين بعد إقامة الحجة عليهم انتصاراً للمظلومين.",
+      "de": "Der gerechte Richter, der die unbußfertigen Tyrannen zur Rechenschaft zieht.",
+      "fr": "Le Rétributeur juste qui châtie les oppresseurs pour venger les innocents.",
+      "es": "El Vengador justo que castiga con equidad a los tiranos contumaces."
+    },
+    "quranReference": "Secde 32:22"
+  },
+  {
+    "id": 82,
+    "arabic": "الْعَفُوُّ",
+    "transliteration": {
+      "tr": "El-Afüvv",
+      "en": "Al-Afuww",
+      "de": "Al-Afuww",
+      "fr": "Al-Afouww",
+      "es": "Al-Afuww",
+      "ar": "العفو"
+    },
+    "meaning": {
+      "tr": "Günahları Kökünden Silen",
+      "en": "The Supreme Effacer of Sins",
+      "ar": "الذي يمحو السيئات من أصلها كأن لم تكن ويتجاوز عن العقوبة",
+      "de": "Der Verzeihende",
+      "fr": "L'Indulgent Effaceur",
+      "es": "El Indulgente Absolvedor"
+    },
+    "explanation": {
+      "tr": "Kullarının hatalarını affetmekle kalmayıp amel defterinden tamamen silen bağışlayıcı.",
+      "en": "The Supreme Pardoner, who completely erases sins as if they had never existed.",
+      "ar": "الذي يطمس آثار المعاصي ويزيلها من ديوان الحفظة بفضله ورحمته.",
+      "de": "Der vollkommen Verzeihende, der Sünden tilgt, als wären sie nie geschehen.",
+      "fr": "L'Indulgent suprême qui efface intégralement la trace des transgressions.",
+      "es": "El Perdonador sublime que borra todo vestigio de pecado del alma arrepentida."
+    },
+    "quranReference": "Nisâ 4:99"
+  },
+  {
+    "id": 83,
+    "arabic": "الرَّؤُوفُ",
+    "transliteration": {
+      "tr": "Er-Raûf",
+      "en": "Ar-Ra'uf",
+      "de": "Ar-Ra'uf",
+      "fr": "Ar-Ra'ouf",
+      "es": "Ar-Ra'uf",
+      "ar": "الرؤوف"
+    },
+    "meaning": {
+      "tr": "Çok Şefkatli, Merhameti Bol",
+      "en": "The Most Compassionate",
+      "ar": "شديد الرأفة والرحمة الذي يرأف بعباده في كل أحوالهم",
+      "de": "Der Mitleidige",
+      "fr": "Le Très-Compatissant",
+      "es": "El Compasivo Piadoso"
+    },
+    "explanation": {
+      "tr": "Kullarına taşıyamayacakları yükü yüklemeyen, sonsuz şefkat ve rikkat sahibi.",
+      "en": "The Most Compassionate and Tender, who shows exquisite pity to all creatures.",
+      "ar": "الذي بلغ الغاية في الرحمة واللطف، فيدفع المشاق عن عباده بحنانه.",
+      "de": "Der unendlich Mitleidige, der Seinen Geschöpfen keine unerträgliche Last auferlegt.",
+      "fr": "Le Très-Compatissant dont la tendresse divine allège toute épreuve humaine.",
+      "es": "El Piadoso enternecedor que prodiga alivio y no impone cargas insoportables."
+    },
+    "quranReference": "Bakara 2:207"
+  },
+  {
+    "id": 84,
+    "arabic": "مَالِكُ الْمُلْكِ",
+    "transliteration": {
+      "tr": "Mâlikü'l-Mülk",
+      "en": "Malik-ul-Mulk",
+      "de": "Malik-ul-Mulk",
+      "fr": "Malik-al-Moulk",
+      "es": "Malik-ul-Mulk",
+      "ar": "مالك الملك"
+    },
+    "meaning": {
+      "tr": "Mülkün Ebedi ve Hakiki Sahibi",
+      "en": "Owner of All Sovereignty",
+      "ar": "المتصرف في الكون كيف يشاء، يؤتي الملك من يشاء وينزعه",
+      "de": "Der Herrscher aller Reiche",
+      "fr": "Le Maître du Royaume",
+      "es": "El Señor de Todo Dominio"
+    },
+    "explanation": {
+      "tr": "Kâinat mülkünün tek mutlak sahibi; dilediğine iktidar veren, dilediğinden alan.",
+      "en": "The Owner of All Sovereignty, granting authority to whom He wills and stripping it away.",
+      "ar": "صاحب الملك التام والقدرة الشاملة، يعز من يشاء ويذل من يشاء بيده الخير.",
+      "de": "Der absolute Eigner aller Reiche, der Macht und Herrschaft nach Seinem Willen verteilt.",
+      "fr": "Le Maître absolu du Royaume qui dispense la royauté et la retire selon Son décret.",
+      "es": "El Dueño del reino absoluto que concede el poder y lo retira a Su voluntad."
+    },
+    "quranReference": "Âl-i İmrân 3:26"
+  },
+  {
+    "id": 85,
+    "arabic": "ذُو الْجَلَالِ وَالْإِكْرَامِ",
+    "transliteration": {
+      "tr": "Zü'l-Celâli ve'l-İkrâm",
+      "en": "Dhul-Jalali wal-Ikram",
+      "de": "Dhul-Jalali wal-Ikram",
+      "fr": "Dhou-al-Djalal wal-Ikram",
+      "es": "Dhul-Yalali wal-Ikram",
+      "ar": "ذو الجلال والإكرام"
+    },
+    "meaning": {
+      "tr": "Büyüklük ve Kerem Sahibi",
+      "en": "Lord of Majesty and Generosity",
+      "ar": "صاحب العظمة والكبرياء والجود والإحسان المستمر",
+      "de": "Der Herr der Majestät und Ehre",
+      "fr": "Le Seigneur de Majesté et Générosité",
+      "es": "Señor de Majestad y Munificencia"
+    },
+    "explanation": {
+      "tr": "Hem sonsuz azamet ve heybet, hem de nihayetsiz lütuf, ikram ve ihsan sahibi.",
+      "en": "The Lord of Majesty and Generosity, possessing supreme splendor and boundless bounty.",
+      "ar": "المستحق للتعظيم والإجلال لكماله، والمستحق للحمد لإحسانه وإنعامه على الخلق.",
+      "de": "Der Herr der Majestät und unermesslichen Freigebigkeit, vollkommen in Ehrfurcht und Liebe.",
+      "fr": "Le Seigneur de Majesté et de Générosité qui réunit grandeur sublime et grâce infinie.",
+      "es": "El Señor de Majestad y Munificencia, digno de reverencia y alabanza eterna."
+    },
+    "quranReference": "Rahmân 55:78"
+  },
+  {
+    "id": 86,
+    "arabic": "الْمُقْسِطُ",
+    "transliteration": {
+      "tr": "El-Muksit",
+      "en": "Al-Muqsit",
+      "de": "Al-Muqsit",
+      "fr": "Al-Mouqsit",
+      "es": "Al-Muqsit",
+      "ar": "المقسط"
+    },
+    "meaning": {
+      "tr": "Adaletle Hükmeden, Mazlumu Koruyan",
+      "en": "The Equitable Arbitrator",
+      "ar": "العادل في حكمه الذي ينتصف للمظلوم من الظالم برحمة",
+      "de": "Der vollkommen Gerechte",
+      "fr": "L'Équitable Parfait",
+      "es": "El Justo Equitativo"
+    },
+    "explanation": {
+      "tr": "Mazlumun hakkını zalimden alan, her varlığa hakkını eksiksiz veren adil dengeleyici.",
+      "en": "The Equitable Arbitrator who establishes perfect justice and aids the oppressed.",
+      "ar": "الذي يقيم القسط في العالم، وينصف المقهورين ويكافئ كل ذي حق حقه.",
+      "de": "Der vollkommen Gerechte, der den Schwachen schützt und das Gleichgewicht wahrt.",
+      "fr": "L'Équitable qui rétablit la justice et délivre l'opprimé de l'injustice.",
+      "es": "El Justo equitativo que defiende al débil y restituye el derecho de cada ser."
+    },
+    "quranReference": "Âl-i İmrân 3:18"
+  },
+  {
+    "id": 87,
+    "arabic": "الْجَامِعُ",
+    "transliteration": {
+      "tr": "El-Câmi'",
+      "en": "Al-Jami'",
+      "de": "Al-Jami'",
+      "fr": "Al-Jami'",
+      "es": "Al-Yami'",
+      "ar": "الجامع"
+    },
+    "meaning": {
+      "tr": "Her Şeyi Bir Araya Toplayan",
+      "en": "The Gatherer, The Assembler",
+      "ar": "الذي يجمع الخلائق يوم الحساب، ومؤلف المتفرقات بحكمته",
+      "de": "Der Versammelnde",
+      "fr": "Le Rassembleur Universel",
+      "es": "El Gran Reconciliador y Revisor"
+    },
+    "explanation": {
+      "tr": "Kıyamet gününde bütün insanlığı hesaba çekmek için mahşerde bir araya getiren.",
+      "en": "The Gatherer who unites contrasting elements and will assemble humanity on the Day of Judgment.",
+      "ar": "الذي يجمع الناس ليوم لا ريب فيه، ومؤلف القلوب والأشياء المتباينة في الوجود.",
+      "de": "Derjenige, der die gesamte Menschheit am Tage des Gerichts unweigerlich versammelt.",
+      "fr": "Le Rassembleur qui réunira tous les hommes au Jour incontestable du Jugement.",
+      "es": "El que congregará a toda la humanidad en el Día del Juicio sin falta alguna."
+    },
+    "quranReference": "Âl-i İmrân 3:9"
+  },
+  {
+    "id": 88,
+    "arabic": "الْغَنِيُّ",
+    "transliteration": {
+      "tr": "El-Ganiyy",
+      "en": "Al-Ghaniyy",
+      "de": "Al-Ghaniyy",
+      "fr": "Al-Ghaniyy",
+      "es": "Al-Ghani",
+      "ar": "الغني"
+    },
+    "meaning": {
+      "tr": "Hiçbir Şeye Muhtaç Olmayan",
+      "en": "The Self-Sufficient",
+      "ar": "المستغني عن جميع خلقه، وكل من في الكون فقير إليه",
+      "de": "Der unendlich Reiche",
+      "fr": "Le Riche Absolu",
+      "es": "El Autosuficiente"
+    },
+    "explanation": {
+      "tr": "Varlığı ve kemali için hiçbir şeye muhtaç olmayan, her şeyin O'na muhtaç olduğu mutlak zengin.",
+      "en": "The Self-Sufficient One, who is independent of all creation while all rely on Him.",
+      "ar": "الذي لا يحتاج إلى أحد في ذاته وأفعاله، بل هو الغني الحميد الذي افتقرت إليه الخلائق.",
+      "de": "Der absolut Reiche und Unabhängige, auf den jedes einzelne Geschöpf angewiesen ist.",
+      "fr": "Le Riche absolu qui se suffit à Lui-même tandis que toute la création Lui est dépendante.",
+      "es": "El Rico autosuficiente que no precisa de nada, mientras todo depende de Él."
+    },
+    "quranReference": "Bakara 2:267"
+  },
+  {
+    "id": 89,
+    "arabic": "الْمُغْنِي",
+    "transliteration": {
+      "tr": "El-Mugnî",
+      "en": "Al-Mughni",
+      "de": "Al-Mughni",
+      "fr": "Al-Moughni",
+      "es": "Al-Mugni",
+      "ar": "المغني"
+    },
+    "meaning": {
+      "tr": "Dilediğini Zengin Kılan",
+      "en": "The Enricher",
+      "ar": "الذي يكفي عباده ويسد حاجاتهم ويغني من يشاء بفضله",
+      "de": "Der Bereichernde",
+      "fr": "L'Enrichisseur",
+      "es": "El Enriquecedor"
+    },
+    "explanation": {
+      "tr": "Kullarına zenginlik, kanaat, gönül tokluğu ve maddi-manevi refah bahşeden.",
+      "en": "The Enricher who bestows wealth, contentment, and satisfaction upon whom He wills.",
+      "ar": "الذي يفيض بالغنى والرضا على من يشاء، فيجعل قلوب أوليائه مستغنية به عمن سواه.",
+      "de": "Der Bereichernde, der Gaben und innere Zufriedenheit schenkt, wem Er will.",
+      "fr": "L'Enrichisseur qui dispense l'abondance matérielle et la quiétude du cœur.",
+      "es": "El Enriquecedor que colma de bienestar y otorga la riqueza de la satisfacción."
+    },
+    "quranReference": "Necm 53:48"
+  },
+  {
+    "id": 90,
+    "arabic": "الْمَانِعُ",
+    "transliteration": {
+      "tr": "El-Mâni'",
+      "en": "Al-Mani'",
+      "de": "Al-Mani'",
+      "fr": "Al-Mani'",
+      "es": "Al-Mani'",
+      "ar": "المانع"
+    },
+    "meaning": {
+      "tr": "Dilediğine Engel Olan, Koruyan",
+      "en": "The Withholder, The Shielder",
+      "ar": "الذي يمنع البلاء عن أوليائه، ويمنع العطاء لحكمة بالغة",
+      "de": "Der Verhindernde",
+      "fr": "Le Protecteur Rétenteur",
+      "es": "El Protector que Impide el Mal"
+    },
+    "explanation": {
+      "tr": "Hikmeti gereği bazı şeylere engel olan, dostlarını kötülük ve tehlikelerden koruyan.",
+      "en": "The Shielder who prevents harm and withholds outcomes according to His wisdom.",
+      "ar": "الذي يحمي أولياءه من الفتن، ويمنع العطاء عن بعض خلقه امتحاناً وحكمة.",
+      "de": "Der Verhindernde, der Unheil abwehrt und Seine Diener vor Schaden bewahrt.",
+      "fr": "Le Protecteur qui prévient les périls et retient Ses dons avec discernement.",
+      "es": "Aquel que frena el daño hacia los Suyos y retiene favores por sabia razón."
+    },
+    "quranReference": "Mülk 67:21"
+  },
+  {
+    "id": 91,
+    "arabic": "الضَّارُّ",
+    "transliteration": {
+      "tr": "Ed-Dârr",
+      "en": "Ad-Darr",
+      "de": "Ad-Darr",
+      "fr": "Ad-Darr",
+      "es": "Ad-Darr",
+      "ar": "الضار"
+    },
+    "meaning": {
+      "tr": "Zararı Yaratan, İmtihan Eden",
+      "en": "The Creator of Harm",
+      "ar": "المقدر للشدائد والمصائب بحكمته ابتلاءً للعباد",
+      "de": "Der Leidbringende zur Prüfung",
+      "fr": "Celui qui Éprouve",
+      "es": "El que Decretó la Adversidad"
+    },
+    "explanation": {
+      "tr": "Hikmetiyle dilediğine elem, musibet ve imtihan veren; her sıkıntının yaratıcısı olan.",
+      "en": "The One who creates adversity and tests according to His wisdom for spiritual growth.",
+      "ar": "الذي بيده الضر والنفع، فيبتلي من يشاء ليرفع درجاتهم ويمحص قلوبهم.",
+      "de": "Derjenige, der Prüfungen und Erschwernisse schickt, um Seelen zu läutern.",
+      "fr": "Celui qui décrète les épreuves et les difficultés pour purifier la foi.",
+      "es": "Aquel que permite la tribulación como crisol para elevar espiritualmente al alma."
+    },
+    "quranReference": "En'âm 6:17"
+  },
+  {
+    "id": 92,
+    "arabic": "النَّافِعُ",
+    "transliteration": {
+      "tr": "En-Nâfi'",
+      "en": "An-Nafi'",
+      "de": "An-Nafi'",
+      "fr": "An-Nafi'",
+      "es": "An-Nafi'",
+      "ar": "النافع"
+    },
+    "meaning": {
+      "tr": "Fayda Veren, Hayır Bahşeden",
+      "en": "The Bestower of Benefit",
+      "ar": "المقدر للخير والنفع لكل كائن، مصدر كل نعمة",
+      "de": "Der Nützende",
+      "fr": "Le Bienfaiteur Dispensateur",
+      "es": "El Dispensador de Beneficios"
+    },
+    "explanation": {
+      "tr": "Bütün hayır, şifa ve faydaların yaratıcısı olan; dilediğine kolaylık ve kazanç lütfeden.",
+      "en": "The Bestower of Benefit, creating all health, advantage, and good in the universe.",
+      "ar": "الذي يفيض بالخيرات والنفع والشفاء على من يشاء، فلا مانع لما أعطى.",
+      "de": "Der Wohltätige, der alle heilsamen und nützlichen Gaben im Dasein erschafft.",
+      "fr": "Le Bienfaiteur qui procure toute félicité, santé et profit spirituel.",
+      "es": "El Hacedor del beneficio que colma a la creación de salud, bondades y bienaventuranza."
+    },
+    "quranReference": "En'âm 6:17"
+  },
+  {
+    "id": 93,
+    "arabic": "النُّورُ",
+    "transliteration": {
+      "tr": "En-Nûr",
+      "en": "An-Nur",
+      "de": "An-Nur",
+      "fr": "An-Nour",
+      "es": "An-Nur",
+      "ar": "النور"
+    },
+    "meaning": {
+      "tr": "Alemleri Aydınlatan Nur",
+      "en": "The Light",
+      "ar": "الذي أشرقت السماوات والأرض بنوره، وهادي القلوب بهداه",
+      "de": "Das Licht",
+      "fr": "La Lumière Suprême",
+      "es": "La Luz Trascendente"
+    },
+    "explanation": {
+      "tr": "Gökleri ve yeri nurlandıran, akılları ve kalpleri hidayetiyle aydınlatan ilahi Nur.",
+      "en": "The Divine Light that illuminates the heavens, the earth, and the hearts of the faithful.",
+      "ar": "نور السماوات والأرض، المظهر للأشياء بنوره وهادي الضالين إلى صراطه المستقيم.",
+      "de": "Das reine Licht, das Himmel, Erde und die Seelen der Gläubigen erleuchtet.",
+      "fr": "La Lumière suprême qui illumine les cieux, la terre et la conscience humaine.",
+      "es": "La Luz resplandeciente que disipa las tinieblas de los mundos y del corazón."
+    },
+    "quranReference": "Nûr 24:35"
+  },
+  {
+    "id": 94,
+    "arabic": "الْهَادِي",
+    "transliteration": {
+      "tr": "El-Hâdî",
+      "en": "Al-Hadi",
+      "de": "Al-Hadi",
+      "fr": "Al-Hadi",
+      "es": "Al-Hadi",
+      "ar": "الهادي"
+    },
+    "meaning": {
+      "tr": "Doğru Yola İleten",
+      "en": "The Guide to Truth",
+      "ar": "الدال لعباده على طريق الحق والخير والموفق للرشاد",
+      "de": "Der Rechtleitende",
+      "fr": "Le Guide Suprême",
+      "es": "El Guía de la Rectitud"
+    },
+    "explanation": {
+      "tr": "Kullarına doğru yolu gösteren, kalpleri hidayetle buluşturan ve selamete erdiren.",
+      "en": "The Supreme Guide, who shows the path of truth and leads souls to eternal salvation.",
+      "ar": "الذي يهدي القلوب للإيمان ويدل السالكين على طريق النجاة والتقوى.",
+      "de": "Der Rechtleitende, der den Weg der Wahrheit weist und Herzen zur Ruhe führt.",
+      "fr": "Le Guide suprême qui conduit les âmes vers la vérité et la délivrance.",
+      "es": "El Guía divino que ilumina el sendero recto y conduce hacia la salvación."
+    },
+    "quranReference": "Hac 22:54"
+  },
+  {
+    "id": 95,
+    "arabic": "الْبَدِيعُ",
+    "transliteration": {
+      "tr": "El-Bedî'",
+      "en": "Al-Badi'",
+      "de": "Al-Badi'",
+      "fr": "Al-Badi'",
+      "es": "Al-Badi'",
+      "ar": "البديع"
+    },
+    "meaning": {
+      "tr": "Eşsiz Güzellikte Yaratan",
+      "en": "The Incomparable Originator",
+      "ar": "المبدع للأكوان على غير مثال سابق بجمال وإتقان",
+      "de": "Der Schöpfer des Einzigartigen",
+      "fr": "L'Incomparable Créateur",
+      "es": "El Creador Incomparable"
+    },
+    "explanation": {
+      "tr": "Kainatı benzeri ve örneği olmaksızın, hayranlık uyandırıcı bir sanat ve güzellikle var eden.",
+      "en": "The Incomparable Originator, who fashions creations of peerless beauty and perfection.",
+      "ar": "فاطر السماوات والأرض على نمط بديع فريد، المتقن لكل ما صنع.",
+      "de": "Der unvergleichliche Schöpfer, der das Universum mit unübertrefflicher Schönheit schuf.",
+      "fr": "L'Incomparable qui façonne l'univers avec une perfection et un éclat sans pareil.",
+      "es": "El Creador de belleza inigualable que originó los cielos y la tierra con arte excelso."
+    },
+    "quranReference": "Bakara 2:117"
+  },
+  {
+    "id": 96,
+    "arabic": "الْبَاقِي",
+    "transliteration": {
+      "tr": "El-Bâkî",
+      "en": "Al-Baqi",
+      "de": "Al-Baqi",
+      "fr": "Al-Baqi",
+      "es": "Al-Baqi",
+      "ar": "الباقي"
+    },
+    "meaning": {
+      "tr": "Varlığı Sonsuz Olan, Ebedi",
+      "en": "The Everlasting",
+      "ar": "الدائم الوجود الذي لا يلحقه فناء ولا زوال أبداً",
+      "de": "Der Ewigbleibende",
+      "fr": "L'Éternel Immuable",
+      "es": "El Perdurable Eterno"
+    },
+    "explanation": {
+      "tr": "Her mahluk yokluğa mahkumken, varlığı ebediyen zeval bulmayacak olan ulu Yaratıcı.",
+      "en": "The Everlasting One, whose existence persists perpetually beyond time and space.",
+      "ar": "المستمر الوجود الذي تفنى الخلائق كلها ويبقى وجهه ذو الجلال والإكرام.",
+      "de": "Der ewig Fortbestehende, der unvergänglich über allen Zeiten weilt.",
+      "fr": "L'Éternel immuable qui demeure à jamais alors que toute créature passe.",
+      "es": "El Imperecedero cuya existencia trasciende todo final y permanece para siempre."
+    },
+    "quranReference": "Rahmân 55:27"
+  },
+  {
+    "id": 97,
+    "arabic": "الْوَارِثُ",
+    "transliteration": {
+      "tr": "El-Vâris",
+      "en": "Al-Warith",
+      "de": "Al-Warith",
+      "fr": "Al-Warith",
+      "es": "Al-Wariz",
+      "ar": "الوارث"
+    },
+    "meaning": {
+      "tr": "Mülkün Son Vârisi",
+      "en": "The Ultimate Inheritor",
+      "ar": "الباقي بعد فناء خلقه، الذي يرجع إليه ملك كل شيء",
+      "de": "Der Allerbende",
+      "fr": "L'Héritier Suprême",
+      "es": "El Heredero Supremo"
+    },
+    "explanation": {
+      "tr": "Bütün canlılar öldükten sonra kâinat mülkünün tek hakiki sahibi olarak kalan.",
+      "en": "The Supreme Inheritor, to whom the ownership of all that exists finally returns.",
+      "ar": "الذي يرث الأرض ومن عليها بعد هلاك الملاك والجبابرة، وله الملك وحده.",
+      "de": "Der eigentliche Erbe aller Dinge, an den alle Herrschaft nach dem Vergehen der Welt zurückkehrt.",
+      "fr": "L'Héritier suprême auquel reviendra toute royauté après la disparition de ce monde.",
+      "es": "El Heredero absoluto al que retornará todo reino y dominio tras la disolución de los seres."
+    },
+    "quranReference": "Hicr 15:23"
+  },
+  {
+    "id": 98,
+    "arabic": "الرَّشِيدُ",
+    "transliteration": {
+      "tr": "Er-Reşîd",
+      "en": "Ar-Rashid",
+      "de": "Ar-Rashid",
+      "fr": "Ar-Rachid",
+      "es": "Ar-Rashid",
+      "ar": "الرشيد"
+    },
+    "meaning": {
+      "tr": "Doğru Yolu Gösteren, İşi Kusursuz Olan",
+      "en": "The Infallible Guide",
+      "ar": "المرشد لخلقه إلى مصالحهم، الصائب في تدبيره بلا خلل",
+      "de": "Der weise Führer",
+      "fr": "Le Guide Infaillible",
+      "es": "El Guía Certero"
+    },
+    "explanation": {
+      "tr": "Bütün işleri dosdoğru ve hikmetli olan, kullarını en hayırlı hedeflere ulaştıran.",
+      "en": "The Infallible Guide to right direction, whose governance is unerring and perfect.",
+      "ar": "الحكيم الذي لا يخيب من استهداه، المدبر لأمور العباد بدقة ورشاد.",
+      "de": "Der unfehlbare Führer, der Seine Diener mit Makellosigkeit zum rechten Ziel leitet.",
+      "fr": "Le Guide infaillible dont chaque décret mène avec rectitude au bien suprême.",
+      "es": "El Conductor infalible cuyas sabias disposiciones conducen siempre a la rectitud."
+    },
+    "quranReference": "Hûd 11:87"
+  },
+  {
+    "id": 99,
+    "arabic": "الصَّبُورُ",
+    "transliteration": {
+      "tr": "Es-Sabûr",
+      "en": "As-Sabur",
+      "de": "As-Sabur",
+      "fr": "As-Sabour",
+      "es": "As-Sabur",
+      "ar": "الصبور"
+    },
+    "meaning": {
+      "tr": "Pek Sabırlı, Cezayı Erteleyen",
+      "en": "The Most Patient",
+      "ar": "الذي لا يعاجل العصاة بالعقوبة، البالغ أقصى درجات الصبر",
+      "de": "Der Allgeduldige",
+      "fr": "Le Patient Parfait",
+      "es": "El Sumo Paciente"
+    },
+    "explanation": {
+      "tr": "Kullarının nankörlüğüne ve isyanına karşı acele etmeyen, sabrı ve hilmi sonsuz olan.",
+      "en": "The Most Patient One, who does not haste to punish and bears all with sublime forbearance.",
+      "ar": "الذي لا تحركه العجلة ولا يستفزه غضب، الصبور على عباده ليبلغ الكتاب أجله.",
+      "de": "Der Allgeduldige, der in Seiner erhabenen Langmut den Sündern stets Frist gewährt.",
+      "fr": "Le Patient sublime qui ne précipite rien et tolère avec une mansuétude infinie.",
+      "es": "El Paciente supremo que no se apresura en el castigo y aguarda con infinita clemencia."
+    },
+    "quranReference": "Bakara 2:153"
+  }
+]
