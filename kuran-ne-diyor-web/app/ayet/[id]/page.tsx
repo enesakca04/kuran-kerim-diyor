@@ -4,32 +4,48 @@ import { Sparkles, Download, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const [surahNum, ayahNum] = (await params).id.split(':');
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const [surahNum, ayahNum] = id.split(":");
   const surah = getSurah(Number(surahNum));
   const ayah = getAyah(Number(surahNum), Number(ayahNum));
-  
+
   if (!surah || !ayah) {
     return {
-      title: "Ayet Bulunamadı - Kuran Kerim Diyor",
+      title: "Âyet bulunamadı",
+      robots: { index: false, follow: false },
     };
   }
 
-  const reference = `${surah.name.tr} ${ayah.number}`;
+  const reference = `${surah.name.tr} Sûresi ${ayah.number}. Âyet`;
   const text = ayah.translations.tr || "";
-  
+  // Arama sonucunda kirpilmayi onlemek icin aciklamayi ~160 karakterde tutuyoruz.
+  const description =
+    text.length > 155 ? `${text.slice(0, 155).trimEnd()}…` : text || reference;
+
   return {
-    title: `${reference} - Kuran Kerim Diyor`,
-    description: text,
+    title: `${reference} — Meali ve Arapça Metni`,
+    description,
+    alternates: { canonical: `/ayet/${surah.number}:${ayah.number}` },
     openGraph: {
+      type: "article",
       title: reference,
-      description: text,
-      type: 'article',
-    }
+      description,
+      url: `/ayet/${surah.number}:${ayah.number}`,
+    },
+    twitter: { card: "summary", title: reference, description },
   };
 }
 
-export default async function VerseDetailPage({ params }: { params: { id: string } }) {
+export default async function VerseDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const [surahNum, ayahNum] = id.split(':');
   
